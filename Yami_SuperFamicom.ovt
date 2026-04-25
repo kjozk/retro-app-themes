@@ -8,17 +8,17 @@
 
 @OBSThemeVars {
     /* Super Famicom Colors */
-    --sfc_case: #b2b4b2;
+    --sfc_case: #e1e1e1;
     --sfc_mid: #707372;
-    --sfc_dark: #54585a;
-    --sfc_red: #C1121C;    /* A Button */
-    --sfc_yellow: #F7BA0B; /* B Button */
-    --sfc_green: #007243;  /* Y Button */
-    --sfc_blue: #00387b;   /* X Button */
+    --sfc_dark: #6d766f;
+    --sfc_red: #ee162f;    /* A Button */
+    --sfc_yellow: #fed300; /* B Button */
+    --sfc_green: #00a046;  /* Y Button */
+    --sfc_blue: #0059a9;   /* X Button */
 
     /* Override Yami Variables for Contrast */
     --bg_window: var(--sfc_case);
-    --bg_base: #c0c3c0;
+    --bg_base: var(--sfc_case);
     --bg_preview: var(--sfc_dark);
 
     /* Text contrast maximization */
@@ -42,6 +42,10 @@
     --danger: var(--sfc_red);
     --success: var(--sfc_green);
 
+    --sfc_system: var(--sfc_dark);
+    --sfc_system_hover: #7d867f;
+    --sfc_system_pressed: #5d665f;
+
     /* Grey Palette Mapping (Used for depth and controls) */
     --grey1: #f0f0f0;
     --grey2: #e0e0e0;
@@ -56,7 +60,7 @@
     --input_bg: #ffffff;
     --input_bg_hover: #f5f5f5;
     --input_bg_focus: #ffffff;
-    --button_bg: #d0d2d0;
+    --button_bg: var(--sfc_system);
     --button_bg_hover: #e0e2e0;
     --button_bg_down: var(--sfc_mid);
 
@@ -72,10 +76,43 @@
     --button_bg_disabled: #e5e5e5;
 }
 
-/* ジオメトリ（矢印など）の視認性改善 - システム標準の暗色アイコンを使用 */
+/* ドックのタイトルバーの背景を暗くして引き締める */
+QDockWidget::title {
+    background-color: var(--sfc_dark);
+    color: #ffffff;
+    padding: 4px;
+}
+
+/* ジオメトリ（矢印・ドロップダウン）の視認性改善 */
+QComboBox::drop-down,
+QSpinBox::up-button, QSpinBox::down-button,
+QDoubleSpinBox::up-button, QDoubleSpinBox::down-button {
+    background-color: var(--sfc_mid);
+    border-left: 1px solid var(--sfc_dark);
+    width: 20px;
+}
+
 QSpinBox::up-arrow, QDoubleSpinBox::up-arrow { image: url(:/res/images/up.svg); }
 QSpinBox::down-arrow, QDoubleSpinBox::down-arrow { image: url(:/res/images/down.svg); }
 QComboBox::down-arrow, QDateTimeEdit::down-arrow { image: url(:/res/images/collapse.svg); }
+
+/* 音声ミキサーの調整：ベースを本体色に、ヘッダーを暗く */
+#mixerContainer, #mixerArea {
+    background-color: var(--sfc_case);
+}
+
+#mixerContainer QLabel,
+#mixerArea QLabel {
+    color: #050505 !important;
+}
+
+/* ミキサーのヘッダー部分 (Global, Active等) を暗くして引き締める */
+#mixerContainer QWidget[header="true"],
+#mixerContainer QLabel#header,
+#mixerContainer .header {
+    background-color: var(--sfc_dark);
+    color: #ffffff !important;
+}
 
 /* 選択・ハイライト時のテキスト色修正 (青背景での視認性確保) */
 QAbstractItemView::item:selected,
@@ -86,10 +123,47 @@ QTabBar::tab:selected,
 SceneTree::item:selected,
 SourceTree::item:selected,
 QPushButton:checked,
-QPushButton:pressed,
-#mixerContainer QLabel,
-#mixerArea QLabel {
+QPushButton:pressed {
     color: #ffffff !important;
+}
+
+/* スライダー (QSlider) の視認性改善 - スーファミのスイッチ風のデザイン */
+QSlider::groove:horizontal {
+    background-color: var(--sfc_mid);
+    height: 4px;
+    border-radius: 2px;
+}
+
+QSlider::handle:horizontal {
+    background-color: var(--sfc_system);
+    border: 1px solid var(--sfc_dark);
+    width: 16px;
+    height: 16px;
+    margin: -6px 0;
+    border-radius: 8px;
+}
+
+QSlider::handle:horizontal:hover {
+    background-color: var(--sfc_system_hover);
+}
+
+QSlider::groove:vertical {
+    background-color: var(--sfc_mid);
+    width: 4px;
+    border-radius: 2px;
+}
+
+QSlider::handle:vertical {
+    background-color: var(--sfc_system);
+    border: 1px solid var(--sfc_dark);
+    width: 16px;
+    height: 16px;
+    margin: 0 -6px;
+    border-radius: 8px;
+}
+
+QSlider::handle:vertical:hover {
+    background-color: var(--sfc_system_hover);
 }
 
 /* リスト表示全体の選択時文字色を固定 */
@@ -104,6 +178,49 @@ QMenuBar::item:selected {
     background-color: var(--primary);
 }
 
+/* ダイアログとグループボックスの調整 */
+QGroupBox {
+    font-weight: bold;
+    color: var(--sfc_dark);
+    border: 1px solid var(--sfc_mid);
+    border-radius: 4px;
+    margin-top: 15px;
+    padding: 10px;
+}
+
+QGroupBox::title {
+    color: var(--sfc_dark);
+    subcontrol-origin: margin;
+    left: 10px;
+}
+
+/* 設定画面の左側リスト（サイドバー）の視認性向上 */
+OBSBasicSettings QListWidget {
+    background-color: #d8d8d8;
+    border-right: 1px solid var(--sfc_mid);
+}
+
+OBSBasicSettings QListWidget::item {
+    padding: 8px;
+}
+
+/* 設定画面下部のシステムボタン (OK, キャンセル, 適用) */
+OBSBasicSettings QPushButton {
+    background-color: var(--sfc_system);
+    color: #ffffff !important;
+    border: 1px solid var(--sfc_dark);
+    min-width: 80px;
+    padding: 4px 12px;
+}
+
+OBSBasicSettings QPushButton:hover {
+    background-color: var(--sfc_system_hover);
+}
+
+OBSBasicSettings QPushButton:pressed {
+    background-color: var(--sfc_system_pressed);
+}
+
 /* 無効状態のボタンの視認性改善 */
 QPushButton:disabled {
     background-color: var(--button_bg_disabled);
@@ -111,60 +228,73 @@ QPushButton:disabled {
     border-color: #cccccc;
 }
 
-/* コントロールボタンのスーファミカラー化 */
-#streamButton { background-color: var(--sfc_red); color: #ffffff !important; }
-#recordButton { background-color: var(--sfc_yellow); color: #050505 !important; }
-#virtualCamButton { background-color: var(--sfc_blue); color: #ffffff !important; }
-#modeSwitch { background-color: var(--sfc_green); color: #ffffff !important; }
+/* --- コントロールボタンのスタイル定義 --- */
 
-#streamButton:hover { background-color: #e33b57; }
-#recordButton:hover { background-color: #ffde40; }
-#virtualCamButton:hover { background-color: #2050b0; }
-#modeSwitch:hover { background-color: #25a231; }
-
-/* 録画・配信中（アクティブ時）の色を濃い色に変更 */
-#streamButton:checked { background-color: #900000 !important; }
-#recordButton:checked { background-color: #b08000 !important; color: #ffffff !important; }
-#virtualCamButton:checked { background-color: #002060 !important; }
-#modeSwitch:checked { background-color: #005020 !important; }
-
-/* その他のボタンを濃い灰色（十字キー色）に統一 */
-QPushButton {
-    background-color: var(--sfc_dark);
+/* 1. 基本的なボタン（設定・終了、ツールボタン等）を --sfc_system に統一 */
+QPushButton,
+QToolButton,
+#settingsButton,
+#exitButton {
+    background-color: var(--sfc_system);
     color: #ffffff !important;
-    border: 1px solid var(--sfc_dark);
+    border: 1px solid var(--sfc_case);
+    padding: 4px;
 }
 
-QPushButton:hover {
-    background-color: var(--sfc_mid);
+QPushButton:hover,
+QToolButton:hover,
+#settingsButton:hover,
+#exitButton:hover {
+    background-color: var(--sfc_system_hover);
 }
 
-/* 個別色指定ボタンの通常時の背景色を再定義 */
-#streamButton { background-color: var(--sfc_red); }
-#recordButton { background-color: var(--sfc_yellow); color: #050505 !important; }
-#virtualCamButton { background-color: var(--sfc_blue); }
-#modeSwitch { background-color: var(--sfc_green); }
+QPushButton:pressed,
+QToolButton:pressed,
+#settingsButton:pressed,
+#exitButton:pressed {
+    background-color: var(--sfc_system_pressed);
+}
 
-/* 録画停止ボタン（Bボタン）だけは通常時黒文字にする */
-#recordButton:not(:checked) {
+/* 2. 個別ボタン（配信・録画・仮想カメラ・スタジオモード）の基本色 */
+QPushButton#streamButton     { background-color: var(--sfc_red);    color: #ffffff !important; border: 1px solid var(--sfc_case); }
+QPushButton#recordButton     { background-color: var(--sfc_yellow); color: #050505 !important; border: 1px solid var(--sfc_case); }
+QPushButton#virtualCamButton { background-color: var(--sfc_blue);   color: #ffffff !important; border: 1px solid var(--sfc_case); }
+QPushButton#modeSwitch       { background-color: var(--sfc_green);  color: #ffffff !important; border: 1px solid var(--sfc_case); }
+
+/* 3. ホバー時の調整（少し明るく） */
+QPushButton#streamButton:hover     { background-color: #e33b57; }
+QPushButton#recordButton:hover     { background-color: #ffde40; }
+QPushButton#virtualCamButton:hover { background-color: #2050b0; }
+QPushButton#modeSwitch:hover       { background-color: #25a231; }
+
+/* 4. アクティブ（実行中 / チェック状態）の色を濃い色に変更 */
+/* より強力なセレクターを使用して確実に上書きする */
+QPushButton#streamButton:checked,
+QPushButton#streamButton:checked:enabled {
+    background-color: #900000 !important;
+    color: #ffffff !important;
+}
+
+QPushButton#recordButton:checked,
+QPushButton#recordButton:checked:enabled {
+    background-color: #b08000 !important;
+    color: #ffffff !important;
+}
+
+QPushButton#virtualCamButton:checked,
+QPushButton#virtualCamButton:checked:enabled {
+    background-color: #002060 !important;
+    color: #ffffff !important;
+}
+
+QPushButton#modeSwitch:checked,
+QPushButton#modeSwitch:checked:enabled {
+    background-color: #005020 !important;
+    color: #ffffff !important;
+}
+
+/* 録画停止中（通常時）の文字色を黒に固定 */
+QPushButton#recordButton:not(:checked) {
     color: #050505 !important;
 }
 
-/* チェックボックスの修正（独自作成の高コントラストアイコンを使用） */
-QCheckBox::indicator:unchecked,
-QGroupBox::indicator:unchecked,
-QTableView::indicator:unchecked {
-    image: url(./sfc/checkbox_unchecked_sfc.svg);
-}
-
-QCheckBox::indicator:checked,
-QGroupBox::indicator:checked,
-QTableView::indicator:checked {
-    image: url(./sfc/checkbox_checked_sfc.svg);
-}
-
-QCheckBox::indicator:unchecked:disabled,
-QGroupBox::indicator:unchecked:disabled,
-QTableView::indicator:unchecked:disabled {
-    image: url(./sfc/checkbox_unchecked_disabled_sfc.svg);
-}
