@@ -9,6 +9,9 @@ echo "=========================================================="
 echo "  OBS Studio カスタムテーマ インストーラー"
 echo "  ・スーパーファミコン (Super Famicom)"
 echo "  ・ファミリーコンピュータ (Family Computer)"
+echo "  ・ゲームボーイ (Gameboy)"
+echo "  ・Windows XP Luna"
+echo "  ・Windows Classic"
 echo "=========================================================="
 echo ""
 
@@ -36,6 +39,10 @@ fi
 THEME_FILES=(
     "Yami_SuperFamicom.ovt"
     "Yami_FamilyComputer.ovt"
+    "Yami_Gameboy.ovt"
+    "Yami_Luna.ovt"
+    "Yami_WindowsClassic.ovt"
+    "classic"
 )
 
 for target in "${TARGET_DIRS[@]}"; do
@@ -44,8 +51,8 @@ for target in "${TARGET_DIRS[@]}"; do
 
     for file in "${THEME_FILES[@]}"; do
         src="${THEMES_DIR}/${file}"
-        if [ -f "${src}" ]; then
-            cp -f "${src}" "${target}/"
+        if [ -e "${src}" ]; then
+            cp -rf "${src}" "${target}/"
             echo "  [OK] コピー完了: ${file}"
         else
             echo "  [スキップ] 見つかりません: ${file}"
@@ -58,9 +65,12 @@ echo "----------------------------------------------------------"
 echo "OBS Studio テーマのインストールが完了しました！"
 echo "----------------------------------------------------------"
 echo ""
-echo "【反映方法】"
+echo "【適用方法】"
 echo "1. OBS Studio を起動（起動中の場合は再起動）します。"
 echo "2. 設定 > 外観 > テーマ（または 一般 > テーマ）から以下を選択してください："
 echo "   - Super Famicom"
 echo "   - Family Computer"
+echo "   - Gameboy"
+echo "   - Windows XP Luna"
+echo "   - Windows Classic"
 echo ""

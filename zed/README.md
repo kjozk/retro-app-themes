@@ -3,6 +3,10 @@
 次世代高性能エディタ [Zed](https://zed.dev/) 向けのカスタムテーマです。  
 任天堂の伝説的名機である **ファミリーコンピュータ（FC）**、**スーパーファミコン（SFC）**、および **ゲームボーイ（GB）** の実機カラーパレットとデザイン言語を忠実に落とし込んでいます。
 
+| ファミリーコンピュータ | ゲームボーイ |
+| :---: | :---: |
+| ![Family Computer Preview](../screenshots/zed/fc_preview.png) | ![Gameboy Preview](../screenshots/zed/gb_preview.png) |
+
 ---
 
 ## 収録テーマ

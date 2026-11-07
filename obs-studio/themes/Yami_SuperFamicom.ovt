@@ -333,7 +333,8 @@ QComboBox,
 QDateTimeEdit {
     background-color: var(--input_bg);
     color: var(--text) !important;
-    border-color: var(--input_border);
+    border: 1px solid var(--input_border);
+    border-radius: 3px;
 }
 
 QComboBox:hover,
@@ -343,17 +344,56 @@ QDateTimeEdit:selected {
     border-color: var(--sfc_dark);
 }
 
-QComboBox::down-arrow,
-QDateTimeEdit::down-arrow {
-    image: url(theme:Light/collapse.svg);
+QComboBox::drop-down,
+QDateTimeEdit::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    background-color: var(--sfc_mid);
+    border: none;
+    border-left: 1px solid var(--sfc_dark);
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
 }
 
+QComboBox::drop-down:hover,
+QDateTimeEdit::drop-down:hover {
+    background-color: var(--sfc_blue);
+    border-left: 1px solid var(--sfc_blue_pressed);
+}
+
+QComboBox::drop-down:on,
+QComboBox::drop-down:pressed,
+QDateTimeEdit::drop-down:pressed {
+    background-color: var(--sfc_blue_pressed);
+    border-left: 1px solid #002b66;
+}
+
+QComboBox::drop-down:disabled,
+QDateTimeEdit::drop-down:disabled {
+    background-color: #6a6478;
+    border: none;
+    border-left: 1px solid var(--sfc_dark);
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+QComboBox::down-arrow,
+QDateTimeEdit::down-arrow,
 QComboBox::down-arrow:editable,
 QDateTimeEdit::down-arrow:editable {
-    image: url(theme:Light/collapse.svg);
+    image: url(theme:Dark/collapse.svg);
+    width: 8px;
+    height: 8px;
 }
 
-/* ドロップダウンメニューのリスト項目: 選択・ホバー時の文字色反転（ダークグレー背景 + 純白枠 + 純白文字） */
+QComboBox::down-arrow:disabled,
+QDateTimeEdit::down-arrow:disabled {
+    image: url(theme:Dark/collapse.svg);
+    width: 8px;
+    height: 8px;
+}
+
 QComboBox QAbstractItemView {
     background-color: #ffffff;
     border: 1px solid var(--sfc_border);
@@ -411,6 +451,7 @@ QComboBox QListView::item:selected:focus {
     background-color: transparent !important;
     color: var(--text) !important;
     border: 1px solid var(--sfc_border) !important;
+    border-radius: 0px !important;
     height: 14px !important;
     max-height: 14px !important;
     min-height: 14px !important;
@@ -420,9 +461,24 @@ QComboBox QListView::item:selected:focus {
 }
 
 #previewScalingMode::drop-down {
+    background-color: var(--sfc_mid) !important;
     border: none !important;
+    border-left: 1px solid var(--sfc_dark) !important;
+    border-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
     width: 14px !important;
     height: 14px !important;
+}
+
+#previewScalingMode::drop-down:hover {
+    background-color: var(--sfc_blue) !important;
+}
+
+#previewScalingMode::down-arrow {
+    image: url(theme:Dark/collapse.svg) !important;
+    width: 7px !important;
+    height: 7px !important;
 }
 
 #previewScalePercent {
@@ -450,6 +506,16 @@ QDoubleSpinBox::up-arrow {
 
 QSpinBox::down-arrow,
 QDoubleSpinBox::down-arrow {
+    image: url(theme:Light/down.svg);
+}
+
+QSpinBox::up-arrow:disabled,
+QDoubleSpinBox::up-arrow:disabled {
+    image: url(theme:Light/up.svg);
+}
+
+QSpinBox::down-arrow:disabled,
+QDoubleSpinBox::down-arrow:disabled {
     image: url(theme:Light/down.svg);
 }
 
@@ -601,9 +667,9 @@ OBSBasicSettings QListWidget::item:hover {
 OBSBasicSettings QListWidget::item:selected,
 OBSBasicSettings QListWidget::item:selected:focus,
 OBSBasicSettings QListWidget::item:selected:hover {
-    background-color: var(--sfc_dark) !important;
-    border: 1px solid #ffffff !important;
-    color: #ffffff !important;
+    background-color: #C2BED4 !important;
+    border: 1px solid #7E7894 !important;
+    color: #1a1622 !important;
     font-weight: bold;
 }
 
@@ -1076,3 +1142,199 @@ OBSBasic {
 .icon-close            { qproperty-icon: url(theme:Light/close.svg); }
 .icon-layout-vertical  { qproperty-icon: url(theme:Light/layout-vertical.svg); }
 .icon-layout-horizontal{ qproperty-icon: url(theme:Light/layout-horizontal.svg); }
+
+/* =============================================================================
+   10. スクロールバー (ホバー時でも背景に埋もれない高コントラスト・SFCスレート仕様)
+   ============================================================================= */
+QScrollBar:vertical,
+#previewYScrollBar,
+OBSBasicSettings QScrollBar:vertical,
+OBSDock QScrollBar:vertical {
+    background-color: var(--sfc_body_dark);
+    width: 16px !important;
+    border: none !important;
+    margin: 16px 0px 16px 0px !important;
+}
+
+QScrollBar:horizontal,
+#previewXScrollBar,
+OBSBasicSettings QScrollBar:horizontal,
+OBSDock QScrollBar:horizontal {
+    background-color: var(--sfc_body_dark);
+    height: 16px !important;
+    border: none !important;
+    margin: 0px 16px 0px 16px !important;
+}
+
+/* つまみ (ボタンと太さを完全一致) */
+QScrollBar::handle:vertical,
+#previewYScrollBar::handle,
+OBSBasicSettings QScrollBar::handle:vertical,
+OBSDock QScrollBar::handle:vertical {
+    background-color: var(--sfc_mid);
+    border: 1px solid var(--sfc_dark);
+    border-top: 2px solid #ffffff;
+    border-bottom: 2px solid var(--sfc_dark);
+    min-height: 24px;
+    margin: 0px !important;
+    border-radius: 0px;
+}
+
+QScrollBar::handle:vertical:hover,
+OBSBasicSettings QScrollBar::handle:vertical:hover {
+    background-color: var(--sfc_blue);
+    border: 1px solid var(--sfc_blue_pressed);
+}
+
+QScrollBar::handle:vertical:pressed,
+OBSBasicSettings QScrollBar::handle:vertical:pressed {
+    background-color: var(--sfc_blue_pressed);
+    border: 1px solid #002b66;
+}
+
+QScrollBar::handle:horizontal,
+#previewXScrollBar::handle,
+OBSBasicSettings QScrollBar::handle:horizontal,
+OBSDock QScrollBar::handle:horizontal {
+    background-color: var(--sfc_mid);
+    border: 1px solid var(--sfc_dark);
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid var(--sfc_dark);
+    min-width: 24px;
+    margin: 0px !important;
+    border-radius: 0px;
+}
+
+QScrollBar::handle:horizontal:hover,
+OBSBasicSettings QScrollBar::handle:horizontal:hover {
+    background-color: var(--sfc_blue);
+    border: 1px solid var(--sfc_blue_pressed);
+}
+
+QScrollBar::handle:horizontal:pressed,
+OBSBasicSettings QScrollBar::handle:horizontal:pressed {
+    background-color: var(--sfc_blue_pressed);
+    border: 1px solid #002b66;
+}
+
+/* 矢印ボタン (スクロールバーつまみと同等のスレートグレー + 白矢印) */
+QScrollBar::add-line:vertical {
+    background-color: var(--sfc_mid);
+    border: 1px solid var(--sfc_dark);
+    border-top: 2px solid var(--sfc_dark);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    background-color: var(--sfc_mid);
+    border: 1px solid var(--sfc_dark);
+    border-bottom: 2px solid var(--sfc_dark);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical:hover,
+QScrollBar::sub-line:vertical:hover {
+    background-color: var(--sfc_blue);
+    border: 1px solid var(--sfc_blue_pressed);
+}
+
+QScrollBar::add-line:vertical:pressed,
+QScrollBar::sub-line:vertical:pressed {
+    background-color: var(--sfc_blue_pressed);
+    border: 1px solid #002b66;
+}
+
+QScrollBar::add-line:horizontal {
+    background-color: var(--sfc_mid);
+    border: 1px solid var(--sfc_dark);
+    border-left: 2px solid var(--sfc_dark);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    background-color: var(--sfc_mid);
+    border: 1px solid var(--sfc_dark);
+    border-right: 2px solid var(--sfc_dark);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:horizontal:hover,
+QScrollBar::sub-line:horizontal:hover {
+    background-color: var(--sfc_blue);
+    border: 1px solid var(--sfc_blue_pressed);
+}
+
+QScrollBar::add-line:horizontal:pressed,
+QScrollBar::sub-line:horizontal:pressed {
+    background-color: var(--sfc_blue_pressed);
+    border: 1px solid #002b66;
+}
+
+QScrollBar::up-arrow:vertical {
+    image: url(theme:Dark/up.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::down-arrow:vertical {
+    image: url(theme:Dark/down.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::left-arrow:horizontal {
+    image: url(theme:Dark/left.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::right-arrow:horizontal {
+    image: url(theme:Dark/right.svg);
+    width: 8px;
+    height: 8px;
+}
+
+/* =============================================================================
+   ミキサー ミュート/モニター ボタン: ON/OFF 状態の明示分離（視認性強化）
+   OFF: 透明背景 + 通常アイコン / ON: 赤(ミュート)・緑(モニター)背景 + 白アイコン
+   ============================================================================= */
+QPushButton.btn-mute:!checked,.btn-mute:!checked:!hover,
+VolumeControl .btn-mute:!checked:!hover {
+    color: #1a1a1a !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    qproperty-icon: url(theme:Light/settings/audio.svg) !important;
+}
+QPushButton.btn-monitor:!checked,.btn-monitor:!checked:!hover,
+VolumeControl .btn-monitor:!checked:!hover {
+    color: #1a1a1a !important;
+    background: transparent !important;
+    border: 1px solid #7a7a86 !important;
+    qproperty-icon: url(theme:Light/headphones-off.svg) !important;
+}
+QPushButton.btn-mute:checked, QPushButton.btn-mute.checked, .btn-mute:checked, .btn-mute.checked,
+VolumeControl .btn-mute:checked {
+    color: #ffffff !important;
+    background: #b3202a !important;
+    border: 1px solid #6a0e14 !important;
+    qproperty-icon: url(theme:Dark/mute.svg) !important;
+}
+QPushButton.btn-monitor:checked, QPushButton.btn-monitor.checked, .btn-monitor:checked, .btn-monitor.checked,
+VolumeControl .btn-monitor:checked {
+    color: #ffffff !important;
+    background: #1e8f42 !important;
+    border: 1px solid #0f5a26 !important;
+    qproperty-icon: url(theme:Dark/headphones.svg) !important;
+}

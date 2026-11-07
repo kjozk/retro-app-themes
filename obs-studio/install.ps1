@@ -1,4 +1,4 @@
-﻿#Requires -Version 5.1
+#Requires -Version 5.1
 <#
 .SYNOPSIS
     OBS Studio のテーマディレクトリに SFC / FC テーマをインストールするスクリプト (Windows / macOS / Linux 対応)
@@ -32,6 +32,8 @@ Write-Host "  OBS Studio カスタムテーマ インストーラー" -Foregroun
 Write-Host "  ・スーパーファミコン (Super Famicom)" -ForegroundColor Cyan
 Write-Host "  ・ファミリーコンピュータ (Family Computer)" -ForegroundColor Cyan
 Write-Host "  ・ゲームボーイ (Gameboy)" -ForegroundColor Cyan
+Write-Host "  ・Windows XP Luna" -ForegroundColor Cyan
+Write-Host "  ・Windows Classic" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -39,7 +41,10 @@ $srcThemeDir = Join-Path $scriptDir "themes"
 $themeFiles = @(
     "Yami_SuperFamicom.ovt",
     "Yami_FamilyComputer.ovt",
-    "Yami_Gameboy.ovt"
+    "Yami_Gameboy.ovt",
+    "Yami_Luna.ovt",
+    "Yami_WindowsClassic.ovt",
+    "classic"
 )
 
 try {
@@ -52,7 +57,7 @@ try {
         foreach ($file in $themeFiles) {
             $srcPath = Join-Path $srcThemeDir $file
             if (Test-Path $srcPath) {
-                Copy-Item -Path $srcPath -Destination $targetDir -Force
+                Copy-Item -Path $srcPath -Destination $targetDir -Recurse -Force
                 Write-Host "  [OK] コピー完了: $file" -ForegroundColor Green
             } else {
                 Write-Host "  [スキップ] ファイルが見つかりません: $file" -ForegroundColor Yellow

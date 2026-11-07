@@ -64,8 +64,8 @@
     --primary_dark: var(--fc_red_pressed);
     --primary_darker: #3a0007;
     --highlight_color: #ffffff;
-    --list_item_bg_selected: var(--fc_red);
-    --list_item_bg_hover: var(--fc_red_hover);
+    --list_item_bg_selected: #dfbc62;
+    --list_item_bg_hover: #ebd180;
     --tab_border_focus: #ffffff;
 
     /* 基底テーマ(Yami/Light)の青色変数を完全無力化（青枠・青背景の漏れ出しを完全阻止） */
@@ -103,8 +103,8 @@
 /* 全ウィジェットの基本テキスト色および標準フォント設定（OBS Default テーマスタック準拠） */
 QWidget {
     color: var(--text);
-    selection-background-color: var(--fc_red);
-    selection-color: #ffffff;
+    selection-background-color: #dfbc62;
+    selection-color: #1a1610;
     font-family: 'Open Sans', '.AppleSystemUIFont', Helvetica, Arial, 'MS Shell Dlg', sans-serif;
 }
 
@@ -211,8 +211,8 @@ QMenuBar::item {
 }
 
 QMenuBar::item:selected {
-    background-color: var(--fc_red);
-    color: #ffffff !important;
+    background-color: #dfbc62;
+    color: #1a1610 !important;
     border-radius: 3px;
 }
 
@@ -308,8 +308,8 @@ QPlainTextEdit {
     border: 1px solid var(--input_border);
     border-radius: 3px;
     padding: 4px 6px;
-    selection-background-color: var(--fc_red);
-    selection-color: #ffffff;
+    selection-background-color: #dfbc62;
+    selection-color: #1a1610;
 }
 
 QLineEdit:focus,
@@ -323,7 +323,8 @@ QComboBox,
 QDateTimeEdit {
     background-color: var(--input_bg);
     color: var(--text) !important;
-    border-color: var(--input_border);
+    border: 1px solid var(--input_border);
+    border-radius: 3px;
 }
 
 QComboBox:hover,
@@ -333,22 +334,61 @@ QDateTimeEdit:selected {
     border-color: var(--fc_gold);
 }
 
-QComboBox::down-arrow,
-QDateTimeEdit::down-arrow {
-    image: url(theme:Light/collapse.svg);
+QComboBox::drop-down,
+QDateTimeEdit::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    background-color: var(--fc_red);
+    border: none;
+    border-left: 1px solid #7D0E16;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
 }
 
+QComboBox::drop-down:hover,
+QDateTimeEdit::drop-down:hover {
+    background-color: var(--fc_red_hover);
+    border-left: 1px solid var(--fc_gold);
+}
+
+QComboBox::drop-down:on,
+QComboBox::drop-down:pressed,
+QDateTimeEdit::drop-down:pressed {
+    background-color: var(--fc_red_pressed);
+    border-left: 1px solid #5A0A0F;
+}
+
+QComboBox::drop-down:disabled,
+QDateTimeEdit::drop-down:disabled {
+    background-color: #7d1c22;
+    border: none;
+    border-left: 1px solid #5A0A0F;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+QComboBox::down-arrow,
+QDateTimeEdit::down-arrow,
 QComboBox::down-arrow:editable,
 QDateTimeEdit::down-arrow:editable {
-    image: url(theme:Light/collapse.svg);
+    image: url(theme:Dark/collapse.svg);
+    width: 8px;
+    height: 8px;
 }
 
-/* ドロップダウンメニューのリスト項目: 選択・ホバー時の文字色反転（えんじ色背景 + 純白枠 + 純白文字） */
+QComboBox::down-arrow:disabled,
+QDateTimeEdit::down-arrow:disabled {
+    image: url(theme:Dark/collapse.svg);
+    width: 8px;
+    height: 8px;
+}
+
 QComboBox QAbstractItemView {
     background-color: #ffffff;
     border: 1px solid var(--fc_border);
-    selection-background-color: var(--fc_red);
-    selection-color: #ffffff;
+    selection-background-color: #dfbc62;
+    selection-color: #1a1610;
     outline: none;
 }
 
@@ -359,48 +399,48 @@ QComboBox QAbstractItemView::item {
     border: 1px solid transparent;
 }
 
-/* ドロップダウンメニューおよびメニューの選択・ホバー・フォーカス時の青枠排除と白枠・白文字化 */
+/* ドロップダウンメニュー及びメニューの選択・ホバー・フォーカスの真鍮色ハイライト */
 QMenu::item:selected,
 QMenu > QWidget:selected,
 QComboBox QAbstractItemView::item:selected,
 QComboBox QListView::item:selected,
 idian--Row QComboBox QAbstractItemView::item:selected {
-    background-color: var(--fc_red) !important;
-    border: 1px solid #ffffff !important;
-    color: #ffffff !important;
+    background-color: #dfbc62 !important;
+    border: 1px solid #b88f55 !important;
+    color: #1a1610 !important;
 }
 
 QMenu::item:hover,
 QComboBox QAbstractItemView::item:hover,
 QComboBox QListView::item:hover,
 idian--Row QComboBox QAbstractItemView.hover::item {
-    background-color: var(--fc_red) !important;
-    border: 1px solid #ffffff !important;
-    color: #ffffff !important;
+    background-color: #ebd180 !important;
+    border: 1px solid #c8a048 !important;
+    color: #1a1610 !important;
 }
 
 QMenu::item:selected:hover,
 QComboBox QAbstractItemView::item:selected:hover,
 QComboBox QListView::item:selected:hover {
-    background-color: var(--fc_red_hover) !important;
-    border: 1px solid #ffffff !important;
-    color: #ffffff !important;
+    background-color: #ebd180 !important;
+    border: 1px solid #b88f55 !important;
+    color: #1a1610 !important;
 }
 
 QMenu::item:focus,
 QMenu::item:selected:focus,
 QComboBox QAbstractItemView::item:selected:focus,
 QComboBox QListView::item:selected:focus {
-    background-color: var(--fc_red) !important;
-    border: 1px solid #ffffff !important;
-    color: #ffffff !important;
+    background-color: #dfbc62 !important;
+    border: 1px solid #b88f55 !important;
+    color: #1a1610 !important;
 }
-
 /* プレビュー下部ズーム・スケーリングバーのはみ出しを完全防止 */
 #previewScalingMode {
     background-color: transparent !important;
     color: var(--text) !important;
     border: 1px solid var(--fc_border) !important;
+    border-radius: 0px !important;
     height: 14px !important;
     max-height: 14px !important;
     min-height: 14px !important;
@@ -410,9 +450,24 @@ QComboBox QListView::item:selected:focus {
 }
 
 #previewScalingMode::drop-down {
+    background-color: var(--fc_red) !important;
     border: none !important;
+    border-left: 1px solid #7D0E16 !important;
+    border-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
     width: 14px !important;
     height: 14px !important;
+}
+
+#previewScalingMode::drop-down:hover {
+    background-color: var(--fc_red_hover) !important;
+}
+
+#previewScalingMode::down-arrow {
+    image: url(theme:Dark/collapse.svg) !important;
+    width: 7px !important;
+    height: 7px !important;
 }
 
 #previewScalePercent {
@@ -440,6 +495,16 @@ QDoubleSpinBox::up-arrow {
 
 QSpinBox::down-arrow,
 QDoubleSpinBox::down-arrow {
+    image: url(theme:Light/down.svg);
+}
+
+QSpinBox::up-arrow:disabled,
+QDoubleSpinBox::up-arrow:disabled {
+    image: url(theme:Light/up.svg);
+}
+
+QSpinBox::down-arrow:disabled,
+QDoubleSpinBox::down-arrow:disabled {
     image: url(theme:Light/down.svg);
 }
 
@@ -634,199 +699,179 @@ OBSBasicSettings QDialogButtonBox QPushButton:disabled {
 }
 
 /* =============================================================================
-   7. コントロールボタン (ファミコン実機4色のみで統一: 赤・金・黒・白)
+   7. コントロールパネル & ボタン (ファミコン Iコン 実機完全再現)
+   真鍮ゴールドプレート背景 + マットブラックボタン + えんじ色フチ
    ============================================================================= */
 
-#streamButton,
-#recordButton,
+/* コントロールパネルのコンテナ背景 (ファミコン Iコン ヘアライン真鍮プレート完全再現) */
+OBSDock#controls,
+OBSDock#controls > QWidget,
+#controlsFrame {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #CDAE6D,
+        stop:0.05 #C5A665,
+        stop:0.50 #BA9957,
+        stop:0.95 #C2A360,
+        stop:1.0 #B3914D);
+    border: 1px solid var(--fc_red);
+}
+
+/* コントロールボタン群 (実機ボタン完全再現: えんじ色メインボタン + マットブラック機能ボタン) */
+
+/* 汎用・機能ボタン (仮想カメラ / スタジオモード / 設定 / 終了): マットブラック + えんじ枠 + 白文字 */
+#controlsFrame QPushButton,
 #virtualCamButton,
 #modeSwitch,
 #settingsButton,
 #exitButton {
-    border-radius: var(--border_radius);
+    background-color: #121214;
+    color: #FFFFFF !important;
+    border: 2px solid var(--fc_red);
+    border-radius: 4px;
     padding: var(--padding_large);
-    font-weight: normal;
+    font-weight: bold;
 }
 
-/* --- 配信ボタン (FC えんじ色: Maroon) --- */
-QPushButton#streamButton {
+#controlsFrame QPushButton:hover,
+#virtualCamButton:hover,
+#modeSwitch:hover,
+#settingsButton:hover,
+#exitButton:hover {
+    background-color: #222226;
+    border-color: #B22234;
+    color: #FFFFFF !important;
+}
+
+#controlsFrame QPushButton:pressed,
+#virtualCamButton:pressed,
+#modeSwitch:pressed,
+#settingsButton:pressed,
+#exitButton:pressed {
+    background-color: #08080A;
+    border-color: #550A12;
+    color: #FFFFFF !important;
+}
+
+/* --- 配信開始 & 録画開始ボタン: 象徴的なFCえんじ色 (Maroon) ボタン --- */
+QPushButton#streamButton,
+QPushButton#recordButton {
     background-color: var(--fc_red);
-    color: #ffffff !important;
-    border: 1px solid #7d0e16;
+    color: #FFFFFF !important;
+    border: 2px solid #7D0E16;
+    border-radius: 4px;
+    padding: var(--padding_large);
+    font-weight: bold;
 }
 
-QPushButton#streamButton:hover {
+QPushButton#streamButton:hover,
+QPushButton#recordButton:hover {
     background-color: var(--fc_red_hover);
     border-color: var(--fc_gold);
-    color: #ffffff !important;
+    color: #FFFFFF !important;
 }
 
-QPushButton#streamButton:pressed {
-    background-color: var(--fc_red_pressed);
-    color: #ffffff !important;
-}
-
-/* 配信中（アクティブ時）: 深いえんじ背景 + ゴールド発光ボーダー + 白文字 */
-QPushButton#streamButton.state-active,
-QPushButton#streamButton:checked,
-QPushButton#streamButton:!hover:!pressed.state-active,
-QPushButton#streamButton:hover.state-active,
-QPushButton#streamButton:hover:checked {
-    background-color: #550a12 !important;
-    border: 2px solid var(--fc_gold_glow) !important;
-    color: #ffffff !important;
-}
-
-/* --- 録画ボタン (FC コントローラー金プレート: Gold) --- */
-QPushButton#recordButton {
-    background-color: var(--fc_gold);
-    color: #1a1610 !important; /* 金プレート上の黒文字刻印を再現し視認性最大化 */
-    border: 1px solid #b88f55;
-}
-
-QPushButton#recordButton:hover {
-    background-color: var(--fc_gold_hover);
-    border-color: var(--fc_gold);
-    color: #1a1610 !important;
-}
-
+QPushButton#streamButton:pressed,
 QPushButton#recordButton:pressed {
-    background-color: var(--fc_gold_pressed);
-    color: #1a1610 !important;
+    background-color: var(--fc_red_pressed);
+    border-color: #550A12;
+    color: #FFFFFF !important;
 }
 
-/* 録画中（アクティブ時＝「録画終了」ボタン）:
-   配信開始（赤）と見分けがつかない問題を完全解決！
-   ファミコンゴールドを保ったまま鮮やかな高輝度ゴールド背景 + えんじ色の注意ボーダー + 漆黒太字 */
-QPushButton#recordButton.state-active,
-QPushButton#recordButton:checked,
-QPushButton#recordButton:!hover:!pressed.state-active,
-QPushButton#recordButton:hover.state-active,
-QPushButton#recordButton:hover:checked {
-    background-color: #e5b742 !important;
-    border: 2px solid var(--fc_red) !important;
-    color: #000000 !important;
-    font-weight: normal;
-}
-
-/* 録画一時停止ボタン */
+/* 録画一時停止ボタン: えんじ色背景 + 純白一時停止アイコン (Darkリソース) */
 QPushButton#pauseRecordButton {
-    background-color: var(--fc_gold);
-    color: #1a1610 !important;
-    border: 1px solid #b88f55;
+    background-color: var(--fc_red);
+    color: #FFFFFF !important;
+    border: 2px solid #7D0E16;
+    border-radius: 4px;
+    padding: var(--padding_large);
+    width: var(--input_height);
+    max-width: var(--input_height);
+    qproperty-icon: url(theme:Dark/media-pause.svg);
 }
 
 QPushButton#pauseRecordButton:hover {
-    background-color: var(--fc_gold_hover);
-    color: #1a1610 !important;
+    background-color: var(--fc_red_hover);
+    border-color: var(--fc_gold);
+    qproperty-icon: url(theme:Dark/media-pause.svg);
+}
+
+QPushButton#pauseRecordButton:pressed {
+    background-color: var(--fc_red_pressed);
+    border-color: #550A12;
+    qproperty-icon: url(theme:Dark/media-pause.svg);
 }
 
 QPushButton#pauseRecordButton.state-active,
 QPushButton#pauseRecordButton:checked,
 QPushButton#pauseRecordButton:!hover:!pressed.state-active {
-    background-color: #e5b742 !important;
+    background-color: #550A12 !important;
+    border: 2px solid var(--fc_gold_glow) !important;
+    color: #FFFFFF !important;
+    qproperty-icon: url(theme:Dark/media-pause.svg);
+}
+
+/* 仮想カメラ設定（歯車）ボタン: ブラック + えんじ枠 + 白アイコンで統一 */
+QPushButton#virtualCamConfigButton {
+    background-color: #121214 !important;
     border: 2px solid var(--fc_red) !important;
-    color: #000000 !important;
+    border-radius: 4px;
+    padding: var(--padding_large);
+    width: var(--input_height);
+    max-width: var(--input_height);
+    color: #FFFFFF !important;
+    qproperty-icon: url(theme:Dark/settings/general.svg);
 }
 
-/* --- 仮想カメラボタン (FC コントローラー十字キー・ボタン: Matte Black) --- */
-QPushButton#virtualCamButton {
-    background-color: var(--fc_black);
-    color: #ffffff !important;
-    border: 1px solid #101012;
+QPushButton#virtualCamConfigButton:hover {
+    background-color: #222226 !important;
+    border-color: #B22234 !important;
+    qproperty-icon: url(theme:Dark/settings/general.svg);
 }
 
-QPushButton#virtualCamButton:hover {
-    background-color: var(--fc_black_hover);
-    border-color: var(--fc_gold);
-    color: #ffffff !important;
+/* --- アクティブ状態 (配信中 / 録画中 / 仮想カメラ / スタジオモード) --- */
+
+/* 配信中: 実機電源ランプのような真紅・濃いえんじ背景 + ゴールド発光枠 + 白文字太字 */
+QPushButton#streamButton.state-active,
+QPushButton#streamButton:checked,
+QPushButton#streamButton:!hover:!pressed.state-active,
+QPushButton#streamButton:hover.state-active,
+QPushButton#streamButton:hover:checked {
+    background-color: #550A12 !important;
+    border: 2px solid var(--fc_gold_glow) !important;
+    color: #FFFFFF !important;
 }
 
-QPushButton#virtualCamButton:pressed {
-    background-color: var(--fc_black_pressed);
-    color: #ffffff !important;
+/* 録画中 (録画終了ボタン): えんじ色背景 + ゴールド発光枠 + 白文字太字 */
+QPushButton#recordButton.state-active,
+QPushButton#recordButton:checked,
+QPushButton#recordButton:!hover:!pressed.state-active,
+QPushButton#recordButton:hover.state-active,
+QPushButton#recordButton:hover:checked {
+    background-color: #550A12 !important;
+    border: 2px solid var(--fc_gold_glow) !important;
+    color: #FFFFFF !important;
 }
 
-/* 仮想カメラ動作中（アクティブ時） */
+/* 仮想カメラ動作中 */
 QPushButton#virtualCamButton.state-active,
 QPushButton#virtualCamButton:checked,
 QPushButton#virtualCamButton:!hover:!pressed.state-active,
 QPushButton#virtualCamButton:hover.state-active,
 QPushButton#virtualCamButton:hover:checked {
-    background-color: #08080a !important;
-    border: 2px solid var(--fc_gold) !important;
-    color: #ffffff !important;
+    background-color: #222226 !important;
+    border: 2px solid var(--fc_gold_glow) !important;
+    color: #FFFFFF !important;
 }
 
-/* 仮想カメラ設定（歯車）ボタン: 白浮きを解消しブラック + ゴールド枠で統一 */
-QPushButton#virtualCamConfigButton {
-    background-color: var(--fc_black) !important;
-    border: 1px solid #101012 !important;
-    border-radius: var(--border_radius);
-    padding: var(--padding_large);
-    width: var(--input_height);
-    max-width: var(--input_height);
-    color: #ffffff !important;
-    qproperty-icon: url(theme:Dark/settings/general.svg);
-}
-
-QPushButton#virtualCamConfigButton:hover {
-    background-color: var(--fc_black_hover) !important;
-    border-color: var(--fc_gold) !important;
-    qproperty-icon: url(theme:Dark/settings/general.svg);
-}
-
-/* --- スタジオモード切替 (緑色廃止 → ファミコン本体アイボリー × えんじ色枠・文字) --- */
-QPushButton#modeSwitch {
-    background-color: #fdfcf8;
-    color: var(--fc_red) !important;
-    border: 2px solid var(--fc_red);
-}
-
-QPushButton#modeSwitch:hover {
-    background-color: #f7f0e8;
-    border-color: var(--fc_gold);
-    color: var(--fc_red) !important;
-}
-
-QPushButton#modeSwitch:pressed {
-    background-color: #ede3d4;
-    color: var(--fc_red_pressed) !important;
-}
-
-/* スタジオモードON（アクティブ時）:
-   赤ベタで文字が消失する問題を完全解消！
-   FCコントローラー黒ボタンをモチーフにしたブラック背景 + ゴールド枠 + 真っ白な太字 */
+/* スタジオモード有効時 */
 QPushButton#modeSwitch.state-active,
 QPushButton#modeSwitch:checked,
 QPushButton#modeSwitch:!hover:!pressed.state-active,
 QPushButton#modeSwitch:hover.state-active,
 QPushButton#modeSwitch:hover:checked {
-    background-color: #1a1a1c !important;
+    background-color: var(--fc_red) !important;
     border: 2px solid var(--fc_gold) !important;
-    color: #ffffff !important;
-    font-weight: normal;
-}
-
-/* --- 設定・終了ボタン (コントローラーブラック + ゴールドのアクセント枠) --- */
-QPushButton#settingsButton,
-QPushButton#exitButton {
-    background-color: var(--fc_black);
-    color: #ffffff !important;
-    border: 1px solid #101012;
-}
-
-QPushButton#settingsButton:hover,
-QPushButton#exitButton:hover {
-    background-color: var(--fc_black_hover);
-    border-color: var(--fc_gold);
-    color: #ffffff !important;
-}
-
-QPushButton#settingsButton:pressed,
-QPushButton#exitButton:pressed {
-    background-color: var(--fc_black_pressed);
-    color: #ffffff !important;
+    color: #FFFFFF !important;
 }
 
 /* 画面左下（プレビュー下部コンテキストバー）ツールボタン: 白浮きを完全解消し背景透明化 */
@@ -1127,3 +1172,199 @@ OBSBasic {
 .icon-close            { qproperty-icon: url(theme:Light/close.svg); }
 .icon-layout-vertical  { qproperty-icon: url(theme:Light/layout-vertical.svg); }
 .icon-layout-horizontal{ qproperty-icon: url(theme:Light/layout-horizontal.svg); }
+
+/* =============================================================================
+   10. スクロールバー (ファミコン本体 白ベース × EJECTレバーえんじ色)
+   ============================================================================= */
+QScrollBar:vertical,
+#previewYScrollBar,
+OBSBasicSettings QScrollBar:vertical,
+OBSDock QScrollBar:vertical {
+    background-color: var(--fc_body);
+    width: 16px !important;
+    border: none !important;
+    margin: 16px 0px 16px 0px !important;
+}
+
+QScrollBar:horizontal,
+#previewXScrollBar,
+OBSBasicSettings QScrollBar:horizontal,
+OBSDock QScrollBar:horizontal {
+    background-color: var(--fc_body);
+    height: 16px !important;
+    border: none !important;
+    margin: 0px 16px 0px 16px !important;
+}
+
+/* つまみ (ファミコン本体 EJECT レバーの象徴的えんじ色: ボタンと太さを完全一致) */
+QScrollBar::handle:vertical,
+#previewYScrollBar::handle,
+OBSBasicSettings QScrollBar::handle:vertical,
+OBSDock QScrollBar::handle:vertical {
+    background-color: var(--fc_red);
+    border: 1px solid #7D0E16;
+    border-top: 2px solid var(--fc_gold);
+    border-bottom: 2px solid var(--fc_gold);
+    min-height: 24px;
+    margin: 0px !important;
+    border-radius: 0px;
+}
+
+QScrollBar::handle:vertical:hover,
+OBSBasicSettings QScrollBar::handle:vertical:hover {
+    background-color: var(--fc_red_hover);
+    border: 1px solid var(--fc_gold);
+}
+
+QScrollBar::handle:vertical:pressed,
+OBSBasicSettings QScrollBar::handle:vertical:pressed {
+    background-color: var(--fc_red_pressed);
+    border: 1px solid #5A0A0F;
+}
+
+QScrollBar::handle:horizontal,
+#previewXScrollBar::handle,
+OBSBasicSettings QScrollBar::handle:horizontal,
+OBSDock QScrollBar::handle:horizontal {
+    background-color: var(--fc_red);
+    border: 1px solid #7D0E16;
+    border-left: 2px solid var(--fc_gold);
+    border-right: 2px solid var(--fc_gold);
+    min-width: 24px;
+    margin: 0px !important;
+    border-radius: 0px;
+}
+
+QScrollBar::handle:horizontal:hover,
+OBSBasicSettings QScrollBar::handle:horizontal:hover {
+    background-color: var(--fc_red_hover);
+    border: 1px solid var(--fc_gold);
+}
+
+QScrollBar::handle:horizontal:pressed,
+OBSBasicSettings QScrollBar::handle:horizontal:pressed {
+    background-color: var(--fc_red_pressed);
+    border: 1px solid #5A0A0F;
+}
+
+/* 矢印ボタン (実機EJECTレバー同等のえんじ色 + 白矢印) */
+QScrollBar::add-line:vertical {
+    background-color: var(--fc_red);
+    border: 1px solid #7D0E16;
+    border-top: 2px solid var(--fc_gold);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    background-color: var(--fc_red);
+    border: 1px solid #7D0E16;
+    border-bottom: 2px solid var(--fc_gold);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical:hover,
+QScrollBar::sub-line:vertical:hover {
+    background-color: var(--fc_red_hover);
+    border: 1px solid var(--fc_gold);
+}
+
+QScrollBar::add-line:vertical:pressed,
+QScrollBar::sub-line:vertical:pressed {
+    background-color: var(--fc_red_pressed);
+    border: 1px solid #5A0A0F;
+}
+
+QScrollBar::add-line:horizontal {
+    background-color: var(--fc_red);
+    border: 1px solid #7D0E16;
+    border-left: 2px solid var(--fc_gold);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    background-color: var(--fc_red);
+    border: 1px solid #7D0E16;
+    border-right: 2px solid var(--fc_gold);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:horizontal:hover,
+QScrollBar::sub-line:horizontal:hover {
+    background-color: var(--fc_red_hover);
+    border: 1px solid var(--fc_gold);
+}
+
+QScrollBar::add-line:horizontal:pressed,
+QScrollBar::sub-line:horizontal:pressed {
+    background-color: var(--fc_red_pressed);
+    border: 1px solid #5A0A0F;
+}
+
+QScrollBar::up-arrow:vertical {
+    image: url(theme:Dark/up.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::down-arrow:vertical {
+    image: url(theme:Dark/down.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::left-arrow:horizontal {
+    image: url(theme:Dark/left.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::right-arrow:horizontal {
+    image: url(theme:Dark/right.svg);
+    width: 8px;
+    height: 8px;
+}
+
+/* =============================================================================
+   ミキサー ミュート/モニター ボタン: ON/OFF 状態の明示分離（視認性強化）
+   OFF: 透明背景 + 通常アイコン / ON: 赤(ミュート)・緑(モニター)背景 + 白アイコン
+   ============================================================================= */
+QPushButton.btn-mute:!checked,.btn-mute:!checked:!hover,
+VolumeControl .btn-mute:!checked:!hover {
+    color: #1a1a1a !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    qproperty-icon: url(theme:Light/settings/audio.svg) !important;
+}
+QPushButton.btn-monitor:!checked,.btn-monitor:!checked:!hover,
+VolumeControl .btn-monitor:!checked:!hover {
+    color: #1a1a1a !important;
+    background: transparent !important;
+    border: 1px solid #7a7364 !important;
+    qproperty-icon: url(theme:Light/headphones-off.svg) !important;
+}
+QPushButton.btn-mute:checked, QPushButton.btn-mute.checked, .btn-mute:checked, .btn-mute.checked,
+VolumeControl .btn-mute:checked {
+    color: #ffffff !important;
+    background: #98161f !important;
+    border: 1px solid #5a0a10 !important;
+    qproperty-icon: url(theme:Dark/mute.svg) !important;
+}
+QPushButton.btn-monitor:checked, QPushButton.btn-monitor.checked, .btn-monitor:checked, .btn-monitor.checked,
+VolumeControl .btn-monitor:checked {
+    color: #ffffff !important;
+    background: #1e8f42 !important;
+    border: 1px solid #0f5a26 !important;
+    qproperty-icon: url(theme:Dark/headphones.svg) !important;
+}

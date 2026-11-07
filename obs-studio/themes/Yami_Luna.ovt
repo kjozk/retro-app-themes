@@ -1,0 +1,1249 @@
+@OBSThemeMeta {
+    name: 'Windows XP Luna';
+    id: 'com.obsproject.Yami.Luna';
+    extends: 'com.obsproject.Yami.Light';
+    author: 'kjozk & Antigravity';
+    dark: 'false';
+}
+
+@OBSThemeVars {
+    /* =========================================================================
+       Windows XP Luna (ルナ) 実機・OS完全再現カラーパレット
+       (黄ばみを排除した現代のディスプレイ向けのクリーン・ペールシルバー調整版)
+       ========================================================================= */
+    --xp_bg: #EEF1F4;           /* 黄ばみのない爽やかで明るいペールシルバーグレー */
+    --xp_bg_light: #FFFFFF;     /* ウィンドウ内側・入力欄・リスト背景 */
+    --xp_bg_dark: #DCE0E6;      /* クラシックベベル・未選択タブ・ステータスバー */
+    --xp_border: #7F9DB9;       /* XP 特有のスカイブルーグレー枠線 (Sunken Border) */
+    --xp_border_dark: #003C74;  /* ボタン・アクティブ枠のディープブルー */
+    --xp_border_light: #FFFFFF; /* ベベルハイライト */
+
+    /* --- Luna Blue (象徴的ロイヤルブルー光沢) --- */
+    --luna_blue_top: #3593FF;
+    --luna_blue_mid: #0C65EE;
+    --luna_blue_bot: #0055EA;
+    --luna_blue_dark: #002288;
+    --luna_blue_glow: #6BAEFF;
+
+    /* --- Luna Green (Windows XP スタートボタン風エメラルドグリーン) --- */
+    --luna_green_top: #54C742;
+    --luna_green_mid: #389B27;
+    --luna_green_bot: #226D14;
+    --luna_green_dark: #164A0B;
+    --luna_green_glow: #78E866;
+
+    /* --- Luna Red / Orange (閉じるボタン・停止・警告用) --- */
+    --luna_red_top: #FF764D;
+    --luna_red_mid: #E83610;
+    --luna_red_bot: #AC1200;
+    --luna_red_dark: #780B00;
+    --luna_red_glow: #FFA485;
+
+    /* --- Luna Gold / Orange (ボタンホバー時のXP特有グロー光彩) --- */
+    --luna_hover_top: #FFFFFF;
+    --luna_hover_mid: #FFE6A2;
+    --luna_hover_bot: #FDD97A;
+    --luna_hover_border: #E68B2C;
+
+    /* --- 選択・アクセント --- */
+    --xp_selection: #316AC5;    /* XP 定番セレクションブルー */
+    --xp_selection_text: #FFFFFF;
+
+    /* --- 画面全体の背景定義 --- */
+    --bg_window: var(--xp_bg);
+    --bg_base: var(--xp_bg);
+    --bg_preview: #323538;      /* プレビュー外周は落ち着いたダークチャコール */
+
+    /* =========================================================================
+       文字色・パレット設定
+       ========================================================================= */
+    --text: #000000;            /* メインテキスト: 完全な黒 */
+    --text_light: #000000;      /* Light テーマ規約準拠: 親から継承されるテキスト用（白飛び防止） */
+    --luna_btn_text: #FFFFFF;   /* 青・緑・赤ボタン専用ホワイトテキスト */
+    --text_muted: #444444;      /* 補足テキスト */
+    --text_inactive: #666666;
+    --text_disabled: #8C9098;   /* 無効時グレー */
+
+    /* Qt パレット完全上書き */
+    --palette_windowText: #000000;
+    --palette_windowText_active: #000000;
+    --palette_windowText_inactive: #000000;
+    --palette_windowText_disabled: #808080;
+    --palette_text: #000000;
+    --palette_text_active: #000000;
+    --palette_text_inactive: #000000;
+    --palette_text_disabled: #808080;
+    --palette_buttonText: #000000;
+    --palette_brightText: #FFFFFF;
+    --palette_highlightedText: #FFFFFF;
+    --palette_toolTipText: #000000;
+    --palette_window: var(--xp_bg);
+    --palette_base: #FFFFFF;
+    --palette_button: var(--xp_bg);
+    --palette_mid: var(--xp_border);
+
+    --primary: var(--luna_blue_bot);
+    --primary_light: var(--luna_blue_top);
+    --primary_dark: var(--luna_blue_dark);
+
+    --accent: var(--luna_blue_mid);
+    --accent_hover: var(--luna_blue_top);
+    --accent_pressed: var(--luna_blue_dark);
+
+    --success: var(--luna_green_bot);
+    --warning: #FF9900;
+    --danger: var(--luna_red_bot);
+}
+
+/* =========================================================================
+   1. 基本ウィジェット & コントラスト保護 (MS UI Gothic 最優先)
+   ========================================================================= */
+QWidget {
+    background-color: var(--xp_bg);
+    color: var(--text);
+    selection-background-color: var(--xp_selection);
+    selection-color: var(--xp_selection_text);
+    font-family: 'MS UI Gothic', 'Tahoma', 'Meiryo UI', sans-serif;
+    font-size: 12px;
+}
+
+QDialog,
+QMainWindow,
+OBSBasic {
+    background-color: var(--xp_bg);
+    color: var(--text);
+}
+
+/* ツールチップ (XP クラシック イエローポップアップ) */
+QToolTip {
+    background-color: #FFFFE1;
+    color: #000000;
+    border: 1px solid #000000;
+    padding: 3px 5px;
+    font-size: 11px;
+}
+
+/* =========================================================================
+   2. ドック・タイトルバー・ウィンドウ枠 (Luna Blue 完全再現)
+   ========================================================================= */
+QDockWidget {
+    color: #FFFFFF; /* タイトルバーの文字色: Lunaブルー上で鮮明な純白 */
+    font-weight: bold;
+    titlebar-close-icon: url(theme:Dark/close.svg);
+    titlebar-normal-icon: url(theme:Dark/popout.svg);
+}
+
+QDockWidget::title {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #0058EE,
+        stop:0.06 #3593FF,
+        stop:0.48 #288EFF,
+        stop:0.50 #0C65EE,
+        stop:1.0 #0055EA);
+    border: 1px solid #002288;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    padding: 4px 8px;
+    text-align: left;
+    color: #FFFFFF;
+}
+
+/* ドック内フレーム */
+OBSDock > QWidget {
+    background-color: var(--xp_bg);
+    border: 1px solid var(--xp_border);
+    border-top: none;
+    color: #000000;
+}
+
+/* ドック内コンテンツ文字色完全保護（QDockWidgetからの白文字継承を遮断） */
+QDockWidget QWidget,
+OBSDock QWidget,
+OBSDock QLabel,
+OBSDock QTreeView,
+OBSDock QListView,
+OBSDock QListWidget,
+OBSDock QTableView,
+OBSDock QPushButton,
+OBSDock QCheckBox,
+OBSDock QRadioButton {
+    color: #000000;
+}
+
+/* =========================================================================
+   3. タブバー (下向きドックタブの正しい方向修正)
+   ========================================================================= */
+
+/* デフォルト / 下側タブ (ドック下部に配置されるタブ) */
+QTabBar::tab:bottom,
+QTabBar::tab {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #F0F2F5, stop:0.5 #E2E6EC, stop:1 #D2D8E0);
+    color: var(--text);
+    border: 1px solid #919B9C;
+    border-top: none;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    padding: 4px 12px;
+    margin-right: 2px;
+    margin-top: -1px;
+}
+
+QTabBar::tab:bottom:selected,
+QTabBar::tab:selected {
+    background: #FFFFFF;
+    color: #000000;
+    font-weight: bold;
+    border: 1px solid #919B9C;
+    border-top: 1px solid #FFFFFF;
+    border-bottom: 3px solid #E68B2C; /* オレンジの強調ラインは下側！ */
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    margin-top: 0px;
+}
+
+QTabBar::tab:bottom:hover:!selected,
+QTabBar::tab:hover:!selected {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:0.5 #FFF3D6, stop:1 #FFE4A0);
+    border-bottom: 2px solid #E68B2C;
+}
+
+/* 上部タブ (もし上側に配置された場合) */
+QTabBar::tab:top {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:0.5 #E2E6EC, stop:1 #D2D8E0);
+    border: 1px solid #919B9C;
+    border-bottom: none;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+QTabBar::tab:top:selected {
+    background: #FFFFFF;
+    border-top: 3px solid #E68B2C;
+    border-bottom: 1px solid #FFFFFF;
+}
+
+QTabBar::tab:top:hover:!selected {
+    border-top: 2px solid #E68B2C;
+}
+
+/* =========================================================================
+   4. 汎用ボタン (Luna 立体プッシュボタン: 黄ばみを排したシルバーホワイト)
+   ========================================================================= */
+QPushButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #FFFFFF,
+        stop:0.48 #F4F6F9,
+        stop:0.50 #E6EAEF,
+        stop:1.0 #D8DEE6);
+    color: #000000;
+    border: 1px solid #003C74;
+    border-radius: 3px;
+    padding: 3px 8px;
+    min-height: 20px;
+    min-width: 64px;
+    font-weight: normal;
+}
+
+QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #FFFFFF,
+        stop:0.48 #FFF2D1,
+        stop:0.50 #FFE6A2,
+        stop:1.0 #FDD672);
+    border: 1px solid #E68B2C;
+    color: #000000;
+}
+
+QPushButton:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #C8CFD8,
+        stop:0.50 #D4DAE2,
+        stop:1.0 #E2E6ED);
+    border: 1px solid #002244;
+}
+
+QPushButton:disabled {
+    background-color: var(--xp_bg);
+    color: var(--text_disabled);
+    border: 1px solid #C4C8D0;
+}
+
+/* トグルボタン・選択中状態 (設定画面の密度ボタン「クラシック」「コンパクト」等) */
+QPushButton:checked,
+QPushButton:checked:hover,
+QPushButton.state-active,
+QPushButton[state-active="true"] {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #3D97FF,
+        stop:0.10 #2E8EFF,
+        stop:0.48 #1168EE,
+        stop:0.50 #0053EA,
+        stop:1.0 #003DB5) !important;
+    color: #FFFFFF !important;
+    font-weight: bold;
+    border: 1px solid #002B82 !important;
+}
+
+QPushButton:checked:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #00308E,
+        stop:0.50 #0045B8,
+        stop:1.0 #0C62EE) !important;
+    color: #FFFFFF !important;
+}
+
+/* デフォルトボタン (OKボタン等) の青い光彩枠 */
+QPushButton:default {
+    border: 1px solid #0055EA;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #FFFFFF,
+        stop:0.48 #F0F4FA,
+        stop:0.50 #E0E8F4,
+        stop:1.0 #D0DCED);
+}
+
+/* =========================================================================
+   5. 入力コントロール (テキスト・ドロップダウン・数値)
+   ========================================================================= */
+QLineEdit,
+QSpinBox,
+QDoubleSpinBox,
+QComboBox {
+    background-color: #FFFFFF;
+    color: #000000;
+    border: 1px solid var(--xp_border);
+    border-radius: 1px;
+    padding: 3px 5px;
+    selection-background-color: var(--xp_selection);
+    selection-color: var(--xp_selection_text);
+}
+
+QLineEdit:focus,
+QSpinBox:focus,
+QDoubleSpinBox:focus,
+QComboBox:focus {
+    border: 1px solid #0055EA;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 18px;
+    border-left: 1px solid var(--xp_border);
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:0.5 #E8ECF2, stop:1 #D8DEE6);
+}
+
+QComboBox::drop-down:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:0.5 #FFEBB8, stop:1 #FDD97A);
+    border-left: 1px solid #E68B2C;
+}
+
+QComboBox::drop-down:disabled {
+    background: #ECE9D8;
+    border-left: 1px solid #D0D0C8;
+}
+
+QComboBox::down-arrow {
+    image: url(theme:Light/collapse.svg);
+    width: 8px;
+    height: 6px;
+}
+
+QComboBox::down-arrow:disabled {
+    image: url(theme:classic/down_disabled.svg);
+    width: 8px;
+    height: 6px;
+}
+
+/* スピンボックスのボタン (Windows XP Luna Up-Down コントロール) */
+QSpinBox,
+QDoubleSpinBox {
+    padding-right: 18px;
+}
+
+QSpinBox::up-button,
+QDoubleSpinBox::up-button {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 17px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:0.5 #ECE9D8, stop:1 #D8DEE6);
+    border-left: 1px solid var(--xp_border);
+    border-bottom: 1px solid #C0C8D0;
+    border-radius: 0px;
+}
+
+QSpinBox::up-button:hover,
+QDoubleSpinBox::up-button:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:0.5 #FFEBB8, stop:1 #FDD97A);
+    border-color: #E68B2C;
+}
+
+QSpinBox::up-button:pressed,
+QDoubleSpinBox::up-button:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #E08520, stop:1 #F5B040);
+    border-color: #A05010;
+}
+
+QSpinBox::up-button:disabled,
+QDoubleSpinBox::up-button:disabled {
+    background: #ECE9D8;
+    border-left: 1px solid var(--xp_border);
+    border-bottom: 1px solid #C0C8D0;
+}
+
+QSpinBox::up-arrow,
+QDoubleSpinBox::up-arrow {
+    image: url(theme:Light/up.svg);
+    width: 7px;
+    height: 5px;
+}
+
+QSpinBox::up-arrow:disabled,
+QSpinBox::up-arrow:off,
+QDoubleSpinBox::up-arrow:disabled,
+QDoubleSpinBox::up-arrow:off {
+    image: url(theme:classic/up_disabled.svg);
+    width: 7px;
+    height: 5px;
+}
+
+QSpinBox::down-button,
+QDoubleSpinBox::down-button {
+    subcontrol-origin: padding;
+    subcontrol-position: bottom right;
+    width: 17px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #D8DEE6, stop:0.5 #ECE9D8, stop:1 #FFFFFF);
+    border-left: 1px solid var(--xp_border);
+    border-top: 1px solid #C0C8D0;
+    border-radius: 0px;
+}
+
+QSpinBox::down-button:hover,
+QDoubleSpinBox::down-button:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FDD97A, stop:0.5 #FFEBB8, stop:1 #FFFFFF);
+    border-color: #E68B2C;
+}
+
+QSpinBox::down-button:pressed,
+QDoubleSpinBox::down-button:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #F5B040, stop:1 #E08520);
+    border-color: #A05010;
+}
+
+QSpinBox::down-button:disabled,
+QDoubleSpinBox::down-button:disabled {
+    background: #ECE9D8;
+    border-left: 1px solid var(--xp_border);
+    border-top: 1px solid #C0C8D0;
+}
+
+QSpinBox::down-arrow,
+QDoubleSpinBox::down-arrow {
+    image: url(theme:Light/collapse.svg);
+    width: 7px;
+    height: 5px;
+}
+
+QSpinBox::down-arrow:disabled,
+QSpinBox::down-arrow:off,
+QDoubleSpinBox::down-arrow:disabled,
+QDoubleSpinBox::down-arrow:off {
+    image: url(theme:classic/down_disabled.svg);
+    width: 7px;
+    height: 5px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #FFFFFF;
+    color: #000000;
+    border: 1px solid var(--xp_border);
+    selection-background-color: var(--xp_selection);
+    selection-color: #FFFFFF;
+}
+
+QComboBox QAbstractItemView::item {
+    color: #000000;
+    padding: 3px 6px;
+    min-height: 18px;
+}
+
+QComboBox QAbstractItemView::item:selected,
+QComboBox QAbstractItemView::item:hover {
+    background-color: var(--xp_selection) !important;
+    color: #FFFFFF !important;
+}
+
+/* チェックボックス・ラジオボタン */
+QCheckBox, QRadioButton {
+    spacing: 6px;
+    color: var(--text);
+}
+
+/* =========================================================================
+   6. リスト・ツリー・テーブル (SceneTree, SourceTree, QAbstractItemView)
+   ========================================================================= */
+QAbstractItemView {
+    background-color: #FFFFFF;
+    color: #000000;
+    selection-background-color: var(--xp_selection);
+    selection-color: #FFFFFF;
+}
+
+QListWidget,
+QListView,
+QTreeWidget,
+QTreeView,
+QTableWidget,
+SourceTree,
+SceneTree {
+    background-color: #FFFFFF;
+    color: #000000;
+    border: 1px solid var(--xp_border);
+    selection-background-color: var(--xp_selection);
+    selection-color: var(--xp_selection_text);
+    show-decoration-selected: 1;
+}
+
+/* 通常時（未選択時）のアイテム文字色を完全保証 (シーン・ソース・一般リスト) */
+QAbstractItemView::item,
+QListView::item,
+QListWidget::item,
+SceneTree::item,
+SourceTree::item,
+.list-grid SceneTree::item {
+    color: #000000 !important;
+    background-color: transparent;
+}
+
+/* ホバー時 (XP淡色ブルー光彩) */
+QAbstractItemView::item:hover,
+QListView::item:hover,
+QListWidget::item:hover,
+QTreeWidget::item:hover,
+SceneTree::item:hover,
+SourceTree::item:hover,
+.list-grid SceneTree::item:hover {
+    background-color: #E8F0FF !important;
+    color: #000000 !important;
+}
+
+/* 選択時 (Windows XP セレクションブルー背景 + 白文字) */
+QAbstractItemView::item:selected,
+QListView::item:selected,
+QListWidget::item:selected,
+QTreeWidget::item:selected,
+SceneTree::item:selected,
+SourceTree::item:selected,
+.list-grid SceneTree::item:selected,
+.list-grid SceneTree::item:selected:hover {
+    background-color: var(--xp_selection) !important;
+    color: #FFFFFF !important;
+}
+
+/* 通常時（未選択時）アイテム文字色 */
+SourceTreeItem,
+SourceTreeItem QLabel,
+SourceTreeItem OBSSourceLabel,
+OBSDock QLabel {
+    color: #000000;
+}
+
+/* 非表示（非アクティブ・目が閉じている状態）でも確実に読める濃いグレー */
+.text-muted,
+QLabel.text-muted {
+    color: #555555 !important;
+}
+
+/* 選択時の非表示ソーステキスト */
+QAbstractItemView::item:selected .text-muted,
+SourceTree::item:selected .text-muted {
+    color: #D0D8F0 !important;
+}
+
+/* ヘッダー */
+QHeaderView::section {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:0.5 #E8ECF2, stop:1 #D8DEE6);
+    color: #000000;
+    border: 1px solid #D4D8E0;
+    border-right: 1px solid #A4AAB4;
+    border-bottom: 1px solid #A4AAB4;
+    padding: 3px 6px;
+}
+
+/* =========================================================================
+   7. 設定ダイアログ (OBSBasicSettings: XPタスクペイン調の爽やかな淡青枠)
+   ========================================================================= */
+OBSBasicSettings {
+    background-color: var(--xp_bg);
+}
+
+OBSBasicSettings QListWidget#categories {
+    background-color: #F4F7FB; /* XPエクスプローラー風の淡いブルーグレー */
+    border: 1px solid var(--xp_border);
+    min-width: 160px;
+}
+
+OBSBasicSettings QListWidget#categories::item {
+    padding: 8px 12px;
+    border-bottom: 1px solid #E2E8F0;
+    color: #000000;
+}
+
+OBSBasicSettings QListWidget#categories::item:selected {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #DDEBFC, stop:1 #B8D6F9);
+    border: 1px solid #7DA2CE;
+    border-radius: 3px;
+    color: #003399 !important;
+    font-weight: bold;
+}
+
+OBSBasicSettings QListWidget#categories::item:hover:!selected {
+    background-color: #E0EBF8;
+    color: #000000;
+}
+
+QGroupBox {
+    border: 1px solid var(--xp_border);
+    border-radius: 4px;
+    margin-top: 10px;
+    padding-top: 10px;
+    font-weight: bold;
+    color: #003399; /* XP グループボックスのディープブルー見出し */
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 0 5px;
+    background-color: var(--xp_bg);
+}
+
+/* =========================================================================
+   8. コントロールボタン (Windows XP 象徴ボタン)
+   ========================================================================= */
+
+/* --- 配信ボタン: Windows XP スタートボタン風エメラルドグリーン --- */
+#streamButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #58D046,
+        stop:0.10 #47BF35,
+        stop:0.48 #38A027,
+        stop:0.50 #2B891B,
+        stop:1.0 #1E6B10);
+    color: #FFFFFF !important;
+    border: 1px solid #144E0A;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 6px 14px;
+}
+
+#streamButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #6EE65C,
+        stop:0.10 #5BD649,
+        stop:0.48 #48B435,
+        stop:0.50 #379F25,
+        stop:1.0 #267E16);
+    border: 1px solid #1A640D;
+    color: #FFFFFF !important;
+}
+
+#streamButton:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #1A5E0E,
+        stop:0.50 #267817,
+        stop:1.0 #329221);
+    border: 1px solid #0F3A07;
+}
+
+/* 配信中 (アクティブ状態: 停止用レッド) */
+#streamButton:!hover:!pressed.state-active,
+#streamButton:hover:!pressed.state-active,
+#streamButton.state-active,
+#streamButton:checked,
+#streamButton:hover:checked {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #FF764D,
+        stop:0.10 #F85A2A,
+        stop:0.48 #E83610,
+        stop:0.50 #D22002,
+        stop:1.0 #AC1200) !important;
+    color: #FFFFFF !important;
+    border: 1px solid #6E0B00 !important;
+}
+
+/* --- 録画ボタン: Windows XP Luna ロイヤルブルー --- */
+#recordButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #3D97FF,
+        stop:0.10 #2E8EFF,
+        stop:0.48 #1168EE,
+        stop:0.50 #0053EA,
+        stop:1.0 #003DB5);
+    color: #FFFFFF !important;
+    border: 1px solid #002B82;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 6px 14px;
+}
+
+#recordButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #57A6FF,
+        stop:0.10 #479FFF,
+        stop:0.48 #2579FA,
+        stop:0.50 #0C65EE,
+        stop:1.0 #004DC7);
+    border: 1px solid #00349E;
+    color: #FFFFFF !important;
+}
+
+#recordButton:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #00308E,
+        stop:0.50 #0045B8,
+        stop:1.0 #0C62EE);
+    border: 1px solid #001C56;
+}
+
+/* 録画中 (アクティブ状態: 停止用レッド) */
+#recordButton:!hover:!pressed.state-active,
+#recordButton:hover:!pressed.state-active,
+#recordButton.state-active,
+#recordButton:checked,
+#recordButton:hover:checked {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #FF764D,
+        stop:0.10 #F85A2A,
+        stop:0.48 #E83610,
+        stop:0.50 #D22002,
+        stop:1.0 #AC1200) !important;
+    color: #FFFFFF !important;
+    border: 1px solid #6E0B00 !important;
+}
+
+/* 仮想カメラ・リプレイバッファ・スタジオモード・設定・終了 */
+#replayBufferButton,
+#vcamButton,
+#modeSwitch {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:0.48 #F4F6F9, stop:0.50 #E6EAEF, stop:1.0 #D8DEE6);
+    border: 1px solid #003C74;
+    border-radius: 3px;
+    color: #000000;
+}
+
+#replayBufferButton:hover,
+#vcamButton:hover,
+#modeSwitch:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:0.48 #FFF2D1, stop:0.50 #FFE6A2, stop:1.0 #FDD672);
+    border: 1px solid #E68B2C;
+}
+
+#settingsButton,
+#exitButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:0.48 #F4F6F9, stop:0.50 #E6EAEF, stop:1.0 #D8DEE6);
+    border: 1px solid #7F9DB9;
+    border-radius: 3px;
+    color: #000000;
+}
+
+#settingsButton:hover,
+#exitButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:0.48 #FFF2D1, stop:0.50 #FFE6A2, stop:1.0 #FDD672);
+    border: 1px solid #E68B2C;
+}
+
+/* =========================================================================
+   9. ミキサー & スライダー (XP Candy Blocks & Track)
+   ========================================================================= */
+
+/* 水平スライダー溝 */
+QSlider::groove:horizontal {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #9AA0AA, stop:0.2 #C0C6D0, stop:1.0 #FFFFFF);
+    border: 1px solid #7F9DB9;
+    height: 4px;
+    border-radius: 2px;
+}
+
+/* 到達側 (進捗ブルー) */
+QSlider::sub-page:horizontal {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3593FF, stop:1 #0055EA) !important;
+    border-radius: 2px;
+}
+
+/* 未達側 */
+QSlider::add-page:horizontal {
+    background: #D4D8E0 !important;
+    border-radius: 2px;
+}
+
+/* つまみ (XP 立体シルバーノブ) */
+QSlider::handle:horizontal {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #FFFFFF,
+        stop:0.45 #F2F4F8,
+        stop:0.55 #E4E8EE,
+        stop:1.0 #D2D8E2) !important;
+    border: 1px solid #003C74;
+    width: 12px;
+    height: 18px;
+    margin: -7px 0;
+    border-radius: 2px;
+}
+
+QSlider::handle:horizontal:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #FFFFFF,
+        stop:0.45 #FFF2D1,
+        stop:0.55 #FFE6A2,
+        stop:1.0 #FDD672) !important;
+    border: 1px solid #E68B2C;
+}
+
+/* 垂直スライダー (音量フェーダー) */
+QSlider::groove:vertical {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #9AA0AA, stop:0.2 #C0C6D0, stop:1.0 #FFFFFF);
+    border: 1px solid #7F9DB9;
+    width: 4px;
+    border-radius: 2px;
+}
+
+QSlider::add-page:vertical {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #3593FF, stop:1 #0055EA) !important;
+    border-radius: 2px;
+}
+
+QSlider::sub-page:vertical {
+    background: #D4D8E0 !important;
+    border-radius: 2px;
+}
+
+QSlider::handle:vertical {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0 #FFFFFF,
+        stop:0.45 #F2F4F8,
+        stop:0.55 #E4E8EE,
+        stop:1.0 #D2D8E2) !important;
+    border: 1px solid #003C74;
+    height: 12px;
+    width: 18px;
+    margin: 0 -7px;
+    border-radius: 2px;
+}
+
+QSlider::handle:vertical:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0 #FFFFFF,
+        stop:0.45 #FFF2D1,
+        stop:0.55 #FFE6A2,
+        stop:1.0 #FDD672) !important;
+    border: 1px solid #E68B2C;
+}
+
+/* 水平ミキサーのチャンネル間余白と境界線（目盛り数字と次チャンネルの被りを解消） */
+#hVolumeWidgets VolumeControl {
+    padding: 4px 6px 8px 6px;
+    border-bottom: 1px solid #D0D4DC;
+}
+
+#vVolumeWidgets VolumeControl {
+    padding: 6px 4px;
+    border-right: 1px solid #D0D4DC;
+}
+
+/* 音声ミキサー (VolumeControl) 文字色・コントロール完全最適化 */
+VolumeControl,
+VolumeControl QLabel,
+VolumeControl QLabel#nameLabel,
+VolumeControl QLabel#volLabel {
+    color: #000000 !important;
+}
+
+VolumeControl QLabel#volLabel {
+    font-size: 10px;
+}
+
+VolumeControl .mixer-category {
+    color: #FFFFFF !important;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #4E87DD, stop:1 #2458AE) !important;
+    border-radius: 2px;
+    padding: 1px 5px;
+    font-weight: bold;
+}
+
+/* ミュートボタン (.btn-mute) & モニターボタン (.btn-monitor) の完全ブレ防止定義 */
+.btn-mute,
+.btn-monitor,
+VolumeControl .btn-mute,
+VolumeControl .btn-monitor {
+    width: 22px;
+    height: 20px;
+    min-width: 22px;
+    max-width: 22px;
+    min-height: 20px;
+    max-height: 20px;
+    padding: 0px !important;
+    margin: 1px 2px !important;
+    background-color: transparent;
+    border: 1px solid transparent !important;
+    border-radius: 2px;
+}
+
+.btn-mute:hover,
+.btn-monitor:hover,
+VolumeControl .btn-mute:hover,
+VolumeControl .btn-monitor:hover {
+    background-color: #E2E6EC !important;
+    border: 1px solid #7F9DB9 !important;
+    padding: 0px !important;
+    margin: 1px 2px !important;
+}
+
+.btn-mute:checked,
+.btn-mute.checked,
+VolumeControl .btn-mute:checked {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FF8866, stop:1 #D8361B) !important;
+    border: 1px solid #A01B06 !important;
+    border-radius: 2px;
+    padding: 0px !important;
+    margin: 1px 2px !important;
+}
+
+.btn-mute:checked:hover,
+.btn-mute.checked.hover,
+VolumeControl .btn-mute:checked:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFA485, stop:1 #E83610) !important;
+    border: 1px solid #6E0B00 !important;
+    padding: 0px !important;
+    margin: 1px 2px !important;
+}
+
+.btn-monitor:checked,
+.btn-monitor.checked,
+VolumeControl .btn-monitor:checked {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #58D046, stop:1 #226D14) !important;
+    border: 1px solid #144E0A !important;
+    border-radius: 2px;
+    padding: 0px !important;
+    margin: 1px 2px !important;
+}
+
+.btn-monitor:checked:hover,
+.btn-monitor.checked.hover,
+VolumeControl .btn-monitor:checked:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #6EE65C, stop:1 #2E891B) !important;
+    border: 1px solid #0F3A07 !important;
+    padding: 0px !important;
+    margin: 1px 2px !important;
+}
+
+/* ボリュームメーター (XP Candy Blocks) */
+VolumeMeter {
+    qproperty-backgroundNominalColor: #28B438; /* XP Candy Green */
+    qproperty-backgroundWarningColor: #FFC000; /* XP Candy Yellow */
+    qproperty-backgroundErrorColor:   #E82810; /* XP Candy Red */
+    qproperty-foregroundNominalColor: #147020;
+    qproperty-foregroundWarningColor: #B08000;
+    qproperty-foregroundErrorColor:   #8C1000;
+    qproperty-rangeMinColor:          #000000;
+    qproperty-rangeMaxColor:          #000000;
+}
+
+/* =========================================================================
+   10. ステータスバー & スクロールバー (Windows XP Luna 実機完全再現)
+   ========================================================================= */
+OBSBasicStatusBar,
+OBSBasicStatusBar *,
+StatusBarWidget,
+StatusBarWidget *,
+StatusBarWidget QLabel,
+StatusBarWidget QLabel#message,
+QStatusBar,
+QStatusBar QLabel,
+QStatusBar::item {
+    color: #000000 !important;
+}
+
+QStatusBar {
+    background-color: var(--xp_bg);
+    border-top: 1px solid var(--xp_border);
+    color: #000000;
+}
+
+QStatusBar::item {
+    border: 1px solid #D0D4DC;
+    border-right: 1px solid #FFFFFF;
+    border-bottom: 1px solid #FFFFFF;
+}
+
+/* --- Windows XP Luna 水色スカイブルー・スクロールバー --- */
+QScrollBar:vertical,
+#previewYScrollBar,
+OBSBasicSettings QScrollBar:vertical,
+OBSDock QScrollBar:vertical {
+    background-color: #ECEAF6; /* 淡いラベンダーグレー */
+    width: 16px !important;
+    border: 1px solid #C4C8D8;
+    margin: 16px 0 16px 0 !important;
+}
+
+QScrollBar:horizontal,
+#previewXScrollBar,
+OBSBasicSettings QScrollBar:horizontal,
+OBSDock QScrollBar:horizontal {
+    background-color: #ECEAF6;
+    height: 16px !important;
+    border: 1px solid #C4C8D8;
+    margin: 0 16px 0 16px !important;
+}
+
+/* スクロール不要時 (無効時) のレール背景 */
+QScrollBar:vertical:disabled,
+QScrollBar:horizontal:disabled {
+    background-color: #ECEAF6;
+    border: 1px solid #D8D8E0;
+}
+
+/* つまみ (Luna ぷるっと水色・円柱グラデーション) */
+QScrollBar::handle:vertical,
+#previewYScrollBar::handle,
+OBSBasicSettings QScrollBar::handle:vertical,
+OBSDock QScrollBar::handle:vertical {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0.0 #EEF4FD,
+        stop:0.20 #CDE0FA,
+        stop:0.45 #98BFF4,
+        stop:0.60 #7CAEF0,
+        stop:0.85 #B8D6FC,
+        stop:1.0 #E2EEFE);
+    border: 1px solid #4D76B8;
+    border-top: 2px solid #FFFFFF;
+    border-bottom: 2px solid #28549C;
+    min-height: 24px;
+    margin: 0px !important;
+    border-radius: 0px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0.0 #FFFFFF,
+        stop:0.20 #DFEEFD,
+        stop:0.50 #ACD1FC,
+        stop:0.80 #87B4F5,
+        stop:1.0 #D5E6FD);
+    border: 1px solid #2B5CA6;
+}
+
+QScrollBar::handle:vertical:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0.0 #6E9EE4,
+        stop:0.50 #4F83D2,
+        stop:1.0 #6E9EE4);
+    border: 1px solid #1E4A90;
+}
+
+QScrollBar::handle:horizontal,
+#previewXScrollBar::handle,
+OBSBasicSettings QScrollBar::handle:horizontal,
+OBSDock QScrollBar::handle:horizontal {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0.0 #EEF4FD,
+        stop:0.20 #CDE0FA,
+        stop:0.45 #98BFF4,
+        stop:0.60 #7CAEF0,
+        stop:0.85 #B8D6FC,
+        stop:1.0 #E2EEFE);
+    border: 1px solid #4D76B8;
+    border-left: 2px solid #FFFFFF;
+    border-right: 2px solid #28549C;
+    min-width: 24px;
+    margin: 0px !important;
+    border-radius: 0px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0.0 #FFFFFF,
+        stop:0.20 #DFEEFD,
+        stop:0.50 #ACD1FC,
+        stop:0.80 #87B4F5,
+        stop:1.0 #D5E6FD);
+    border: 1px solid #2B5CA6;
+}
+
+QScrollBar::handle:horizontal:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0.0 #6E9EE4,
+        stop:0.50 #4F83D2,
+        stop:1.0 #6E9EE4);
+    border: 1px solid #1E4A90;
+}
+
+/* ボタン (Luna 水色ボタン) */
+QScrollBar::add-line:vertical {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0.0 #EEF4FD,
+        stop:0.25 #C5DCFA,
+        stop:0.50 #95BEF2,
+        stop:0.75 #B6D4F8,
+        stop:1.0 #E2EEFD);
+    border: 1px solid #4D76B8;
+    border-top: 2px solid #28549C;
+    width: 16px !important;
+    height: 16px !important;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0.0 #EEF4FD,
+        stop:0.25 #C5DCFA,
+        stop:0.50 #95BEF2,
+        stop:0.75 #B6D4F8,
+        stop:1.0 #E2EEFD);
+    border: 1px solid #4D76B8;
+    border-bottom: 2px solid #28549C;
+    width: 16px !important;
+    height: 16px !important;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical:hover,
+QScrollBar::sub-line:vertical:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0.0 #FFFFFF,
+        stop:0.30 #D9E8FD,
+        stop:0.60 #A8CEFA,
+        stop:1.0 #E4EFFE);
+    border: 1px solid #2B5CA6;
+}
+
+QScrollBar::add-line:vertical:pressed,
+QScrollBar::sub-line:vertical:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0.0 #6E9EE4,
+        stop:0.50 #4F83D2,
+        stop:1.0 #6E9EE4);
+    border: 1px solid #1E4A90;
+}
+
+QScrollBar::add-line:vertical:disabled,
+QScrollBar::sub-line:vertical:disabled {
+    background: #ECE9D8;
+    border: 1px solid #C4C8D8;
+    width: 16px !important;
+    height: 16px !important;
+}
+
+QScrollBar::add-line:horizontal {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0.0 #EEF4FD,
+        stop:0.25 #C5DCFA,
+        stop:0.50 #95BEF2,
+        stop:0.75 #B6D4F8,
+        stop:1.0 #E2EEFD);
+    border: 1px solid #4D76B8;
+    border-left: 2px solid #28549C;
+    width: 16px !important;
+    height: 16px !important;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0.0 #EEF4FD,
+        stop:0.25 #C5DCFA,
+        stop:0.50 #95BEF2,
+        stop:0.75 #B6D4F8,
+        stop:1.0 #E2EEFD);
+    border: 1px solid #4D76B8;
+    border-right: 2px solid #28549C;
+    width: 16px !important;
+    height: 16px !important;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:horizontal:hover,
+QScrollBar::sub-line:horizontal:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0.0 #FFFFFF,
+        stop:0.30 #D9E8FD,
+        stop:0.60 #A8CEFA,
+        stop:1.0 #E4EFFE);
+    border: 1px solid #2B5CA6;
+}
+
+QScrollBar::add-line:horizontal:pressed,
+QScrollBar::sub-line:horizontal:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0.0 #6E9EE4,
+        stop:0.50 #4F83D2,
+        stop:1.0 #6E9EE4);
+    border: 1px solid #1E4A90;
+}
+
+QScrollBar::add-line:horizontal:disabled,
+QScrollBar::sub-line:horizontal:disabled {
+    background: #ECE9D8;
+    border: 1px solid #C4C8D8;
+    width: 16px !important;
+    height: 16px !important;
+}
+
+/* 矢印アイコン (Windows XP Luna: クラシック三角矢印) */
+QScrollBar::up-arrow:vertical {
+    image: url(theme:classic/up.svg);
+    width: 8px;
+    height: 8px;
+}
+QScrollBar::up-arrow:vertical:disabled {
+    image: url(theme:classic/up_disabled.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::down-arrow:vertical {
+    image: url(theme:classic/down.svg);
+    width: 8px;
+    height: 8px;
+}
+QScrollBar::down-arrow:vertical:disabled {
+    image: url(theme:classic/down_disabled.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::left-arrow:horizontal {
+    image: url(theme:classic/left.svg);
+    width: 8px;
+    height: 8px;
+}
+QScrollBar::left-arrow:horizontal:disabled {
+    image: url(theme:classic/left_disabled.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::right-arrow:horizontal {
+    image: url(theme:classic/right.svg);
+    width: 8px;
+    height: 8px;
+}
+QScrollBar::right-arrow:horizontal:disabled {
+    image: url(theme:classic/right_disabled.svg);
+    width: 8px;
+    height: 8px;
+}
+

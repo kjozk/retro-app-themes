@@ -1,9 +1,20 @@
 # retro-app-themes
 
-任天堂の伝説的名機である **ファミリーコンピュータ（FC）**、**スーパーファミコン（SFC）**、および **ゲームボーイ（GB）** の実機カラーパレットとデザイン言語を忠実に再現した、クリエイター＆エンジニア向けマルチアプリケーション・テーマコレクションです。
+任天堂の伝説的名機である **ファミリーコンピュータ（FC）**、**スーパーファミコン（SFC）**、**ゲームボーイ（GB）**、およびクラシックOSである **Windows Classic**、**Windows XP Luna** の実機カラーパレットとデザイン言語を忠実に再現した、クリエイター＆エンジニア向けマルチアプリケーション・テーマコレクションです。
 
-![OBS Studio Famicom Preview](screenshots/obs/fc_preview.png)
-![OBS Studio Super Famicom Preview](screenshots/obs/sfc_preview.png)
+---
+
+## 📸 プレビューギャラリー
+
+### OBS Studio
+| ファミリーコンピュータ | スーパーファミコン | Windows Classic |
+| :---: | :---: | :---: |
+| ![OBS Studio Famicom Preview](screenshots/obs/fc_preview.png) | ![OBS Studio Super Famicom Preview](screenshots/obs/sfc_preview.png) | ![OBS Studio Windows Classic Preview](screenshots/obs/windows_preview.png) |
+
+### Zed エディタ
+| ファミリーコンピュータ | ゲームボーイ |
+| :---: | :---: |
+| ![Zed Famicom Preview](screenshots/zed/fc_preview.png) | ![Zed Gameboy Preview](screenshots/zed/gb_preview.png) |
 
 ---
 
@@ -13,7 +24,7 @@
 
 | アプリケーション | 状態 | 収録テーマ | 詳細・インストール手順 |
 | :--- | :---: | :--- | :--- |
-| **OBS Studio** | ✅ 対応済み | ファミリーコンピュータ / スーパーファミコン / ゲームボーイ | [OBS Studio テーマ詳細](obs-studio/README.md) |
+| **OBS Studio** | ✅ 対応済み | ファミリーコンピュータ / スーパーファミコン / ゲームボーイ / Windows Classic / Windows XP Luna | [OBS Studio テーマ詳細](obs-studio/README.md) |
 | **Zed** | ✅ 対応済み | Family Computer / Super Famicom / Gameboy (通常・ブラー対応) | [Zed テーマ詳細](zed/README.md) |
 | **VS Code** | 🚧 開発中 | Family Computer / Super Famicom / Gameboy | [VS Code テーマ詳細](vscode/README.md) |
 
@@ -37,6 +48,18 @@
 - **実機再現オリーブ液晶**: 初代ゲームボーイ（DMG-01）の象徴である4階調STN液晶のオリーブイエローグリーンを大胆にベース採用。
 - **青紫ロゴ (`#393C9F`) & A/Bマゼンタ (`#9E285A`)**: アイコン、見出し、フォーカス枠線に実機パーツカラーを完全マッピング。
 - **画面ベゼル 2トーンフレーム**: スレートグレーの画面枠と成型色オフホワイトのタブバーで、ハードウェアの没入感を再現。
+
+### 4. Windows Classic (Windows 95/98/2000/XPクラシック)
+- **実機完全再現の 3D ベベル**: 角丸なし（0px）の完全スクエアUIと、光（白）と影（グレー・黒）による 3D Raised / Sunken ベベルを全ウィジェットで再現。
+- **伝統のアクティブ濃紺グラデーション**: ドックタイトルバーやリスト選択時に、クラシック特有のディープネイビー〜シアン（`#0A246A` → `#A6CAF0`）をマッピング。
+- **押し込み（Sunken）フィール**: ボタン押下時にベベルが反転し、テキストが右下に1px沈み込むクラシックな押し心地。
+- **クラシックスクロールバー & スライダー**: 16px幅の立体スクロールバーと、ホームベース型（五角形）スライダーノブを搭載。
+
+### 5. Windows XP Luna
+- **Luna ロイヤルブルー光沢**: ドックタイトルバーや主要ボタンに、XPの象徴である光沢ロイヤルブルーのグラデーションを採用。
+- **スタートボタン風エメラルドグリーン**: 「配信開始」ボタンなどに、XPスタートボタンを彷彿とさせる鮮やかなアクセントを配置。
+- **クリーン・ペールシルバー**: 現代のディスプレイに合わせて黄ばみを排した、爽やかなペールシルバーグレー（`#EEF1F4`）を基調色に設定。
+- **XP スカイブルースクロールバー**: 水色円柱グラデーションのつまみと上下矢印ボタンを完全再現。
 
 ---
 
@@ -68,7 +91,10 @@ retro-app-themes/
 │   ├── themes/
 │   │   ├── Yami_SuperFamicom.ovt
 │   │   ├── Yami_FamilyComputer.ovt
-│   │   └── Yami_Gameboy.ovt
+│   │   ├── Yami_Gameboy.ovt
+│   │   ├── Yami_WindowsClassic.ovt
+│   │   ├── Yami_Luna.ovt
+│   │   └── classic/             # クラシックスライダーSVGアセット
 │   ├── install.bat              # OBS専用インストーラー (Win)
 │   ├── install.ps1
 │   ├── install.sh               # OBS専用インストーラー (macOS / Linux)
@@ -89,7 +115,12 @@ retro-app-themes/
 │
 ├── screenshots/                 # プレビュー画像
 │   ├── obs/
+│   │   ├── fc_preview.png
+│   │   ├── sfc_preview.png
+│   │   └── windows_preview.png
 │   └── zed/
+│       ├── fc_preview.png
+│       └── gb_preview.png
 │
 ├── .gitignore
 ├── LICENSE
@@ -105,4 +136,6 @@ retro-app-themes/
 - **著作権**:
   - オリジナルの OBS Yami テーマおよび Zed テーマスキーマの著作権は、各プロジェクトおよびその貢献者に帰属します。
   - レトロハードウェア再現テーマのカラーパレット定義、スタイリング、カスタムコードの著作権は kjozk およびコントリビューターに帰属します。
-- 任天堂の各ハードウェア名称および意匠は任天堂株式会社の商標または登録商標です。本プロジェクトはファンによる非公式のオマージュテーマです。
+- 任天堂の各ハードウェア名称および意匠は任天堂株式会社の商標または登録商標です。
+- Microsoft、Windows、Windows XPは米国Microsoft Corporationの米国およびその他の国における登録商標または商標です。
+- 本プロジェクトはファンによる非公式のオマージュテーマです。

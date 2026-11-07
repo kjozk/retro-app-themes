@@ -7,6 +7,10 @@ description: Create, customize, and style themes for OBS Studio. Covers OBS them
 
 OBS Studio 向けカスタムテーマ（`.ovt` / `.qss`）の構造、主要ウィジェットのオブジェクト名、ダイアログのスタイリング手法、配布パスを網羅した実践ガイドです。
 
+> [!NOTE] 関連スキルとの連携
+> - **Qt スタイルシート（QSS）の共通トラブルシューティング**: 擬似状態フォールバック（無効時アイコン同化）、特異度トラップ、セレクタ仕様違反、スクロールバー境界セパレータ等の低レイヤーな QSS デバッグは [`qt-stylesheet-troubleshooting`](file:///e:/obs-studio-theme/.agents/skills/qt-stylesheet-troubleshooting/SKILL.md) を参照してください。
+> - **レトロハード & クラシック OS のメタファー設計論**: ゲームボーイ、ファミコン、Windows 98/2000、Windows XP などの実機パレット抽出・成型パーツ色分離原則は [`retro-ui-metaphor-design`](file:///e:/obs-studio-theme/.agents/skills/retro-ui-metaphor-design/SKILL.md) を参照してください。
+
 ---
 
 ## 1. テーマアーキテクチャ (.ovt と .qss)
@@ -95,7 +99,7 @@ OBS の UI は Qt で構築されており、特定のコンポーネントを�
 ### (4) 設定ダイアログ (`OBSBasicSettings.ui`)
 | オブジェクト名 | クラス | 説明 |
 | :--- | :--- | :--- |
-| `listWidget` | `QListWidget` | 設定カテゴリのサイドバー |
+| `categories` (`listWidget`) | `QListWidget` | 設定カテゴリのサイドバー（`OBSBasicSettings QListWidget#categories`） |
 | `settingsPages` | `QStackedWidget` | メイン設定エリアのコンテナ |
 | `buttonBox` | `QDialogButtonBox` | 下部の OK / キャンセル / 適用ボタン |
 
@@ -131,107 +135,107 @@ OBS の UI は Qt で構築されており、特定のコンポーネントを�
 
 ---
 
-## 5. 実機ハードウェア・メタファー設計原則 (Hardware Metaphor Rules)
+## 5. OBS 固有のウィジェット階層とセレクタ仕様
 
-ハードウェア（ゲーム機・AV機器・シンセサイザー等）をモチーフにしたテーマを作成する際は、以下の原則を厳守します。
+### (1) ソースツリー（SourceTreeItem / OBSSourceLabel）の階層構造
+OBS 28+ のソースツリーは `QListView` をベースに、各行へ `SourceTreeItem`（`QFrame` 継承）、その内部に `OBSSourceLabel`（`QLabel` 継承）を配置しています。
 
-### (1) 成型パーツ色と印字・ロゴ色の厳格な分離
-- **ボタンパーツに「印字色」を使わない**:
-  実機に存在しない成型色のボタンを作ってはならない（例: 印字やロゴが紫や赤だからといって、ボタンそのものを紫や赤にしない）。
-  - **ボタン・スイッチ・つまみ**: 実機成型色（プラスチック成型色、ラバー色、金属色）をマッピングする。
-  - **テキスト・アイコン・刻印**: シルク印刷されたテキスト印字色やロゴ色をマッピングする。
-  - この分離を守ることで、「実機パーツの上に文字が刻印されている」リアリティと高コントラストが成立する。
-
-### (2) 画面表示と外枠（ベゼルカバー）の役割分担
-- **プレビュー外周 (`--bg_preview`)**:
-  プレビュー画面の外周は、ディスプレイ画面そのものの色ではなく、画面を覆う「ベゼルカバー樹脂色（スレートグレー等）」を当てる。
-- **液晶・CRT画面メタファー**:
-  ディスプレイ画面を模したカラー（STNグリーン、モノクロ液晶、CRTアンバー等）は、設定サイドバーやソースリストなどの「四角い情報表示コンテナ」に適用し、小型サブディスプレイとしての没入感を演出する。
-- **画面メタファー領域内への異物混入防止**:
-  画面表示を模したコンテナ内部には、ボタン色などの外部パーツカラー（小豆色や赤など）を持ち込まず、スクリーンの階調（明ハイライト、暗ドット）や同系色の枠線で完結させる。
-
----
-
-## 6. Qt / OBS QSS スタイリングの落とし穴と回避策
-
-### (1) 基底テーマ (`Yami.obt`) の多重擬似クラス特異度（Specificity）トラップ
-基底テーマに多重擬似クラスが付与されているコントロールボタン（録画中・配信中など）は、単純なセレクタ（`.state-active` や `:hover.state-active`）では特異度で負け、ホバー時に文字色が意図せず上書きされて可読性が崩壊します。
-必ず以下の高特異度セレクタを網羅して定義し、`!important` で確実に上書きしてください：
 ```css
-#recordButton:!hover:!pressed.state-active,
-#recordButton:hover:!pressed.state-active,
-#recordButton.state-active,
-#recordButton:checked,
-#recordButton:hover:checked,
-QPushButton#recordButton.state-active,
-QPushButton#recordButton:checked,
-QPushButton#recordButton:!hover:!pressed.state-active,
-QPushButton#recordButton:hover:!pressed.state-active {
-    background-color: var(--active_color) !important;
-    color: #ffffff !important;
-    font-weight: bold;
-}
-```
-
-### (2) `SourceTree` / `SceneTree` の子要素セレクタ階層
-ソースリスト内の文字・アイコン色は、`SourceTree::item:selected` だけでなく内部ウィジェットまで明示的に指定する必要があります：
-```css
-/* リスト内ウィジェットの通常時文字色 */
+/* 通常時（未選択時） */
 SourceTreeItem,
-SourceTreeItem QLabel {
+SourceTreeItem QLabel,
+OBSSourceLabel {
     color: var(--text) !important;
 }
 
-/* 選択時: 親の selected 状態から子要素ラベルの文字色を強制 */
-SourceTree::item:selected SourceTreeItem,
-SourceTreeItem:selected QLabel,
-SourceTree::item:selected QLabel {
-    color: var(--selected_text_color) !important;
-    font-weight: bold;
+/* 選択時: Qt標準のサブコントロール状態のみで制御する */
+QListView::item:selected,
+SourceTree::item:selected {
+    background-color: var(--selection_bg) !important;
+    color: #FFFFFF !important;
 }
 ```
 
-### (3) `QSlider` の進捗方向定義とコンポーネント構造
-水平と垂直で到達側（進捗）と未達側（溝）のセレクタが異なります：
-- **水平スライダー**: `sub-page:horizontal`（左＝進捗）、`add-page:horizontal`（右＝未達溝）
-- **垂直スライダー**: `add-page:vertical`（下＝進捗）、`sub-page:vertical`（上＝未達溝）
+### (2) ステータスバー（OBSBasicStatusBar / StatusBarWidget）の完全文字色保護
+画面下部の録画時間、ビットレート、CPU、FPS、左下メッセージが薄色化・白飛びするのを防ぐため、内部コンテナウィジェットのラベルまで網羅して指定します：
+
 ```css
-/* 水平スライダー溝 (未達側ベース) */
-QSlider::groove:horizontal {
-    background: var(--groove_bg);
-    border: 1px solid var(--groove_border);
-    height: 4px;
-    border-radius: 2px;
-}
-/* 到達側 (アクティブ進捗) */
-QSlider::sub-page:horizontal {
-    background: var(--accent_color) !important;
-    border-radius: 2px;
-}
-/* 未達側 (残量) */
-QSlider::add-page:horizontal {
-    background: var(--groove_bg) !important;
-    border-radius: 2px;
-}
-
-/* つまみ (実機操作ノブ調) */
-QSlider::handle:horizontal {
-    background: var(--dial_color) !important;
-    border: 1px solid #ffffff;
-    border-left: 2px solid var(--accent_color);
-    border-right: 2px solid var(--accent_color);
-    width: 12px;
-    height: 20px;
-    margin: -8px 0;
-    border-radius: 3px;
+OBSBasicStatusBar,
+OBSBasicStatusBar *,
+StatusBarWidget,
+StatusBarWidget *,
+StatusBarWidget QLabel,
+QStatusBar,
+QStatusBar QLabel,
+QStatusBar::item {
+    color: var(--text) !important;
 }
 ```
 
-### (4) WCAG コントラスト検証とフォント描画対策
-- **アンチエイリアスによる実効コントラスト低下**:
-  中間明度の背景（グレーなど）上の暗色テキストは、計算上の理論値（例: 5.5:1）を満たしていても、細いフォントストロークによるアンチエイリアスで実効知覚コントラストが半減する現象が起きます。
-- **対策**:
-  1. 背景色をわずかに明るく調整する。
-  2. テキスト色をより濃い色（最暗インディゴや黒）に設定する。
-  3. `font-weight: bold;`（または 600）を付与してストローク幅を太くし、実画面上で WCAG AAA 基準（7.0:1 以上）を確実に達成する。
+### (3) 水平ミキサーのトラック分離
+水平ボリュームコントロール（`#hVolumeWidgets VolumeControl`）に下線と適切なパディングを付与し、各チャンネルの目盛り数値（dB）が次チャンネルのタイトル行に被らないようにします：
 
+```css
+#hVolumeWidgets VolumeControl {
+    padding: 4px 6px 8px 6px;
+    border-bottom: 1px solid var(--border_color);
+}
+```
+
+### (4) プレビュー外周・ベゼルカバーの独立色指定
+プレビュー画面の余白領域（`canvasEditor` や `preview` 背景）は、テーマ背景とは切り離して `--bg_preview` 変数で独立制御し、実機のベゼルやモニター枠としての没入感を確保します。
+
+---
+
+## 6. カスタムアイコン・画像アセットの管理階層と衛生性（Hygiene）ルール
+
+OBS Studio のカスタムテーマで独自の SVG や PNG 画像アセットを使用する場合、ファイル散乱を防ぎ保守性を最大化するため、以下のディレクトリ階層ルールを厳守します。
+
+### (1) テーマルート直下の衛生性（Hygiene 原則）
+- **禁止事項**: `obs-studio/themes/` 直下に個別の画像ファイル（`foo.svg`, `bar.png` 等）を直接配置してはなりません。
+- **原則**: テーマ直下に存在してよいのは、**`.ovt` ファイル** と **アセット格納用サブディレクトリ** のみです。
+
+```
+obs-studio/themes/
+  ├── Yami_FamilyComputer.ovt
+  ├── Yami_Gameboy.ovt
+  ├── Yami_Luna.ovt
+  ├── Yami_SuperFamicom.ovt
+  ├── Yami_WindowsClassic.ovt
+  └── classic/                  ← 専用サブディレクトリに完全集約
+      ├── up.svg
+      ├── up_disabled.svg
+      ├── down.svg
+      ├── down_disabled.svg
+      ├── slider_h.svg
+      └── slider_v.svg
+```
+
+### (2) サブディレクトリ集約と命名規則
+- **冗長プレフィックスの排除**: ディレクトリ名（例: `classic/`）でスコープが明確なため、ファイル名に `classic_up.svg` のようなプレフィックスを付けず、`up.svg` や `down_disabled.svg` のように簡潔・明瞭に命名します。
+- **QSS 内の参照構文**:
+  OBS の `theme:` 仮想スキームはサブディレクトリ解決に対応しています。以下のように記述します：
+  ```css
+  QSpinBox::up-arrow {
+      image: url(theme:classic/up.svg);
+  }
+  QSpinBox::up-arrow:disabled {
+      image: url(theme:classic/up_disabled.svg);
+  }
+  QSlider::handle:horizontal {
+      image: url(theme:classic/slider_h.svg);
+  }
+  ```
+
+### (3) インストーラースクリプトとの連動
+アセットをサブディレクトリに集約することで、`install.ps1` や `install.sh` のインストール対象リストに画像ファイルを 1 枚ずつ追加・更新する手間が省け、ディレクトリを 1 つ指定するだけで安全に一括再帰コピーが可能になります：
+```powershell
+$themeFiles = @(
+    "Yami_SuperFamicom.ovt",
+    "Yami_FamilyComputer.ovt",
+    "Yami_Gameboy.ovt",
+    "Yami_Luna.ovt",
+    "Yami_WindowsClassic.ovt",
+    "classic"    # ディレクトリごと一括再帰コピー
+)
+```
