@@ -1,0 +1,1078 @@
+@OBSThemeMeta {
+    name: 'スーパーファミコン';
+    id: 'com.obsproject.Yami.SuperFamicom';
+    extends: 'com.obsproject.Yami.Light';
+    author: 'kjozk & Antigravity';
+    dark: 'false';
+}
+
+@OBSThemeVars {
+    /* =========================================================================
+       スーパーファミコン 実機再現カラーパレット
+       ========================================================================= */
+    --sfc_body: #d8dce2;        /* 本体ライトグレー成型色（ベース） */
+    --sfc_body_light: #ffffff;  /* 入力欄・通常ボタン背景 */
+    --sfc_body_dark: #c8ccd4;   /* リスト・サイドバー背景 */
+    --sfc_mid: #8c929c;         /* カセット周辺のミディアムグレー / 枠線 */
+    --sfc_dark: #464a52;        /* POWER/RESET/十字キーのダークスレートグレー */
+    --sfc_dark_hover: #565b65;  /* ダークホバー */
+    --sfc_dark_pressed: #36393f;/* ダークプレス */
+    --sfc_border: #b0b6c0;      /* コンポーネント境界線 */
+
+    /* --- ABXY コントローラー 4色ボタン (実機写真準拠) --- */
+    --sfc_blue: #005ec4;        /* X Button (Top) - ロイヤルブルー */
+    --sfc_blue_hover: #1573dc;
+    --sfc_blue_pressed: #004593;
+    --sfc_blue_glow: #54a0ff;
+
+    --sfc_yellow: #f0b400;      /* B Button (Bottom) - 実機カナリア/山吹イエロー */
+    --sfc_yellow_hover: #ffc41a;
+    --sfc_yellow_pressed: #c79500;
+    --sfc_yellow_glow: #ffe57f;
+
+    --sfc_green: #009e46;       /* Y Button (Left) - 実機エメラルドグリーン */
+    --sfc_green_hover: #0fb357;
+    --sfc_green_pressed: #007734;
+    --sfc_green_glow: #69f0ae;
+
+    --sfc_red: #e01e34;         /* A Button (Right) - 実機ヴィヴィッドレッド */
+    --sfc_red_hover: #f03348;
+    --sfc_red_pressed: #ad1122;
+    --sfc_red_glow: #ff7688;
+
+    /* --- 画面全体の背景定義 --- */
+    --bg_window: var(--sfc_body);
+    --bg_base: var(--sfc_body);
+    --bg_preview: #252830;      /* プレビュー周囲は引き締まったダーク */
+
+    /* =========================================================================
+       文字色・パレット設定（絶対に文字が背景に溶け込まないための完全定義）
+       ========================================================================= */
+    --text: #181a1f;            /* メインテキスト: 高コントラストな濃色 */
+    --text_light: #ffffff;      /* 暗色ボタン・ヘッダー用ホワイト */
+    --text_muted: #4e535e;      /* 補足テキスト */
+    --text_inactive: #383c46;
+    --text_disabled: #888e99;   /* 無効時でも視認できるグレー */
+
+    /* Qt パレット完全上書き (非QSSウィジェットの白文字化を防止) */
+    --palette_windowText: #181a1f;
+    --palette_text: #181a1f;
+    --palette_buttonText: #181a1f;
+    --palette_brightText: #ffffff;
+    --palette_highlightedText: #ffffff;
+    --palette_toolTipText: #ffffff;
+    --palette_window: var(--sfc_body);
+    --palette_base: #ffffff;
+    --palette_button: #ffffff;
+    --palette_mid: var(--sfc_border);
+
+    --primary: var(--sfc_dark);
+    --primary_light: var(--sfc_dark_hover);
+    --primary_lighter: #ffffff;
+    --primary_dark: var(--sfc_dark_pressed);
+    --primary_darker: #1a1e27;
+    --highlight_color: #ffffff;
+    --list_item_bg_selected: var(--sfc_dark);
+    --list_item_bg_hover: var(--sfc_dark_hover);
+    --tab_border_focus: #ffffff;
+
+    /* 基底テーマ(Yami/Light)の青色変数を完全無力化（青枠・青背景の漏れ出しを完全阻止） */
+    --blue1: #ffffff;
+    --blue2: var(--sfc_dark_hover);
+    --blue3: var(--sfc_dark);
+    --blue4: var(--sfc_dark_pressed);
+    --blue5: var(--sfc_dark_pressed);
+    --blue6: #1a1e27;
+
+    --warning: var(--sfc_yellow);
+    --danger: var(--sfc_red);
+    --success: var(--sfc_green);
+
+    /* 入力フォーム & 汎用ボタン変数: プライマリーカラーはSFCグレーに統一 */
+    --input_bg: #ffffff;
+    --input_bg_hover: #f8fafc;
+    --input_bg_focus: #ffffff;
+    --input_border: var(--sfc_border);
+    --input_border_focus: var(--sfc_dark);
+
+    --button_bg: #ffffff;
+    --button_bg_hover: #edf0f5;
+    --button_bg_down: #dce0e8;
+    --button_bg_disabled: #e6e9ee;
+    --button_border: var(--sfc_border);
+    --button_border_hover: var(--sfc_dark);
+    --button_border_focus: var(--sfc_dark);
+    --button_border_width: 1px;
+}
+
+/* =============================================================================
+   1. 基本ウィジェット & 文字コントラスト保護
+   ============================================================================= */
+
+/* 全ウィジェットの基本テキスト色および標準フォント設定（OBS Default テーマスタック準拠） */
+QWidget {
+    color: var(--text);
+    selection-background-color: var(--sfc_dark);
+    selection-color: #ffffff;
+    font-family: 'Open Sans', '.AppleSystemUIFont', Helvetica, Arial, 'MS Shell Dlg', sans-serif;
+}
+
+/* ラベル、チェックボックス、ラジオボタンの視認性確保 */
+QLabel {
+    color: var(--text);
+}
+
+QLabel:disabled {
+    color: var(--text_disabled);
+}
+
+QCheckBox,
+QRadioButton {
+    color: var(--text);
+    spacing: 6px;
+}
+
+QCheckBox:disabled,
+QRadioButton:disabled {
+    color: var(--text_disabled);
+}
+
+/* =============================================================================
+   2. ドック・タイトルバー・ウィンドウ枠
+   ============================================================================= */
+
+/* ドックタイトルバー: SFCのPOWER/RESETやカセットスロットを模したダークスレートグレー */
+QDockWidget {
+    color: #ffffff;
+    titlebar-close-icon: url(theme:Dark/close.svg);
+    titlebar-normal-icon: url(theme:Dark/popout.svg);
+}
+
+QDockWidget::title {
+    background-color: var(--sfc_dark);
+    color: #ffffff !important;
+    padding: 6px 10px;
+    font-weight: bold;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+/* ドック内部のベースコンテナ */
+OBSDock > QWidget {
+    background: var(--sfc_body);
+    border: 1px solid var(--sfc_border);
+    border-top: none;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+/* ドックのタブバー（青色を廃止し、SFC実機EJECTボタン風スレートグレーに統一） */
+QTabBar {
+    outline: none;
+}
+
+QTabBar::tab {
+    background: #d8dce4;
+    color: #2b303c !important;
+    border: 1px solid var(--sfc_border);
+    padding: var(--tab_padding_base) 6px;
+    min-width: 40px;
+    font-weight: 500;
+}
+
+QTabBar::tab:hover {
+    background: #e6e9f0;
+    color: var(--sfc_dark) !important;
+    border-color: var(--sfc_mid);
+}
+
+/* 選択タブ: POWER/RESETスイッチのダークグレー + 白文字でドックタイトルと完全に調和 */
+QTabBar::tab:selected {
+    background: var(--sfc_dark) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--sfc_dark_pressed) !important;
+    border-bottom: 2px solid var(--sfc_mid) !important;
+    font-weight: bold;
+}
+
+/* ステータスバー（最下部） */
+QStatusBar {
+    background-color: var(--sfc_body_dark);
+    color: var(--text);
+    border-top: 1px solid var(--sfc_border);
+}
+
+QStatusBar QLabel {
+    color: var(--text) !important;
+}
+
+/* メニューバー & メニュー */
+QMenuBar {
+    background-color: var(--sfc_body);
+    color: var(--text);
+    border-bottom: 1px solid var(--sfc_border);
+}
+
+QMenuBar::item {
+    background: transparent;
+    color: var(--text);
+    padding: 5px 9px;
+}
+
+QMenuBar::item:selected {
+    background-color: var(--sfc_dark);
+    color: #ffffff !important;
+    border-radius: 3px;
+}
+
+QMenu {
+    background-color: #ffffff;
+    color: var(--text);
+    border: 1px solid var(--sfc_border);
+    padding: 4px;
+}
+
+QMenu::item {
+    padding: 6px 24px 6px 12px;
+    border-radius: 3px;
+    color: var(--text);
+}
+
+QMenu::item:selected {
+    background-color: var(--sfc_dark);
+    color: #ffffff !important;
+}
+
+QMenu::separator {
+    height: 1px;
+    background-color: var(--sfc_body_dark);
+    margin: 4px 6px;
+}
+
+/* =============================================================================
+   3. 一般ボタン (QPushButton, QToolButton)
+   ============================================================================= */
+
+/* ダイアログや設定画面内の通常ボタン: 上品なライト成型色 + スレートグレーのホバー */
+QPushButton,
+QToolButton {
+    background-color: var(--button_bg);
+    color: var(--text) !important;
+    border: 1px solid var(--button_border);
+    border-radius: var(--border_radius);
+    padding: var(--input_padding) var(--padding_wide);
+}
+
+QPushButton:hover,
+QToolButton:hover {
+    background-color: var(--button_bg_hover);
+    border-color: var(--sfc_dark);
+    color: var(--sfc_dark) !important;
+}
+
+QPushButton:pressed,
+QToolButton:pressed {
+    background-color: var(--button_bg_down);
+    border-color: var(--sfc_dark_pressed);
+    color: var(--sfc_dark_pressed) !important;
+}
+
+/* 選択・トグルボタン（外観の密度設定ボタン「クラシック」「通常」等）:
+   青色を廃止し、POWER/RESETスイッチのダークスレートグレーに統一 */
+QPushButton:checked,
+QToolButton:checked {
+    background-color: var(--sfc_dark) !important;
+    border: 1px solid var(--sfc_dark_pressed) !important;
+    color: #ffffff !important;
+    font-weight: bold;
+}
+
+QPushButton:checked:hover,
+QToolButton:checked:hover {
+    background-color: var(--sfc_dark_hover) !important;
+    border-color: var(--sfc_dark) !important;
+    color: #ffffff !important;
+}
+
+QPushButton:disabled,
+QToolButton:disabled {
+    background-color: var(--button_bg_disabled);
+    color: var(--text_disabled) !important;
+    border-color: #d0d4dc;
+}
+
+QPushButton:focus,
+QToolButton:focus {
+    border-color: var(--sfc_dark);
+}
+
+/* =============================================================================
+   4. 入力コントロール (テキスト, 数値, ドロップダウン)
+   ============================================================================= */
+
+QLineEdit,
+QTextEdit,
+QPlainTextEdit {
+    background-color: var(--input_bg);
+    color: var(--text) !important;
+    border: 1px solid var(--input_border);
+    border-radius: 3px;
+    padding: 4px 6px;
+    selection-background-color: var(--sfc_dark);
+    selection-color: #ffffff;
+}
+
+QLineEdit:focus,
+QTextEdit:focus,
+QPlainTextEdit:focus {
+    border: 1px solid var(--sfc_dark);
+}
+
+/* ドロップダウン（コンボボックス）: OBS基底テーマ（Yami）の精密なサイズ・パディング計算に準拠 */
+QComboBox,
+QDateTimeEdit {
+    background-color: var(--input_bg);
+    color: var(--text) !important;
+    border-color: var(--input_border);
+}
+
+QComboBox:hover,
+QComboBox:focus,
+QDateTimeEdit:hover,
+QDateTimeEdit:selected {
+    border-color: var(--sfc_dark);
+}
+
+QComboBox::down-arrow,
+QDateTimeEdit::down-arrow {
+    image: url(theme:Light/collapse.svg);
+}
+
+QComboBox::down-arrow:editable,
+QDateTimeEdit::down-arrow:editable {
+    image: url(theme:Light/collapse.svg);
+}
+
+/* ドロップダウンメニューのリスト項目: 選択・ホバー時の文字色反転（ダークグレー背景 + 純白枠 + 純白文字） */
+QComboBox QAbstractItemView {
+    background-color: #ffffff;
+    border: 1px solid var(--sfc_border);
+    selection-background-color: var(--sfc_dark);
+    selection-color: #ffffff;
+    outline: none;
+}
+
+QComboBox QAbstractItemView::item {
+    color: var(--text);
+    padding: 4px 8px;
+    min-height: 20px;
+    border: 1px solid transparent;
+}
+
+/* ドロップダウンメニューおよびメニューの選択・ホバー・フォーカス時の青枠排除と白枠・白文字化 */
+QMenu::item:selected,
+QMenu > QWidget:selected,
+QComboBox QAbstractItemView::item:selected,
+QComboBox QListView::item:selected,
+idian--Row QComboBox QAbstractItemView::item:selected {
+    background-color: var(--sfc_dark) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QMenu::item:hover,
+QComboBox QAbstractItemView::item:hover,
+QComboBox QListView::item:hover,
+idian--Row QComboBox QAbstractItemView.hover::item {
+    background-color: var(--sfc_dark) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QMenu::item:selected:hover,
+QComboBox QAbstractItemView::item:selected:hover,
+QComboBox QListView::item:selected:hover {
+    background-color: var(--sfc_dark_hover) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QMenu::item:focus,
+QMenu::item:selected:focus,
+QComboBox QAbstractItemView::item:selected:focus,
+QComboBox QListView::item:selected:focus {
+    background-color: var(--sfc_dark) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+/* プレビュー下部ズーム・スケーリングバーのはみ出しを完全防止 */
+#previewScalingMode {
+    background-color: transparent !important;
+    color: var(--text) !important;
+    border: 1px solid var(--sfc_border) !important;
+    height: 14px !important;
+    max-height: 14px !important;
+    min-height: 14px !important;
+    padding: 0px 4px !important;
+    margin: 0px !important;
+    font-size: var(--font_xsmall);
+}
+
+#previewScalingMode::drop-down {
+    border: none !important;
+    width: 14px !important;
+    height: 14px !important;
+}
+
+#previewScalePercent {
+    color: var(--text) !important;
+    font-size: var(--font_xsmall);
+}
+
+/* スピンボックス: OBS基底テーマ（Yami）の精密なレイアウト計算に準拠（独自ボタン定義によるズレ・隙間を完全解消） */
+QSpinBox,
+QDoubleSpinBox {
+    background-color: var(--input_bg);
+    color: var(--text) !important;
+    border-color: var(--input_border);
+}
+
+QSpinBox:focus,
+QDoubleSpinBox:focus {
+    border-color: var(--sfc_dark);
+}
+
+QSpinBox::up-arrow,
+QDoubleSpinBox::up-arrow {
+    image: url(theme:Light/up.svg);
+}
+
+QSpinBox::down-arrow,
+QDoubleSpinBox::down-arrow {
+    image: url(theme:Light/down.svg);
+}
+
+/* グループボックス: 枠線とタイトルの位置ずれおよび最下部見切れを完全解消 */
+QGroupBox {
+    background-color: transparent;
+    color: var(--sfc_dark);
+    border: 1px solid var(--sfc_mid);
+    border-radius: 4px;
+    margin-top: 6px;
+    padding-top: 10px;
+    padding-bottom: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-weight: bold;
+}
+
+QGroupBox::title {
+    color: var(--sfc_dark) !important;
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 10px;
+    top: 0px;
+    padding: 0 8px;
+    background-color: var(--sfc_body);
+}
+
+/* 警告・エラーメッセージの視認性最大化（明るい背景での溶け込みを防止） */
+.text-warning,
+QLabel[class="text-warning"],
+QLabel#simpleOutRecWarning,
+QLabel#advOutRecWarning {
+    color: #9e4a00 !important; /* 明るい背景でくっきり読めるディープアンバーオレンジ */
+    font-weight: bold;
+}
+
+.text-danger,
+QLabel[class="text-danger"] {
+    color: #b30018 !important; /* 明るい背景でくっきり読めるクラシック深紅 */
+    font-weight: bold;
+}
+
+/* スタジオモードのプレビュー／プログラムラベルの視認性確保（白文字化を完全解消） */
+.label-preview-title {
+    color: var(--sfc_dark) !important;
+    font-size: var(--font_xlarge);
+    font-weight: bold;
+}
+
+/* =============================================================================
+   5. リスト・ツリー・テーブル (SceneTree, SourceTree 等) の文字切れ解消
+   ============================================================================= */
+
+/* =============================================================================
+   5. リスト・ツリー (SceneTree, SourceTree) の最適化
+   ============================================================================= */
+
+QAbstractItemView {
+    background-color: #ffffff;
+    color: var(--text);
+    border: 1px solid var(--sfc_border);
+}
+
+/* 選択時: POWER/RESETダークグレー + 純白のフチ（青枠・はみ出しを完全排除し、アイコン・文字を完全収容） */
+QListView::item:selected,
+QListWidget::item:selected,
+SceneTree::item:selected,
+SourceTree::item:selected {
+    background-color: var(--sfc_dark) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QListView::item:hover,
+QListWidget::item:hover,
+SceneTree::item:hover,
+SourceTree::item:hover {
+    background-color: #ecf0f6 !important;
+    border: 1px solid #ffffff !important;
+    color: var(--text) !important;
+}
+
+QListView::item:selected:hover,
+QListWidget::item:selected:hover,
+SceneTree::item:selected:hover,
+SourceTree::item:selected:hover {
+    background-color: var(--sfc_dark_hover) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QListView::item:focus,
+QListWidget::item:focus,
+SceneTree::item:focus,
+SourceTree::item:focus,
+SceneTree::item:selected:focus,
+SourceTree::item:selected:focus {
+    border: 1px solid #ffffff !important;
+}
+
+/* シーンツリー（SceneTree）の行高確保 */
+SceneTree::item,
+#scenes::item {
+    min-height: 24px;
+    padding: 3px 6px;
+}
+
+/* =============================================================================
+   6. 設定ダイアログ (OBSBasicSettings) の完全最適化
+   ============================================================================= */
+
+OBSBasicSettings {
+    background-color: var(--sfc_body);
+    qproperty-generalIcon: url(theme:Light/settings/general.svg);
+    qproperty-appearanceIcon: url(theme:Light/settings/appearance.svg);
+    qproperty-streamIcon: url(theme:Light/settings/stream.svg);
+    qproperty-outputIcon: url(theme:Light/settings/output.svg);
+    qproperty-audioIcon: url(theme:Light/settings/audio.svg);
+    qproperty-videoIcon: url(theme:Light/settings/video.svg);
+    qproperty-hotkeysIcon: url(theme:Light/settings/hotkeys.svg);
+    qproperty-accessibilityIcon: url(theme:Light/settings/accessibility.svg);
+    qproperty-advancedIcon: url(theme:Light/settings/advanced.svg);
+}
+
+/* 設定ダイアログの左側サイドバー */
+OBSBasicSettings QListWidget {
+    background-color: var(--sfc_body_dark);
+    border: none;
+    border-right: 1px solid var(--sfc_border);
+    padding: 6px;
+}
+
+OBSBasicSettings QListWidget::item {
+    padding: var(--padding_large) var(--padding_wide);
+    margin: 1px 0;
+    border: 1px solid transparent;
+    border-radius: var(--border_radius);
+    color: var(--text) !important;
+    font-weight: 500;
+}
+
+OBSBasicSettings QListWidget::item:hover {
+    background-color: #d6dae2;
+    border: 1px solid transparent;
+    color: var(--text) !important;
+}
+
+/* 選択時: POWER/RESETスイッチのダークスレートグレー + 純白のフチ（白枠線） + 純白文字 */
+OBSBasicSettings QListWidget::item:selected,
+OBSBasicSettings QListWidget::item:selected:focus,
+OBSBasicSettings QListWidget::item:selected:hover {
+    background-color: var(--sfc_dark) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+    font-weight: bold;
+}
+
+OBSBasicSettings QListWidget::item:focus {
+    border: 1px solid #ffffff !important;
+}
+
+/* 設定画面下部のボタンボックス（OK, キャンセル, 適用）の視認性を完全確保 */
+OBSBasicSettings QDialogButtonBox QPushButton {
+    background-color: #ffffff !important;
+    color: var(--text) !important;
+    border: 1px solid var(--sfc_border) !important;
+    border-radius: var(--border_radius);
+    min-width: 75px;
+    padding: var(--input_padding) var(--padding_wide);
+    font-weight: bold;
+}
+
+OBSBasicSettings QDialogButtonBox QPushButton:hover {
+    background-color: #edf0f5 !important;
+    border-color: var(--sfc_dark) !important;
+    color: var(--sfc_dark) !important;
+}
+
+/* OKボタン（確定）: POWER/RESETスイッチのダークスレートグレー + 白文字 */
+OBSBasicSettings QDialogButtonBox QPushButton:default {
+    background-color: var(--sfc_dark) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--sfc_dark_pressed) !important;
+}
+
+OBSBasicSettings QDialogButtonBox QPushButton:default:hover {
+    background-color: var(--sfc_dark_hover) !important;
+    border-color: var(--sfc_dark) !important;
+    color: #ffffff !important;
+}
+
+/* 適用ボタン等の無効時: しっかり読める濃さのグレー文字 */
+OBSBasicSettings QDialogButtonBox QPushButton:disabled {
+    background-color: #e6e9ee !important;
+    color: #787e88 !important;
+    border-color: #d0d4dc !important;
+}
+
+/* =============================================================================
+   7. コントロールボタン (スーパーファミコン ABXY 4色 + POWER/RESET)
+   ============================================================================= */
+
+#streamButton,
+#recordButton,
+#virtualCamButton,
+#modeSwitch,
+#settingsButton,
+#exitButton {
+    border-radius: var(--border_radius);
+    padding: var(--padding_large);
+    font-weight: normal;
+}
+
+/* --- 配信ボタン (A Button: Red) --- */
+QPushButton#streamButton {
+    background-color: var(--sfc_red);
+    color: #ffffff !important;
+    border: 1px solid #ad1122;
+}
+
+QPushButton#streamButton:hover {
+    background-color: var(--sfc_red_hover);
+    border-color: var(--sfc_red);
+    color: #ffffff !important;
+}
+
+QPushButton#streamButton:pressed {
+    background-color: var(--sfc_red_pressed);
+    color: #ffffff !important;
+}
+
+/* 配信中（アクティブ時）: 深い真紅 + 鮮烈な発光ボーダー + 白文字 */
+QPushButton#streamButton.state-active,
+QPushButton#streamButton:checked,
+QPushButton#streamButton:!hover:!pressed.state-active,
+QPushButton#streamButton:hover.state-active,
+QPushButton#streamButton:hover:checked {
+    background-color: #8f0e1c !important;
+    border: 2px solid var(--sfc_red_glow) !important;
+    color: #ffffff !important;
+}
+
+/* --- 録画ボタン (B Button: Yellow) --- */
+QPushButton#recordButton {
+    background-color: var(--sfc_yellow);
+    color: #16181d !important; /* ※要件: 黄色背景上での視認性を絶対確保するため濃色太字 */
+    border: 1px solid #c79500;
+}
+
+QPushButton#recordButton:hover {
+    background-color: var(--sfc_yellow_hover);
+    border-color: var(--sfc_yellow);
+    color: #16181d !important;
+}
+
+QPushButton#recordButton:pressed {
+    background-color: var(--sfc_yellow_pressed);
+    color: #16181d !important;
+}
+
+/* 録画中（アクティブ時＝「録画終了」ボタン）:
+   配信ボタン（赤）と同化せず、黄色モチーフを守りながら文字視認性を最大化 */
+QPushButton#recordButton.state-active,
+QPushButton#recordButton:checked,
+QPushButton#recordButton:!hover:!pressed.state-active,
+QPushButton#recordButton:hover.state-active,
+QPushButton#recordButton:hover:checked {
+    background-color: #f5a800 !important;
+    border: 2px solid var(--sfc_red) !important;
+    color: #000000 !important;
+    font-weight: normal;
+}
+
+/* 録画一時停止ボタン */
+QPushButton#pauseRecordButton {
+    background-color: var(--sfc_yellow);
+    color: #16181d !important;
+    border: 1px solid #c79500;
+}
+
+QPushButton#pauseRecordButton:hover {
+    background-color: var(--sfc_yellow_hover);
+    color: #16181d !important;
+}
+
+QPushButton#pauseRecordButton.state-active,
+QPushButton#pauseRecordButton:checked,
+QPushButton#pauseRecordButton:!hover:!pressed.state-active {
+    background-color: #f5a800 !important;
+    border: 2px solid var(--sfc_red) !important;
+    color: #000000 !important;
+}
+
+/* --- 仮想カメラボタン (X Button: Blue) --- */
+QPushButton#virtualCamButton {
+    background-color: var(--sfc_blue);
+    color: #ffffff !important;
+    border: 1px solid #004593;
+}
+
+QPushButton#virtualCamButton:hover {
+    background-color: var(--sfc_blue_hover);
+    border-color: var(--sfc_blue);
+    color: #ffffff !important;
+}
+
+QPushButton#virtualCamButton:pressed {
+    background-color: var(--sfc_blue_pressed);
+    color: #ffffff !important;
+}
+
+/* 仮想カメラ動作中（アクティブ時） */
+QPushButton#virtualCamButton.state-active,
+QPushButton#virtualCamButton:checked,
+QPushButton#virtualCamButton:!hover:!pressed.state-active,
+QPushButton#virtualCamButton:hover.state-active,
+QPushButton#virtualCamButton:hover:checked {
+    background-color: #003675 !important;
+    border: 2px solid var(--sfc_blue_glow) !important;
+    color: #ffffff !important;
+}
+
+/* 仮想カメラ設定（歯車）ボタン: 白浮きを解消しダークグレー + 白アイコンで統一 */
+QPushButton#virtualCamConfigButton {
+    background-color: var(--sfc_dark) !important;
+    border: 1px solid var(--sfc_dark_pressed) !important;
+    border-radius: var(--border_radius);
+    padding: var(--padding_large);
+    width: var(--input_height);
+    max-width: var(--input_height);
+    color: #ffffff !important;
+    qproperty-icon: url(theme:Dark/settings/general.svg);
+}
+
+QPushButton#virtualCamConfigButton:hover {
+    background-color: var(--sfc_dark_hover) !important;
+    border-color: var(--sfc_mid) !important;
+    qproperty-icon: url(theme:Dark/settings/general.svg);
+}
+
+/* --- スタジオモード切替 (Y Button: Green) --- */
+QPushButton#modeSwitch {
+    background-color: var(--sfc_green);
+    color: #ffffff !important;
+    border: 1px solid #007734;
+}
+
+QPushButton#modeSwitch:hover {
+    background-color: var(--sfc_green_hover);
+    border-color: var(--sfc_green);
+    color: #ffffff !important;
+}
+
+QPushButton#modeSwitch:pressed {
+    background-color: var(--sfc_green_pressed);
+    color: #ffffff !important;
+}
+
+/* スタジオモードON（アクティブ時）: 白文字を完全固定 */
+QPushButton#modeSwitch.state-active,
+QPushButton#modeSwitch:checked,
+QPushButton#modeSwitch:!hover:!pressed.state-active,
+QPushButton#modeSwitch:hover.state-active,
+QPushButton#modeSwitch:hover:checked {
+    background-color: #005626 !important;
+    border: 2px solid var(--sfc_green_glow) !important;
+    color: #ffffff !important;
+    font-weight: normal;
+}
+
+/* --- 設定・終了ボタン (POWER / RESET スイッチのダークスレートグレー) --- */
+QPushButton#settingsButton,
+QPushButton#exitButton {
+    background-color: var(--sfc_dark);
+    color: #ffffff !important;
+    border: 1px solid var(--sfc_dark_pressed);
+}
+
+QPushButton#settingsButton:hover,
+QPushButton#exitButton:hover {
+    background-color: var(--sfc_dark_hover);
+    border-color: var(--sfc_mid);
+    color: #ffffff !important;
+}
+
+QPushButton#settingsButton:pressed,
+QPushButton#exitButton:pressed {
+    background-color: var(--sfc_dark_pressed);
+    color: #ffffff !important;
+}
+
+/* 画面左下（プレビュー下部コンテキストバー）ツールボタン: 白浮きを完全解消し背景透明化 */
+#contextContainer {
+    background-color: var(--sfc_body);
+}
+
+#contextContainer QPushButton {
+    background-color: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: var(--border_radius);
+    padding: 3px 6px;
+}
+
+#contextContainer QPushButton:hover {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid var(--sfc_border) !important;
+}
+
+#contextContainer QPushButton:pressed {
+    background-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+/* =============================================================================
+   8. 音声ミキサー & スライダー
+   ============================================================================= */
+
+#mixerContainer,
+#mixerArea {
+    background-color: var(--sfc_body);
+}
+
+/* ミキサーヘッダー (Global, Active 等) */
+#mixerContainer QWidget[header="true"] QLabel,
+#mixerContainer QLabel#header,
+#mixerContainer .header {
+    background-color: var(--sfc_dark);
+    color: #ffffff !important;
+    padding: 3px 6px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+VolumeControl .mixer-category,
+VolumeControl QLabel.mixer-category,
+#vVolumeWidgets VolumeControl QLabel.mixer-category,
+#hVolumeWidgets VolumeControl QLabel.mixer-category,
+QLabel.mixer-category {
+    background: var(--sfc_dark) !important;
+    color: #ffffff !important;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--sfc_border);
+}
+
+/* ミュートボタン: 通常は背景透明、ミュート時は赤背景 + 純白ミュートアイコン
+   ※OBSの applyColorToIcon() が buttonText (color) でアイコンを再着色するため、color: #ffffff !important が必須！ */
+.btn-mute {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    qproperty-icon: url(theme:Light/settings/audio.svg);
+}
+
+.btn-mute:hover {
+    background-color: #d6dae2;
+    border-color: var(--sfc_border);
+}
+
+.btn-mute.checked,
+.btn-mute:checked {
+    color: #ffffff !important;
+    background: var(--sfc_red) !important;
+    border: 1px solid #ad1122 !important;
+    border-radius: 4px;
+    qproperty-icon: url(theme:Dark/mute.svg) !important;
+}
+
+.btn-mute.checked:hover,
+.btn-mute:checked:hover {
+    color: #ffffff !important;
+    background: var(--sfc_red_hover) !important;
+    border-color: var(--sfc_red) !important;
+    qproperty-icon: url(theme:Dark/mute.svg) !important;
+}
+
+/* モニタリングボタン: 通常は透明、ON時はダークグレー + 純白ヘッドホンアイコン */
+.btn-monitor {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    qproperty-icon: url(theme:Light/headphones-off.svg);
+}
+
+.btn-monitor:hover {
+    background-color: #d6dae2;
+    border-color: var(--sfc_border);
+}
+
+.btn-monitor.checked,
+.btn-monitor:checked {
+    color: #ffffff !important;
+    background: var(--sfc_dark) !important;
+    border: 1px solid var(--sfc_dark_pressed) !important;
+    border-radius: 4px;
+    qproperty-icon: url(theme:Dark/headphones.svg) !important;
+}
+
+.btn-monitor.checked:hover,
+.btn-monitor:checked:hover {
+    color: #ffffff !important;
+    background: var(--sfc_dark_hover) !important;
+    border-color: var(--sfc_mid) !important;
+    qproperty-icon: url(theme:Dark/headphones.svg) !important;
+}
+
+/* スライダー: POWERスイッチ風のダークグレーハンドル & スレートグレープログレス */
+QSlider::groove:horizontal {
+    background-color: var(--sfc_mid);
+    height: 4px;
+    border-radius: 2px;
+}
+
+QSlider::sub-page:horizontal {
+    background-color: var(--sfc_dark) !important;
+    border-radius: 2px;
+}
+
+QSlider::add-page:horizontal {
+    background-color: var(--sfc_mid);
+    border-radius: 2px;
+}
+
+QSlider::groove:vertical {
+    background-color: var(--sfc_mid);
+    width: 4px;
+    border-radius: 2px;
+}
+
+QSlider::add-page:vertical {
+    background-color: var(--sfc_dark) !important;
+    border-radius: 2px;
+}
+
+QSlider::sub-page:vertical {
+    background-color: var(--sfc_mid);
+    border-radius: 2px;
+}
+
+QSlider::handle:horizontal {
+    background-color: var(--sfc_dark);
+    border: 1px solid var(--sfc_dark_pressed);
+    width: 14px;
+    height: 18px;
+    margin: -7px 0;
+    border-radius: 3px;
+}
+
+QSlider::handle:horizontal:hover {
+    background-color: var(--sfc_dark_hover);
+    border-color: var(--sfc_dark);
+}
+
+QSlider::groove:vertical {
+    background-color: var(--sfc_mid);
+    width: 4px;
+    border-radius: 2px;
+}
+
+QSlider::handle:vertical {
+    background-color: var(--sfc_dark);
+    border: 1px solid var(--sfc_dark_pressed);
+    width: 18px;
+    height: 14px;
+    margin: 0 -7px;
+    border-radius: 3px;
+}
+
+QSlider::handle:vertical:hover {
+    background-color: var(--sfc_dark_hover);
+    border-color: var(--sfc_dark);
+}
+
+/* 音声ボリュームメーター */
+VolumeMeter {
+    qproperty-backgroundNominalColor: #28a745;
+    qproperty-backgroundWarningColor: #e09800;
+    qproperty-backgroundErrorColor: #e01e34;
+    qproperty-foregroundNominalColor: #009e46;
+    qproperty-foregroundWarningColor: #c77e00;
+    qproperty-foregroundErrorColor: #b21b28;
+    qproperty-magnitudeColor: #181a1f;
+    qproperty-majorTickColor: #181a1f;
+    qproperty-minorTickColor: var(--sfc_mid);
+}
+
+/* =============================================================================
+   9. Light テーマ標準アイコンの継承・明示指定
+   ============================================================================= */
+
+OBSBasic {
+    qproperty-imageIcon: url(theme:Light/sources/image.svg);
+    qproperty-colorIcon: url(theme:Light/sources/brush.svg);
+    qproperty-slideshowIcon: url(theme:Light/sources/slideshow.svg);
+    qproperty-audioInputIcon: url(theme:Light/sources/microphone.svg);
+    qproperty-audioOutputIcon: url(theme:Light/settings/audio.svg);
+    qproperty-desktopCapIcon: url(theme:Light/settings/video.svg);
+    qproperty-windowCapIcon: url(theme:Light/sources/window.svg);
+    qproperty-gameCapIcon: url(theme:Light/sources/gamepad.svg);
+    qproperty-cameraIcon: url(theme:Light/sources/camera.svg);
+    qproperty-textIcon: url(theme:Light/sources/text.svg);
+    qproperty-mediaIcon: url(theme:Light/sources/media.svg);
+    qproperty-browserIcon: url(theme:Light/sources/globe.svg);
+    qproperty-groupIcon: url(theme:Light/sources/group.svg);
+    qproperty-sceneIcon: url(theme:Light/sources/scene.svg);
+    qproperty-defaultIcon: url(theme:Light/sources/default.svg);
+    qproperty-audioProcessOutputIcon: url(theme:Light/sources/windowaudio.svg);
+}
+
+.icon-plus             { qproperty-icon: url(theme:Light/plus.svg); }
+.icon-minus            { qproperty-icon: url(theme:Light/minus.svg); }
+.icon-trash            { qproperty-icon: url(theme:Light/trash.svg); }
+.icon-clear            { qproperty-icon: url(theme:Light/entry-clear.svg); }
+.icon-gear             { qproperty-icon: url(theme:Light/settings/general.svg); }
+.icon-dots-vert        { qproperty-icon: url(theme:Light/dots-vert.svg); }
+.icon-refresh          { qproperty-icon: url(theme:Light/refresh.svg); }
+.icon-cogs             { qproperty-icon: url(theme:Light/cogs.svg); }
+.icon-touch            { qproperty-icon: url(theme:Light/interact.svg); }
+.icon-up               { qproperty-icon: url(theme:Light/up.svg); }
+.icon-down             { qproperty-icon: url(theme:Light/down.svg); }
+.icon-filter           { qproperty-icon: url(theme:Light/filter.svg); }
+.icon-revert           { qproperty-icon: url(theme:Light/revert.svg); }
+.icon-close            { qproperty-icon: url(theme:Light/close.svg); }
+.icon-layout-vertical  { qproperty-icon: url(theme:Light/layout-vertical.svg); }
+.icon-layout-horizontal{ qproperty-icon: url(theme:Light/layout-horizontal.svg); }

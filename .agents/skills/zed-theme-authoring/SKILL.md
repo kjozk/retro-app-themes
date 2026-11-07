@@ -1,0 +1,177 @@
+---
+name: zed-theme-authoring
+description: Create, customize, debug, and install Zed editor themes. Covers Zed theme schema (v0.2.0), OS-specific directory structures (Windows %APPDATA% vs macOS/Linux ~/.config), GPUI component color resolution mechanisms (text, icon, element, ghost_element), and practical authoring best practices.
+---
+
+# Zed テーマ作成・カスタマイズ総合ガイド (Zed Theme Authoring)
+
+Zed エディタのカスタムテーマを作成・編集・デバッグ・配布するための汎用実践ノウハウ集です。
+
+---
+
+## 1. ディレクトリ構造とテーマ配置パス (OS別仕様)
+
+Zed は OS によってテーマファイルおよび設定ファイルの探索パスが異なります。
+
+| OS | テーマ配置ディレクトリ | 設定ファイル (`settings.json`) |
+| :--- | :--- | :--- |
+| **Windows** | **`%APPDATA%\Zed\themes\`**<br>(`C:\Users\<ユーザー名>\AppData\Roaming\Zed\themes\`) | `%APPDATA%\Zed\settings.json` |
+| **macOS** | **`~/.config/zed/themes/`** | `~/.config/zed/settings.json` |
+| **Linux** | **`~/.config/zed/themes/`**<br>(または `$XDG_CONFIG_HOME/zed/themes/`) | `~/.config/zed/settings.json` |
+
+> [!IMPORTANT]
+> **Windows 版の重要な落とし穴**:
+> Windows 版 Zed は `~/.config/zed/themes/` ではなく、**`%APPDATA%\Zed\themes\`** を最優先かつ標準として読み込みます。
+> `.config` 側に配置しても認識されない、あるいは `%APPDATA%` 側に古いファイルが残っているとそちらが優先され、編集内容が画面に反映されない原因となります。
+
+---
+
+## 2. テーマファイル構造 (`v0.2.0` スキーマ)
+
+Zed のテーマは 1 つの JSON ファイル（拡張子 `.json`）で構成され、複数のテーマバリアント（Light、Dark、Blurred 等）をまとめて定義できます。
+
+公式スキーマ: `https://zed.dev/schema/themes/v0.2.0.json`
+
+### 基本構造
+```json
+{
+  "$schema": "https://zed.dev/schema/themes/v0.2.0.json",
+  "name": "My Theme Family",
+  "author": "Your Name",
+  "themes": [
+    {
+      "name": "My Theme Light",
+      "appearance": "light",
+      "style": { ... }
+    },
+    {
+      "name": "My Theme Dark",
+      "appearance": "dark",
+      "style": { ... }
+    },
+    {
+      "name": "My Theme Light [Blurred]",
+      "appearance": "light",
+      "style": {
+        "background.appearance": "blurred",
+        ...
+      }
+    }
+  ]
+}
+```
+
+### テーマ名の命名規則と設定ファイルの連動
+- 日本語を含む任意の Unicode（UTF-8）文字列をテーマ名として使用可能。
+- `settings.json` の `"theme"` で指定する文字列と、テーマ定義内の `"name"` は**完全一致**している必要があります。
+  ```json
+  "theme": {
+    "mode": "light",
+    "light": "My Theme Light",
+    "dark": "My Theme Dark"
+  }
+  ```
+- 名前が一致しない場合、Zed はデフォルトテーマ（One Light / One Dark 等）へフォールバックします。
+
+---
+
+## 3. GPUI コンポーネントのカラー解決ロジック (最重要ノウハウ)
+
+Zed の UI フレームワーク（GPUI）では、テーマの各トークンがどの UI 要素に適用されるか固有のルールと制約が存在します。
+
+### (1) ステータスバー・タイトルバー・Markdown Preview の文字色問題 (共通トークンの制約)
+- スキーマには `status_bar.background` や `title_bar.background` が存在しますが、**`status_bar.text` や `title_bar.text` などの個別文字色プロパティは存在しません**。
+- ステータスバー内の行番号・言語表示・各種アイコンボタン、およびタイトルバー内のプロジェクト名・ブランチ名ボタンは、内部実装で `Button::new` 経由のデフォルト色（`Color::Default` = **`style.text`**）または `Color::Muted`（**`style.text.muted`**）がそのまま適用されます。
+- **さらに重要な落とし穴 (Markdown Preview の白飛び)**:
+  - Zed の **Markdown Preview（プレビュー画面）の本文・見出し・テーブル文字色も、テーマ全体の `style.text` を直接参照します**。
+  - ライトテーマでステータスバーを白文字にしようとして `text: #FFFFFF`（白）に設定すると、Markdown プレビューの白背景上で文字が完全に白飛びして読めなくなります。
+  - したがって、**ライトテーマ（`appearance: "light"`）では `text` は必ず暗色（黒〜濃チャコール）でなければなりません**。
+
+### (2) Light テーマと Dark テーマの役割分担パターン (GPUI 思想への適合)
+「濃い象徴色（えんじ色、ネイビー、ブランドカラー等）をバーに敷いて白文字でくっきり見せたい」という要求がある場合、Light と Dark で役割を分担するのが最も美しく破綻しない設計パターンです。
+
+| テーマ種別 | 配色方針 | バー（ステータス/タイトル） | 文字色 (`text`) | 象徴色（アクセント）の配置 |
+| :--- | :--- | :--- | :--- | :--- |
+| **Light** (`light`) | 清潔感・可読性重視<br>（本体成型色、アイボリー等） | 中間色〜明色<br>（真鍮ゴールド、ライトグレー等） | **暗色（黒）**<br>※Preview白飛び防止 | アイコン、フォーカス枠線、リンク、タグ等 |
+| **Dark** (`dark`) | 重厚感・高コントラスト重視<br>（黒カセット、コントローラー等） | **濃い象徴色**<br>（えんじ色、ネイビー等） | **明色（白/アイボリー）** | 真鍮ゴールド、イエロー等の金属色アイコン |
+
+- **Dark テーマの優位性**:
+  - `appearance: "dark"` では Markdown Preview も暗色背景になるため、全体文字色 `text` を白に設定してもプレビューが白飛びしません。
+  - これにより、「ステータスバーやタイトルバーが濃色 × 文字が白」という高コントラストなデザインを副作用ゼロで実現できます。
+
+### (3) 左右パネルの背景色共通化の制約
+- 左側のドック（Agent スレッド、アウトライン等）と、右側のドック（プロジェクトパネル、ターミナル等）は、すべて同一の **`panel.background`** を参照します。
+- 「左パネルだけをグレーにして、右パネルだけをアイボリーにする」といった左右個別の塗り分けは、現行の Zed スキーマでは不可能です。
+
+### (4) トグルボタンの ON / OFF 状態と実機ボタンメタファー
+- トグルスイッチや選択トグルボタン（検索バーの `Aa` や `.*`、ピン留め等）:
+  - **OFF 状態**: `icon`（通常アイコン色）または `Color::Muted`（`text.muted`）
+  - **ON 状態**: `Color::Accent`（**`text.accent`** / **`icon.accent`**）
+  - **トグル背景**: `ghost_element.selected` や `element.selected`
+- **設計指針 (ハードウェア・メタファー)**:
+  - 通常時（OFF）を「本体ロゴ色や通常文字色」にし、選択時（ON）を「実機ボタン色（例: ゲームボーイの小豆色 `#8E1E4F`）」に割り当てることで、ボタンを押し込んで点灯したような直感的で気持ちのよい状態変化を演出できます。
+  - `text.accent` は白背景・暗色背景の双方に対してコントラスト比 4.5:1 以上（推奨 7:1 以上）を保つ色を選択してください。
+
+### (5) 入力ボックス・ドロップダウン・設定画面 (`element.*`)
+- **`element.background`**: 設定画面（Settings）のドロップダウン、数値入力ボックス、トグルスイッチの基本背景。
+- **`element.hover`** / **`element.active`**: ホバー・押下時の背景。
+- **`element.selected`**: 選択中の背景。
+- ⚠️ `element.background` を暗色に設定すると、白背景の設定画面でドロップダウンが真っ黒な四角いブロックになり、内部のテキストが読めなくなります。ライトテーマでは必ず明るい成型色・ニュートラルトーン（`#EFECE4` 等）に設定してください。
+
+### (6) エディタ領域と UI の独立性
+- **`editor.foreground`**: エディタ内の通常コードの文字色（UI 全体の `text` とは完全に独立）。
+- **`editor.background`**: エディタの背景色（Blurred バリアントでは `#00000000` で透明化）。
+- **`editor.gutter.background`**: 行番号領域（ガター）の背景色。
+- **`editor.line_number`** / **`editor.active_line_number`**: 行番号・現在行番号の文字色。
+
+---
+
+## 4. 実機ハードウェア再現テーマの設計技法 (Hardware Metaphor)
+
+ハードウェア（家庭用ゲーム機、携帯機、計測機器等）をモチーフにしたカスタムテーマを設計する際は、以下の構造化マッピングと原則を適用します。
+
+### (1) 実機パーツと UI トークンのマッピング原則
+実機の構造をエディタのレイアウトに対応させます：
+
+| 実機パーツ | 役割 | Zed UI トークン | 設計指針 |
+| :--- | :--- | :--- | :--- |
+| **本体外枠（ボディ成型色）** | 外側の土台 | `background`, `panel.background` | プラスチック成型色（アイボリー、ライトグレー、オフホワイト等） |
+| **画面ベゼル（液晶枠 / スロット）** | 境界・フレーム | `title_bar`, `status_bar`, `tab_bar` | スレートグレー、画面枠のダークグレーなど、エディタを引き締める中間色 |
+| **ディスプレイ（画面・液晶）** | 情報表示領域 | `editor.background` | 液晶の緑（Gameboy）や、クリーンなペーパーホワイト等 |
+| **操作パーツ（ボタン・スイッチ）** | アクセント | `icon`, `border.focused`, `element.selected` | A/Bボタン、十字キー、POWERスイッチ等の象徴色 |
+| **インジケーター（LED・ロゴ）** | 状態通知 | `version_control.*`, `warning`, `error` | バッテリーランプ、公式ロゴのマルチカラー等 |
+
+### (2) 大面積ベースと小面積アクセントの黄金比 (9:1 の法則)
+- **大面積（90%）**: 実機ボディ・ベゼル・スロット等のインダストリアルな成型色（2〜3トーンのグレーやアイボリー）。
+- **小面積（10%）**: アイコン、フォーカス枠、Git インジケーター等の象徴色。
+- ⚠️ 実機に存在しない大きな有彩色帯（例: 画面全体を覆うような派手な青や赤のバー）を敷くと、おもちゃ感が出たり、他のブランドに見えてリアリティが損なわれます。
+
+### (3) 有彩色ベース（液晶グリーン・アンバー等）のコントラストと実用性設計
+初代ゲームボーイのオリーブグリーン液晶（`#8C9E5B`）のように、白でも純黒でもない有彩色をモチーフにする場合の設計ルール：
+
+1. **Light テーマの実用性優先原則（エディタ背景は白ベース）**:
+   - エディタ背景全面を有彩色（オリーブグリーン等）で塗りつぶすと、長時間のコード編集や Markdown プレビューで視覚的負荷が大きく「癖が強すぎる」状態になります。
+   - したがって、Light テーマでは**エディタ背景をクリーンな白（成型色オフホワイト／ペーパーホワイト）**に設定し、液晶オリーブグリーンは「検索一致（`search.match_background`）」「Git 追加（`version_control.added`）」などの機能的ハイライトとして要所に活かすのが最も洗練された設計です。
+2. **非アクティブタブの視認性担保**:
+   - タブバー（`tab_bar.background` / `tab.inactive_background`）に画面枠やベゼルのグレーを濃く適用すると、非アクティブタブのファイル名（`text.muted`）が同化して読めなくなります。
+   - タブバーには明るい成型色／明るいカバーグレー（`#B8BAC2` 等）を採用し、`text.muted` を濃いチャコール（`#3D424C` 等）に引き締めることで視認性を完全確保してください。
+3. **Dark テーマにおける「彩度抑制（Desaturation）」原則**:
+   - 背景に濃緑黒（`#14200E`）などの有彩色ダークを採用する場合、シンタックスハイライトやテキストに高彩度のネオンカラーを乗せるとギラついて可読性が低下します。
+   - テキストはセージオリーブ（`#98A882`）、青紫はスレートインディゴ（`#686BA8`）、ボタン色はくすみ小豆色（`#B0426A` / `#8E1E4F`）のように、**彩度（Saturation）を抑えたビンテージトーン**に落とすことで、背景のユニークさを保ちながら目に優しい渋い高級感を生み出せます。
+
+---
+
+## 5. テーマの更新とホットリロード
+
+1. **自動リロード**:
+   - Zed 起動中に `%APPDATA%\Zed\themes\`（または `~/.config/zed/themes/`）内の既存 `.json` ファイルが上書き更新されると、Zed は自動的にホットリロードして画面に即座に反映します。
+2. **手動で再読み込みする場合**:
+   - `Ctrl + K` の後に `Ctrl + T` を押す（または `Ctrl + Shift + P` で `theme: select` を実行）。
+   - テーマ一覧から対象テーマを選択し直す。
+
+---
+
+## 6. テーマのインストールと配布
+
+ユーザー環境へのテーマ配布には、各OSのテーマディレクトリへ `.json` をコピーするインストーラースクリプト（Windows: PowerShell / macOS・Linux: Shell script）を同梱するのが一般的です。
+※PowerShell スクリプトのエンコーディングや安全な作成ノウハウについては、`powershell-scripting` スキルを参照してください。
