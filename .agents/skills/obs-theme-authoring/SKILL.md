@@ -9,7 +9,7 @@ OBS Studio 向けカスタムテーマ（`.ovt` / `.qss`）の構造、主要ウ
 
 > [!NOTE] 関連スキルとの連携
 > - **Qt スタイルシート（QSS）の共通トラブルシューティング**: 擬似状態フォールバック（無効時アイコン同化）、特異度トラップ、セレクタ仕様違反、スクロールバー境界セパレータ等の低レイヤーな QSS デバッグは [`qt-stylesheet-troubleshooting`](file:///e:/obs-studio-theme/.agents/skills/qt-stylesheet-troubleshooting/SKILL.md) を参照してください。
-> - **レトロハード & クラシック OS のメタファー設計論**: ゲームボーイ、ファミコン、Windows 98/2000、Windows XP などの実機パレット抽出・成型パーツ色分離原則は [`retro-ui-metaphor-design`](file:///e:/obs-studio-theme/.agents/skills/retro-ui-metaphor-design/SKILL.md) を参照してください。
+> - **レトロハード & クラシック OS のメタファー設計論**: 実機パレット抽出や成型パーツ色分離原則は [`retro-ui-metaphor-design`](file:///e:/obs-studio-theme/.agents/skills/retro-ui-metaphor-design/SKILL.md) を、各テーマの個別仕様は `docs/designs/` を参照してください。
 
 ---
 
@@ -197,11 +197,8 @@ OBS Studio のカスタムテーマで独自の SVG や PNG 画像アセット�
 
 ```
 obs-studio/themes/
-  ├── Yami_FamilyComputer.ovt
-  ├── Yami_Gameboy.ovt
-  ├── Yami_Luna.ovt
-  ├── Yami_SuperFamicom.ovt
-  ├── Yami_WindowsClassic.ovt
+  ├── Yami_ThemeA.ovt
+  ├── Yami_ThemeB.ovt
   └── classic/                  ← 専用サブディレクトリに完全集約
       ├── up.svg
       ├── up_disabled.svg
@@ -231,11 +228,39 @@ obs-studio/themes/
 アセットをサブディレクトリに集約することで、`install.ps1` や `install.sh` のインストール対象リストに画像ファイルを 1 枚ずつ追加・更新する手間が省け、ディレクトリを 1 つ指定するだけで安全に一括再帰コピーが可能になります：
 ```powershell
 $themeFiles = @(
-    "Yami_SuperFamicom.ovt",
-    "Yami_FamilyComputer.ovt",
-    "Yami_Gameboy.ovt",
-    "Yami_Luna.ovt",
-    "Yami_WindowsClassic.ovt",
-    "classic"    # ディレクトリごと一括再帰コピー
+    "Yami_ThemeA.ovt",
+    "Yami_ThemeB.ovt",
+    "assets_dir"    # ディレクトリごと一括再帰コピー
 )
 ```
+
+
+---
+
+## 7. OBS 外観密度（クラシック・コンパクト・通常・快適）とフォントスケーリング連動
+
+OBS Studio の設定（「外観」→「密度」および「フォントサイズ」）は、ベーステーマ Yami.obt 内で --obsPadding および --obsFontScale を通じて動的に計算されます。
+
+### (1) パディング固定値（px）ハードコードの禁止
+テーマの QSS 内で padding: 7px 14px; や ont-size: 11pt; などの固定値を指定すると、ユーザーが「コンパクト」や「快適」を選択してもサイズが変動せず、密度機能が完全に無力化されます。
+
+### (2) 密度連動の標準変数マッピング
+ウィジェットの余白・パディングには、必ず OBS 公式の動的計算変数を使用します：
+
+| 要素 | 推奨指定 | 備考 |
+| :--- | :--- | :--- |
+| **コントロールボタン** | padding: var(--padding_large) var(--padding_wide); | 密度変更に応じてボタンの上下左右余白が伸縮 |
+| **タブ (QTabBar::tab)** | padding: var(--tab_padding_base) var(--tab_padding_large); | タブの高さと横幅がスケーリング |
+| **設定画面リスト (QListWidget::item)** | padding: var(--padding_large) var(--padding_wide); | 行間が密度設定に応じて変化 |
+| **一般リスト・ツリー (::item)** | padding: var(--padding_large); | シーン・ソース一覧の行の高さ |
+| **ツールバーボタン (QToolButton)** | padding: var(--padding_large); max-width: var(--icon_small); | アイコンと余白が連動 |
+| **入力フォーム (QLineEdit 等)** | padding: var(--input_padding); | 入力枠内のパディング |
+| **フォントサイズ** | ont-size の px/pt ハードコードを避け、未指定（継承）または ar(--font_base) | スライダー操作で拡大縮小可能に |
+
+---
+
+## 8. 関連ガイド
+
+- テーマの品質保証・レビュー観点チェックリストは [	heme-review-guidelines](../theme-review-guidelines/SKILL.md) を参照。
+- QSS の構文違反・無効セレクタ（SourceTreeItem:selected、::item:selected の子孫結合子、存在しない型セレクタ等）は [\qt-stylesheet-troubleshooting\](file:///e:/obs-studio-theme/.agents/skills/qt-stylesheet-troubleshooting/SKILL.md) の §3 / §8 を参照。
+- \install.ps1\ は UTF-8 with BOM 必須。適用方法メッセージには全テーマを列挙する（詳細は \powershell-scripting\ スキル §5）。

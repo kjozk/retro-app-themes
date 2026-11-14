@@ -1,20 +1,45 @@
-# retro-app-themes
+# retro-app-themes 🎮
 
-任天堂の伝説的名機である **ファミリーコンピュータ（FC）**、**スーパーファミコン（SFC）**、**ゲームボーイ（GB）**、およびクラシックOSである **Windows Classic**、**Windows XP Luna** の実機カラーパレットとデザイン言語を忠実に再現した、クリエイター＆エンジニア向けマルチアプリケーション・テーマコレクションです。
+**Famicom / Super Famicom / Game Boy / NES / SNES / Wii / Switch / Windows Classic / Windows XP Luna** — レトロハード & クラシックOSの配色を再現する、**OBS Studio・Zed 用テーマ集**
+
+*Retro console & classic Windows color themes for **OBS Studio** and **Zed** editor — Famicom, Super Famicom, Game Boy, NES, SNES, Wii, Switch, Windows 98/2000 Classic, Windows XP Luna.*
+
+![License: GPL v2](https://img.shields.io/badge/license-GPLv2-blue)
+![OBS Studio](https://img.shields.io/badge/OBS%20Studio-theme-302E31?logo=obsstudio&logoColor=white)
+![Zed](https://img.shields.io/badge/Zed-theme-084CCF)
+![Themes](https://img.shields.io/badge/themes-10-orange)
+
+ファミコン・スーファミ・ゲームボーイ・Wii・Switch・Windows Classic・Windows XP Luna の実機カラーパレットとデザイン言語を忠実に再現した、クリエイター＆エンジニア向けのテーマコレクションです。ダークテーマに飽きた方、配信画面・エディタをレトロ・モダンゲーム機の雰囲気にしたい方へ。
+
+> **キーワード**: OBS theme / OBS Studio テーマ / Zed theme / ファミコン / スーパーファミコン / ゲームボーイ / Wii / Switch / Windows XP / Windows 98 / レトロ / retro / pixel / Famicom / Game Boy
 
 ---
 
 ## 📸 プレビューギャラリー
 
 ### OBS Studio
-| ファミリーコンピュータ | スーパーファミコン | Windows Classic |
+| ファミリーコンピュータ | スーパーファミコン | ゲームボーイ | Nintendo Switch |
+| :---: | :---: | :---: | :---: |
+| ![OBS Studio Famicom Preview](screenshots/obs/fc_preview.png) | ![OBS Studio Super Famicom Preview](screenshots/obs/sfc_preview.png) | ![OBS Studio Gameboy Preview](screenshots/obs/gb_preview.png) | ![OBS Studio Switch Preview](screenshots/obs/switch_preview.png) |
+
+| Nintendo Wii | Windows Classic | Windows XP Luna |
 | :---: | :---: | :---: |
-| ![OBS Studio Famicom Preview](screenshots/obs/fc_preview.png) | ![OBS Studio Super Famicom Preview](screenshots/obs/sfc_preview.png) | ![OBS Studio Windows Classic Preview](screenshots/obs/windows_preview.png) |
+| ![OBS Studio Wii Preview](screenshots/obs/wii_preview.png) | ![OBS Studio Windows Classic Preview](screenshots/obs/windows_preview.png) | ![OBS Studio Windows XP Luna Preview](screenshots/obs/luna_preview.png) |
 
 ### Zed エディタ
-| ファミリーコンピュータ | ゲームボーイ |
-| :---: | :---: |
-| ![Zed Famicom Preview](screenshots/zed/fc_preview.png) | ![Zed Gameboy Preview](screenshots/zed/gb_preview.png) |
+| ファミリーコンピュータ | スーパーファミコン | ゲームボーイ |
+| :---: | :---: | :---: |
+| ![Zed Famicom Preview](screenshots/zed/fc_preview.png) | ![Zed Super Famicom Preview](screenshots/zed/sfc_preview.png) | ![Zed Gameboy Preview](screenshots/zed/gb_preview.png) |
+
+---
+
+## ⚡ クイックスタート
+
+```bash
+git clone https://github.com/kjozk/retro-app-themes.git
+cd retro-app-themes/obs-studio   # Zed は zed/
+# Windows: install.bat  /  macOS・Linux: bash install.sh
+```
 
 ---
 
@@ -24,8 +49,8 @@
 
 | アプリケーション | 状態 | 収録テーマ | 詳細・インストール手順 |
 | :--- | :---: | :--- | :--- |
-| **OBS Studio** | ✅ 対応済み | ファミリーコンピュータ / スーパーファミコン / ゲームボーイ / Windows Classic / Windows XP Luna | [OBS Studio テーマ詳細](obs-studio/README.md) |
-| **Zed** | ✅ 対応済み | Family Computer / Super Famicom / Gameboy (通常・ブラー対応) | [Zed テーマ詳細](zed/README.md) |
+| **OBS Studio** | ✅ 対応済み | ファミリーコンピュータ / スーパーファミコン / ゲームボーイ / NES / SNES / Wii / Switch / Windows Classic / Windows XP Luna | [OBS Studio テーマ詳細](obs-studio/README.md) |
+| **Zed** | ✅ 対応済み | FC / SFC / GB / NES / SNES / Wii / Switch (Dark & Light・ブラー対応) | [Zed テーマ詳細](zed/README.md) |
 | **VS Code** | 🚧 開発中 | Family Computer / Super Famicom / Gameboy | [VS Code テーマ詳細](vscode/README.md) |
 
 ---
@@ -61,6 +86,25 @@
 - **クリーン・ペールシルバー**: 現代のディスプレイに合わせて黄ばみを排した、爽やかなペールシルバーグレー（`#EEF1F4`）を基調色に設定。
 - **XP スカイブルースクロールバー**: 水色円柱グラデーションのつまみと上下矢印ボタンを完全再現。
 
+### 6. NES (Nintendo Entertainment System / 北米版)
+- **北米版 NES の実機カラー**: ライトグレーの本体色と黒のコントローラー、赤のアクセントを再現（日本版ファミコンのアイボリー × えんじ色とは別配色）。
+- **FC をベースに無彩色化**: 暖色系の成型色・金プレートをグレーへ置換し、赤はそのまま操作ボタンの強調色に使用。
+
+### 7. SNES (Super Nintendo Entertainment System / 北米版)
+- **北米版 SNES の実機カラー**: ニュートラルなライトグレー本体と、ラベンダー/パープルのボタン配色を再現（日本版スーファミの ABXY 4 色とは別配色）。
+- **SFC をベースに再配色**: 青みのあるスレートを無彩色化し、青系アクセントをパープルへ置換。
+
+### 8. Wii (Nintendo Wii)
+- **白いボディ × 水色 × シルバー**: Wii 本体の白い成型色を土台に、ロゴ／ディスクスロットの水色（`#22B2E9`）をアクセント、スタンドのシルバーを構造色に採用。
+- **Wii メニュー風の丸いタイル UI**: 角丸を大きめにし、白→シルバーのグラデーションと水色の下線でチャンネル画面を再現。
+- **視認性重視**: 水色の塗りの上は濃紺文字、水色の文字が必要な箇所は深い水色（`#136185`）に分離。
+
+### 9. Nintendo Switch (Dark & Light)
+- **公式 2 テーマの完全同期**: Nintendo Switch システム UI のミニマルなマットチャコール（Dark: `#2D2D2D`）およびマットオフホワイト（Light: `#EBEBEB`）を基調とし、Light では決定ブルー（`#2052FF`）、Dark ではシアン（`#00D2F3`）を象徴色に設定。
+- **キャレット外枠と選択インジケーターの多層分離**: 実機設定画面の操作感を再現し、外側に 2px キャレットハイライト枠線、内側に独立した縦バーインジケーターを配置して衝突を防止。
+- **実機電源メニュー準拠トグルボタン**: ベタ塗りを廃止し、深みのある黒背景＋シアン/ブルー枠線＋純白文字により 16:1 以上の高い視認性を両立。
+- **丸型ノブスライダー & ネオンカラー**: 細身のカプセル型トラックと直径 16px の純白円形ノブ、Joy-Con やホーム丸アイコンにインスパイアされたカラーマッピング。
+
 ---
 
 ## 🚀 インストール手順 (個別インストール)
@@ -92,6 +136,11 @@ retro-app-themes/
 │   │   ├── Yami_SuperFamicom.ovt
 │   │   ├── Yami_FamilyComputer.ovt
 │   │   ├── Yami_Gameboy.ovt
+│   │   ├── Yami_NES.ovt
+│   │   ├── Yami_SNES.ovt
+│   │   ├── Yami_Wii.ovt
+│   │   ├── Yami_Switch_Dark.ovt
+│   │   ├── Yami_Switch_Light.ovt
 │   │   ├── Yami_WindowsClassic.ovt
 │   │   ├── Yami_Luna.ovt
 │   │   └── classic/             # クラシックスライダーSVGアセット
@@ -104,11 +153,36 @@ retro-app-themes/
 │   ├── themes/
 │   │   ├── super-famicom.json
 │   │   ├── family-computer.json
+│   │   ├── nes.json
+│   │   ├── snes.json
+│   │   ├── wii.json
+│   │   ├── switch.json
 │   │   └── gameboy.json
 │   ├── install.bat              # Zed専用インストーラー (Win)
 │   ├── install.ps1
 │   ├── install.sh               # Zed専用インストーラー (macOS / Linux)
 │   └── README.md
+│
+├── docs/                        # 品質ガイドライン & 機種別詳細設計書
+│   ├── ISSUES.md                # 課題管理簿 (Issue Tracker)
+│   ├── THEME_REVIEW_GUIDELINES.md
+│   └── designs/                 # 各ハードウェア・OS別詳細設計書アーカイブ
+│       ├── README.md            # 機種別設計書インデックス
+│       ├── gameboy.md
+│       ├── famicom_super_famicom.md
+│       ├── nes_snes.md
+│       ├── nintendo_wii.md
+│       ├── nintendo_switch.md
+│       ├── windows_classic.md
+│       └── windows_xp_luna.md
+│
+├── .agents/skills/              # 汎用設計・開発・検証スキル（機種非依存）
+│   ├── obs-theme-authoring/
+│   ├── retro-ui-metaphor-design/
+│   ├── theme-review-guidelines/
+│   ├── qt-stylesheet-troubleshooting/
+│   ├── zed-theme-authoring/
+│   └── powershell-scripting/
 │
 ├── vscode/                      # VS Code 向けテーマ（開発準備中）
 │   └── README.md
@@ -117,15 +191,46 @@ retro-app-themes/
 │   ├── obs/
 │   │   ├── fc_preview.png
 │   │   ├── sfc_preview.png
-│   │   └── windows_preview.png
+│   │   ├── gb_preview.png
+│   │   ├── switch_preview.png
+│   │   ├── wii_preview.png
+│   │   ├── windows_preview.png
+│   │   └── luna_preview.png
 │   └── zed/
 │       ├── fc_preview.png
+│       ├── sfc_preview.png
 │       └── gb_preview.png
 │
 ├── .gitignore
 ├── LICENSE
 └── README.md                    # 総合ポータル README
 ```
+
+---
+
+## 🛠️ テーマ開発・品質レビューガイドライン
+
+新しいテーマの追加や既存テーマの改修にあたり、実機メタファーの再現性と高品質な UI/UX（アクセシビリティ・密度連動・リフロー防止）を保証するための包括的なレビュー観点をまとめています。
+
+- 📌 [課題管理簿 (Issue Tracker)](docs/ISSUES.md) - 機能要望、UI/UX 改善課題、および既知の課題一覧
+- 📋 [テーマ品質レビュー基準 & レビュー観点ガイドライン](docs/THEME_REVIEW_GUIDELINES.md)
+  - **コントラスト & 視認性**: WCAG AA/AAA 準拠、白背景上の水色・黄色対策、未選択アイコンの同化防止
+  - **実機メタファー設計**: 成型色と印字・ロゴ色の厳格分離、実機パレット階層
+  - **OBS Studio 特有ルール**: コントロールボタン枠線 2px 固定（リフロー防止）、--obsPadding 動的変数による密度連動
+  - **Zed エディタ特有ルール**: element.selected の半透明化（透明黒 #00000000 排除）、シンタックス階層
+  - **インストーラー整合性**: PowerShell スクリプトの UTF-8 with BOM 厳守
+
+### 📐 機種別詳細設計書 (Design Specifications)
+
+各テーマの実機カラーパレット、ピクセル測定値、マテリアル意匠、および実装マッピングをまとめた詳細設計書です。
+
+- 🎮 [Gameboy (DMG-01) テーマ詳細設計書](docs/designs/gameboy.md)
+- 🎮 [ファミリーコンピュータ & スーパーファミコン テーマ詳細設計書](docs/designs/famicom_super_famicom.md)
+- 🎮 [NES & SNES (北米版コンソール) テーマ詳細設計書](docs/designs/nes_snes.md)
+- 🎮 [Nintendo Wii テーマ詳細設計書](docs/designs/nintendo_wii.md)
+- 🎮 [Nintendo Switch テーマ詳細設計書](docs/designs/nintendo_switch.md)
+- 💻 [Windows Classic (98/2000) テーマ詳細設計書](docs/designs/windows_classic.md)
+- 💻 [Windows XP Luna テーマ詳細設計書](docs/designs/windows_xp_luna.md)
 
 ---
 

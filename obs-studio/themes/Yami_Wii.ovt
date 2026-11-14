@@ -1,0 +1,1574 @@
+@OBSThemeMeta {
+    name: '[2006] Wii - Nintendo Wii';
+    id: 'com.obsproject.Yami.Wii';
+    extends: 'com.obsproject.Yami.Light';
+    author: 'kjozk & Antigravity';
+    dark: 'false';
+}
+
+@OBSThemeVars {
+    /* =========================================================================
+       Nintendo Wii カラーパレット (白 × 水色 × シルバー)
+       ========================================================================= */
+    /* 白（ボディ） */
+    --wii_body: #f4f5f7;        /* ウィンドウ背景（純白だと境界が溶けるため僅かにグレー） */
+    --wii_body_light: #ffffff;  /* 入力欄・通常ボタン背景 */
+    --wii_body_dark: #e6e8eb;   /* リスト・サイドバー背景 */
+
+    /* シルバー（スタンド・リモコン下部・メニューバー） */
+    --wii_silver: #d7d8dc;      /* ボタングラデ下端・区切り */
+    --wii_mid: #9ca1aa;         /* 強めの枠線・つまみ */
+    --wii_border: #b3b6c0;      /* コンポーネント境界線 */
+    --wii_slate: #657685;       /* 補足テキスト（側面の影の青灰） */
+
+    /* 水色（WiiWare ロゴ #22b2e9 / スロット LED） */
+    --wii_cyan: #22b2e9;
+    --wii_cyan_hover: #44bfed;
+    --wii_cyan_pressed: #1a8fbd;
+    --wii_cyan_glow: #7fd3f3;
+    --wii_cyan_pale: #e0f4fc;
+    --wii_dark: #136185;        /* スロット LED の深い水色（白文字を載せる塗り・リンク） */
+    --wii_dark_hover: #1a7aa3;
+    --wii_dark_pressed: #0e4a66;
+    --wii_navy: #062a3b;        /* 水色塗りの上の文字 */
+
+    /* 機能色（意味を持つ色は維持） */
+    --wii_yellow: #e0a800;
+    --wii_yellow_hover: #f0b814;
+    --wii_yellow_pressed: #b88a00;
+    --wii_yellow_glow: #ffd75e;
+    --wii_green: #28a745;
+    --wii_green_hover: #34b955;
+    --wii_green_pressed: #1e7e34;
+    --wii_green_glow: #7ee09a;
+    --wii_red: #d9363e;         /* リモコン電源ボタンの赤 */
+    --wii_red_hover: #e5484f;
+    --wii_red_pressed: #b02a31;
+    --wii_red_glow: #ff8f94;
+
+    /* --- 画面全体の背景定義 --- */
+    --bg_window: var(--wii_body);
+    --bg_base: var(--wii_body);
+    --bg_preview: #3c424b;      /* プレビュー周囲は白いUIに対して映像を引き締めるダーク */
+
+    /* =========================================================================
+       文字色・パレット設定
+       ========================================================================= */
+    --text: #2b2f36;
+    --text_light: #ffffff;
+    --text_muted: #657685;
+    --text_inactive: #4a505a;
+    --text_disabled: #8f949e;
+
+    /* Qt パレット完全上書き (非QSSウィジェットの白文字化を防止) */
+    --palette_windowText: #2b2f36;
+    --palette_text: #2b2f36;
+    --palette_buttonText: #2b2f36;
+    --palette_brightText: #ffffff;
+    --palette_highlightedText: #ffffff;
+    --palette_toolTipText: #ffffff;
+    --palette_window: var(--wii_body);
+    --palette_base: #ffffff;
+    --palette_button: #ffffff;
+    --palette_mid: var(--wii_border);
+
+    --border_radius: 6px;       /* Wii メニューのタイルに合わせた大きめの角丸 */
+
+    --primary: var(--wii_dark);
+    --primary_light: var(--wii_dark_hover);
+    --primary_lighter: #ffffff;
+    --primary_dark: var(--wii_dark_pressed);
+    --primary_darker: #0a3347;
+    --highlight_color: var(--wii_cyan);
+    --list_item_bg_selected: var(--wii_cyan_pale);
+    --list_item_bg_hover: #f0f9fd;
+    --tab_border_focus: var(--wii_cyan);
+
+    /* 基底テーマ(Yami/Light)の青色変数を水色〜深い水色へ統一 */
+    --blue1: #ffffff;
+    --blue2: var(--wii_dark_hover);
+    --blue3: var(--wii_dark);
+    --blue4: var(--wii_dark_pressed);
+    --blue5: var(--wii_dark_pressed);
+    --blue6: #0a3347;
+
+    --warning: var(--wii_yellow);
+    --danger: var(--wii_red);
+    --success: var(--wii_green);
+
+    /* 入力フォーム & 汎用ボタン変数 */
+    --input_bg: #ffffff;
+    --input_bg_hover: #f8fafc;
+    --input_bg_focus: #ffffff;
+    --input_border: var(--wii_border);
+    --input_border_focus: var(--wii_cyan);
+
+    --button_bg: #ffffff;
+    --button_bg_hover: #f0f9fd;
+    --button_bg_down: var(--wii_silver);
+    --button_bg_disabled: #e6e8eb;
+    --button_border: var(--wii_border);
+    --button_border_hover: var(--wii_cyan);
+    --button_border_focus: var(--wii_cyan);
+    --button_border_width: 1px;
+}
+
+/* =============================================================================
+   1. 基本ウィジェット & 文字コントラスト保護
+   ============================================================================= */
+
+/* 全ウィジェットの基本テキスト色および標準フォント設定（OBS Default テーマスタック準拠） */
+QWidget {
+    color: var(--text);
+    selection-background-color: var(--wii_dark);
+    selection-color: #ffffff;
+    font-family: 'Open Sans', '.AppleSystemUIFont', Helvetica, Arial, 'MS Shell Dlg', sans-serif;
+}
+
+/* ラベル、チェックボックス、ラジオボタンの視認性確保 */
+QLabel {
+    color: var(--text);
+}
+
+QLabel:disabled {
+    color: var(--text_disabled);
+}
+
+QCheckBox,
+QRadioButton {
+    color: var(--text);
+    spacing: 6px;
+}
+
+QCheckBox:disabled,
+QRadioButton:disabled {
+    color: var(--text_disabled);
+}
+
+/* =============================================================================
+   2. ドック・タイトルバー・ウィンドウ枠
+   ============================================================================= */
+
+QDockWidget {
+    color: #ffffff;
+    titlebar-close-icon: url(theme:Light/close.svg);
+    titlebar-normal-icon: url(theme:Light/popout.svg);
+}
+
+QDockWidget::title {
+    background-color: var(--wii_dark);
+    color: #ffffff !important;
+    padding: 6px 10px;
+    font-weight: bold;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+/* ドック内部のベースコンテナ */
+OBSDock > QWidget {
+    background: var(--wii_body);
+    border: 1px solid var(--wii_border);
+    border-top: none;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+QTabBar {
+    outline: none;
+}
+
+QTabBar::tab {
+    background: #dcdee0;
+    color: #313336 !important;
+    border: 1px solid var(--wii_border);
+    padding: var(--tab_padding_base) 6px;
+    min-width: 40px;
+    font-weight: 500;
+}
+
+QTabBar::tab:hover {
+    background: #eaebec;
+    color: var(--wii_dark) !important;
+    border-color: var(--wii_mid);
+}
+
+QTabBar::tab:selected {
+    background: var(--wii_dark) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--wii_dark_pressed) !important;
+    border-bottom: 2px solid var(--wii_mid) !important;
+    font-weight: bold;
+}
+
+/* ステータスバー（最下部） */
+QStatusBar {
+    background-color: var(--wii_body_dark);
+    color: var(--text);
+    border-top: 1px solid var(--wii_border);
+}
+
+QStatusBar QLabel {
+    color: var(--text) !important;
+}
+
+/* メニューバー & メニュー */
+QMenuBar {
+    background-color: var(--wii_body);
+    color: var(--text);
+    border-bottom: 1px solid var(--wii_border);
+}
+
+QMenuBar::item {
+    background: transparent;
+    color: var(--text);
+    padding: 5px 9px;
+}
+
+QMenuBar::item:selected {
+    background-color: var(--wii_dark);
+    color: #ffffff !important;
+    border-radius: 3px;
+}
+
+QMenu {
+    background-color: #ffffff;
+    color: var(--text);
+    border: 1px solid var(--wii_border);
+    padding: 4px;
+}
+
+QMenu::item {
+    padding: 6px 24px 6px 12px;
+    border-radius: 3px;
+    color: var(--text);
+}
+
+QMenu::item:selected {
+    background-color: var(--wii_dark);
+    color: #ffffff !important;
+}
+
+QMenu::separator {
+    height: 1px;
+    background-color: var(--wii_body_dark);
+    margin: 4px 6px;
+}
+
+/* =============================================================================
+   3. 一般ボタン (QPushButton, QToolButton)
+   ============================================================================= */
+
+QPushButton,
+QToolButton {
+    background-color: var(--button_bg);
+    color: var(--text) !important;
+    border: 1px solid var(--button_border);
+    border-radius: var(--border_radius);
+    padding: var(--input_padding) var(--padding_wide);
+}
+
+QPushButton:hover,
+QToolButton:hover {
+    background-color: var(--button_bg_hover);
+    border-color: var(--wii_dark);
+    color: var(--wii_dark) !important;
+}
+
+QPushButton:pressed,
+QToolButton:pressed {
+    background-color: var(--button_bg_down);
+    border-color: var(--wii_dark_pressed);
+    color: var(--wii_dark_pressed) !important;
+}
+
+QPushButton:checked,
+QToolButton:checked {
+    background-color: var(--wii_dark) !important;
+    border: 1px solid var(--wii_dark_pressed) !important;
+    color: #ffffff !important;
+    font-weight: bold;
+}
+
+QPushButton:checked:hover,
+QToolButton:checked:hover {
+    background-color: var(--wii_dark_hover) !important;
+    border-color: var(--wii_dark) !important;
+    color: #ffffff !important;
+}
+
+QPushButton:disabled,
+QToolButton:disabled {
+    background-color: var(--button_bg_disabled);
+    color: var(--text_disabled) !important;
+    border-color: #d4d6d8;
+}
+
+QPushButton:focus,
+QToolButton:focus {
+    border-color: var(--wii_dark);
+}
+
+/* =============================================================================
+   4. 入力コントロール (テキスト, 数値, ドロップダウン)
+   ============================================================================= */
+
+QLineEdit,
+QTextEdit,
+QPlainTextEdit {
+    background-color: var(--input_bg);
+    color: var(--text) !important;
+    border: 1px solid var(--input_border);
+    border-radius: 3px;
+    padding: 4px 6px;
+    selection-background-color: var(--wii_dark);
+    selection-color: #ffffff;
+}
+
+QLineEdit:focus,
+QTextEdit:focus,
+QPlainTextEdit:focus {
+    border: 1px solid var(--wii_dark);
+}
+
+/* ドロップダウン（コンボボックス）: OBS基底テーマ（Yami）の精密なサイズ・パディング計算に準拠 */
+QComboBox,
+QDateTimeEdit {
+    background-color: var(--input_bg);
+    color: var(--text) !important;
+    border: 1px solid var(--input_border);
+    border-radius: 3px;
+}
+
+QComboBox:hover,
+QComboBox:focus,
+QDateTimeEdit:hover,
+QDateTimeEdit:selected {
+    border-color: var(--wii_dark);
+}
+
+QComboBox::drop-down,
+QDateTimeEdit::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    background-color: var(--wii_mid);
+    border: none;
+    border-left: 1px solid var(--wii_dark);
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+QComboBox::drop-down:hover,
+QDateTimeEdit::drop-down:hover {
+    background-color: var(--wii_cyan);
+    border-left: 1px solid var(--wii_cyan_pressed);
+}
+
+QComboBox::drop-down:on,
+QComboBox::drop-down:pressed,
+QDateTimeEdit::drop-down:pressed {
+    background-color: var(--wii_cyan_pressed);
+    border-left: 1px solid #034663;
+}
+
+QComboBox::drop-down:disabled,
+QDateTimeEdit::drop-down:disabled {
+    background-color: #6c6d70;
+    border: none;
+    border-left: 1px solid var(--wii_dark);
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+QComboBox::down-arrow,
+QDateTimeEdit::down-arrow,
+QComboBox::down-arrow:editable,
+QDateTimeEdit::down-arrow:editable {
+    image: url(theme:Dark/collapse.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QComboBox::down-arrow:disabled,
+QDateTimeEdit::down-arrow:disabled {
+    image: url(theme:Dark/collapse.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #ffffff;
+    border: 1px solid var(--wii_border);
+    selection-background-color: var(--wii_dark);
+    selection-color: #ffffff;
+    outline: none;
+}
+
+QComboBox QAbstractItemView::item {
+    color: var(--text);
+    padding: 4px 8px;
+    min-height: 20px;
+    border: 1px solid transparent;
+}
+
+/* ドロップダウンメニューおよびメニューの選択・ホバー・フォーカス時の青枠排除と白枠・白文字化 */
+QMenu::item:selected,
+QMenu > QWidget:selected,
+QComboBox QAbstractItemView::item:selected,
+QComboBox QListView::item:selected {
+    background-color: var(--wii_dark) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QMenu::item:hover,
+QComboBox QAbstractItemView::item:hover,
+QComboBox QListView::item:hover {
+    background-color: var(--wii_dark) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QMenu::item:selected:hover,
+QComboBox QAbstractItemView::item:selected:hover,
+QComboBox QListView::item:selected:hover {
+    background-color: var(--wii_dark_hover) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QMenu::item:focus,
+QMenu::item:selected:focus,
+QComboBox QAbstractItemView::item:selected:focus,
+QComboBox QListView::item:selected:focus {
+    background-color: var(--wii_dark) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+/* プレビュー下部ズーム・スケーリングバーのはみ出しを完全防止 */
+#previewScalingMode {
+    background-color: transparent !important;
+    color: var(--text) !important;
+    border: 1px solid var(--wii_border) !important;
+    border-radius: 0px !important;
+    height: 14px !important;
+    max-height: 14px !important;
+    min-height: 14px !important;
+    padding: 0px 4px !important;
+    margin: 0px !important;
+    font-size: var(--font_xsmall);
+}
+
+#previewScalingMode::drop-down {
+    background-color: var(--wii_mid) !important;
+    border: none !important;
+    border-left: 1px solid var(--wii_dark) !important;
+    border-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    width: 14px !important;
+    height: 14px !important;
+}
+
+#previewScalingMode::drop-down:hover {
+    background-color: var(--wii_cyan) !important;
+}
+
+#previewScalingMode::down-arrow {
+    image: url(theme:Dark/collapse.svg) !important;
+    width: 7px !important;
+    height: 7px !important;
+}
+
+#previewScalePercent {
+    color: var(--text) !important;
+    font-size: var(--font_xsmall);
+}
+
+/* スピンボックス: OBS基底テーマ（Yami）の精密なレイアウト計算に準拠（独自ボタン定義によるズレ・隙間を完全解消） */
+QSpinBox,
+QDoubleSpinBox {
+    background-color: var(--input_bg);
+    color: var(--text) !important;
+    border-color: var(--input_border);
+}
+
+QSpinBox:focus,
+QDoubleSpinBox:focus {
+    border-color: var(--wii_dark);
+}
+
+QSpinBox::up-arrow,
+QDoubleSpinBox::up-arrow {
+    image: url(theme:Light/up.svg);
+}
+
+QSpinBox::down-arrow,
+QDoubleSpinBox::down-arrow {
+    image: url(theme:Light/down.svg);
+}
+
+QSpinBox::up-arrow:disabled,
+QDoubleSpinBox::up-arrow:disabled {
+    image: url(theme:Light/up.svg);
+}
+
+QSpinBox::down-arrow:disabled,
+QDoubleSpinBox::down-arrow:disabled {
+    image: url(theme:Light/down.svg);
+}
+
+/* グループボックス: 枠線とタイトルの位置ずれおよび最下部見切れを完全解消 */
+QGroupBox {
+    background-color: transparent;
+    color: var(--wii_dark);
+    border: 1px solid var(--wii_mid);
+    border-radius: 4px;
+    margin-top: 6px;
+    padding-top: 10px;
+    padding-bottom: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-weight: bold;
+}
+
+QGroupBox::title {
+    color: var(--wii_dark) !important;
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 10px;
+    top: 0px;
+    padding: 0 8px;
+    background-color: var(--wii_body);
+}
+
+/* 警告・エラーメッセージの視認性最大化（明るい背景での溶け込みを防止） */
+.text-warning,
+QLabel[class="text-warning"],
+QLabel#simpleOutRecWarning,
+QLabel#advOutRecWarning {
+    color: #9e4a00 !important; /* 明るい背景でくっきり読めるディープアンバーオレンジ */
+    font-weight: bold;
+}
+
+.text-danger,
+QLabel[class="text-danger"] {
+    color: #b30018 !important; /* 明るい背景でくっきり読めるクラシック深紅 */
+    font-weight: bold;
+}
+
+/* スタジオモードのプレビュー／プログラムラベルの視認性確保（白文字化を完全解消） */
+.label-preview-title {
+    color: var(--wii_dark) !important;
+    font-size: var(--font_xlarge);
+    font-weight: bold;
+}
+
+/* =============================================================================
+   5. リスト・ツリー・テーブル (SceneTree, SourceTree 等) の文字切れ解消
+   ============================================================================= */
+
+/* =============================================================================
+   5. リスト・ツリー (SceneTree, SourceTree) の最適化
+   ============================================================================= */
+
+QAbstractItemView {
+    background-color: #ffffff;
+    color: var(--text);
+    border: 1px solid var(--wii_border);
+}
+
+QListView::item:selected,
+QListWidget::item:selected,
+SceneTree::item:selected,
+SourceTree::item:selected {
+    background-color: var(--wii_dark) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QListView::item:hover,
+QListWidget::item:hover,
+SceneTree::item:hover,
+SourceTree::item:hover {
+    background-color: #ecf3f6 !important;
+    border: 1px solid #ffffff !important;
+    color: var(--text) !important;
+}
+
+QListView::item:selected:hover,
+QListWidget::item:selected:hover,
+SceneTree::item:selected:hover,
+SourceTree::item:selected:hover {
+    background-color: var(--wii_dark_hover) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QListView::item:focus,
+QListWidget::item:focus,
+SceneTree::item:focus,
+SourceTree::item:focus,
+SceneTree::item:selected:focus,
+SourceTree::item:selected:focus {
+    border: 1px solid #ffffff !important;
+}
+
+/* シーンツリー（SceneTree）の行高確保 */
+SceneTree::item,
+#scenes::item {
+    min-height: 24px;
+    padding: 3px 6px;
+}
+
+/* =============================================================================
+   6. 設定ダイアログ (OBSBasicSettings) の完全最適化
+   ============================================================================= */
+
+OBSBasicSettings {
+    background-color: var(--wii_body);
+    qproperty-generalIcon: url(theme:Light/settings/general.svg);
+    qproperty-appearanceIcon: url(theme:Light/settings/appearance.svg);
+    qproperty-streamIcon: url(theme:Light/settings/stream.svg);
+    qproperty-outputIcon: url(theme:Light/settings/output.svg);
+    qproperty-audioIcon: url(theme:Light/settings/audio.svg);
+    qproperty-videoIcon: url(theme:Light/settings/video.svg);
+    qproperty-hotkeysIcon: url(theme:Light/settings/hotkeys.svg);
+    qproperty-accessibilityIcon: url(theme:Light/settings/accessibility.svg);
+    qproperty-advancedIcon: url(theme:Light/settings/advanced.svg);
+}
+
+/* 設定ダイアログの左側サイドバー */
+OBSBasicSettings QListWidget {
+    background-color: var(--wii_body_dark);
+    border: none;
+    border-right: 1px solid var(--wii_border);
+    padding: 6px;
+}
+
+OBSBasicSettings QListWidget::item {
+    padding: var(--padding_large) var(--padding_wide);
+    margin: 1px 0;
+    border: 1px solid transparent;
+    border-radius: var(--border_radius);
+    color: var(--text) !important;
+    font-weight: 500;
+}
+
+OBSBasicSettings QListWidget::item:hover {
+    background-color: #dbdcde;
+    border: 1px solid transparent;
+    color: var(--text) !important;
+}
+
+OBSBasicSettings QListWidget::item:selected,
+OBSBasicSettings QListWidget::item:selected:focus,
+OBSBasicSettings QListWidget::item:selected:hover {
+    background-color: #c6c8cc !important;
+    border: 1px solid #83858a !important;
+    color: #1a1b1e !important;
+    font-weight: bold;
+}
+
+OBSBasicSettings QListWidget::item:focus {
+    border: 1px solid #ffffff !important;
+}
+
+/* 設定画面下部のボタンボックス（OK, キャンセル, 適用）の視認性を完全確保 */
+OBSBasicSettings QDialogButtonBox QPushButton {
+    background-color: #ffffff !important;
+    color: var(--text) !important;
+    border: 1px solid var(--wii_border) !important;
+    border-radius: var(--border_radius);
+    min-width: 75px;
+    padding: var(--input_padding) var(--padding_wide);
+    font-weight: bold;
+}
+
+OBSBasicSettings QDialogButtonBox QPushButton:hover {
+    background-color: #f0f1f2 !important;
+    border-color: var(--wii_dark) !important;
+    color: var(--wii_dark) !important;
+}
+
+OBSBasicSettings QDialogButtonBox QPushButton:default {
+    background-color: var(--wii_dark) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--wii_dark_pressed) !important;
+}
+
+OBSBasicSettings QDialogButtonBox QPushButton:default:hover {
+    background-color: var(--wii_dark_hover) !important;
+    border-color: var(--wii_dark) !important;
+    color: #ffffff !important;
+}
+
+/* 適用ボタン等の無効時: しっかり読める濃さのグレー文字 */
+OBSBasicSettings QDialogButtonBox QPushButton:disabled {
+    background-color: #e9eaeb !important;
+    color: #7e7f82 !important;
+    border-color: #d4d6d8 !important;
+}
+
+/* =============================================================================
+   7. コントロールボタン (Wii: 主要=水色 / 副次=シルバー・淡水色)
+   ※枠線は全状態で 2px 固定（アクティブ時のレイアウトずれ防止）
+   ============================================================================= */
+
+#streamButton,
+#recordButton,
+#pauseRecordButton,
+#virtualCamButton,
+#modeSwitch,
+#settingsButton,
+#exitButton {
+    border-radius: 8px;
+    padding: var(--padding_large);
+    font-weight: normal;
+}
+
+/* --- 配信 / 録画 / 一時停止 (主要アクション: 水色 + 紺文字) --- */
+QPushButton#streamButton,
+QPushButton#recordButton,
+QPushButton#pauseRecordButton {
+    background: #22b2e9;
+    color: #062a3b !important;
+    border: 2px solid #1a8fbd;
+    border-radius: 8px;
+}
+
+QPushButton#streamButton:hover,
+QPushButton#recordButton:hover,
+QPushButton#pauseRecordButton:hover {
+    background: #44bfed;
+    border: 2px solid #22b2e9;
+    color: #062a3b !important;
+}
+
+QPushButton#streamButton:pressed,
+QPushButton#recordButton:pressed,
+QPushButton#pauseRecordButton:pressed {
+    background: #1a8fbd;
+    border: 2px solid #1a8fbd;
+    color: #062a3b !important;
+}
+
+QPushButton#streamButton.state-active,
+QPushButton#streamButton:checked,
+QPushButton#streamButton:!hover:!pressed.state-active,
+QPushButton#streamButton:hover.state-active,
+QPushButton#streamButton:hover:checked,
+QPushButton#recordButton.state-active,
+QPushButton#recordButton:checked,
+QPushButton#recordButton:!hover:!pressed.state-active,
+QPushButton#recordButton:hover.state-active,
+QPushButton#recordButton:hover:checked,
+QPushButton#pauseRecordButton.state-active,
+QPushButton#pauseRecordButton:checked,
+QPushButton#pauseRecordButton:!hover:!pressed.state-active,
+QPushButton#pauseRecordButton:hover.state-active,
+QPushButton#pauseRecordButton:hover:checked {
+    background: #136185 !important;
+    border: 2px solid #7fd3f3 !important;
+    color: #ffffff !important;
+}
+
+/* --- 仮想カメラ (副次: シルバー) --- */
+QPushButton#virtualCamButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ffffff, stop:1 #d7d8dc);
+    color: #062a3b !important;
+    border: 2px solid #9ca1aa;
+    border-radius: 8px;
+}
+
+QPushButton#virtualCamButton:hover {
+    background: #f0f9fd;
+    border: 2px solid #22b2e9;
+    color: #062a3b !important;
+}
+
+QPushButton#virtualCamButton:pressed {
+    background: #d7d8dc;
+    border: 2px solid #9ca1aa;
+    color: #062a3b !important;
+}
+
+QPushButton#virtualCamButton.state-active,
+QPushButton#virtualCamButton:checked,
+QPushButton#virtualCamButton:!hover:!pressed.state-active,
+QPushButton#virtualCamButton:hover.state-active,
+QPushButton#virtualCamButton:hover:checked {
+    background: #e0f4fc !important;
+    border: 2px solid #22b2e9 !important;
+    color: #062a3b !important;
+}
+
+/* 仮想カメラ設定（歯車）ボタン */
+QPushButton#virtualCamConfigButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ffffff, stop:1 #d7d8dc) !important;
+    border: 2px solid #9ca1aa !important;
+    border-radius: 8px;
+    padding: var(--padding_large);
+    width: var(--input_height);
+    max-width: var(--input_height);
+    color: #062a3b !important;
+    qproperty-icon: url(theme:Light/settings/general.svg);
+}
+
+QPushButton#virtualCamConfigButton:hover {
+    background: #f0f9fd !important;
+    border: 2px solid #22b2e9 !important;
+}
+
+/* --- スタジオモード (副次: 淡水色) --- */
+QPushButton#modeSwitch {
+    background: #beebfa;
+    color: #062a3b !important;
+    border: 2px solid #7fd3f3;
+    border-radius: 8px;
+}
+
+QPushButton#modeSwitch:hover {
+    background: #dff5fc;
+    border: 2px solid #22b2e9;
+    color: #062a3b !important;
+}
+
+QPushButton#modeSwitch:pressed {
+    background: #7fd3f3;
+    border: 2px solid #7fd3f3;
+    color: #062a3b !important;
+}
+
+QPushButton#modeSwitch.state-active,
+QPushButton#modeSwitch:checked,
+QPushButton#modeSwitch:!hover:!pressed.state-active,
+QPushButton#modeSwitch:hover.state-active,
+QPushButton#modeSwitch:hover:checked {
+    background: #22b2e9 !important;
+    border: 2px solid #136185 !important;
+    color: #062a3b !important;
+}
+
+/* --- 設定 / 終了 (白いメニュータイル) --- */
+QPushButton#settingsButton,
+QPushButton#exitButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ffffff, stop:1 #d7d8dc);
+    color: #2b2f36 !important;
+    border: 2px solid #b3b6c0;
+    border-radius: 8px;
+}
+
+QPushButton#settingsButton:hover,
+QPushButton#exitButton:hover {
+    background: #f0f9fd;
+    border: 2px solid #22b2e9;
+    color: #2b2f36 !important;
+}
+
+QPushButton#settingsButton:pressed,
+QPushButton#exitButton:pressed {
+    background: #d7d8dc;
+    border: 2px solid #b3b6c0;
+    color: #2b2f36 !important;
+}
+
+
+#contextContainer {
+    background-color: var(--wii_body);
+}
+
+#contextContainer QPushButton {
+    background-color: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: var(--border_radius);
+    padding: 3px 6px;
+}
+
+#contextContainer QPushButton:hover {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid var(--wii_border) !important;
+}
+
+#contextContainer QPushButton:pressed {
+    background-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+/* =============================================================================
+   8. 音声ミキサー & スライダー
+   ============================================================================= */
+
+#mixerContainer,
+#mixerArea {
+    background-color: var(--wii_body);
+}
+
+/* ミキサーヘッダー (Global, Active 等) */
+#mixerContainer QWidget[header="true"] QLabel,
+#mixerContainer QLabel#header,
+#mixerContainer .header {
+    background-color: var(--wii_dark);
+    color: #ffffff !important;
+    padding: 3px 6px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+VolumeControl .mixer-category,
+VolumeControl QLabel.mixer-category,
+#vVolumeWidgets VolumeControl QLabel.mixer-category,
+#hVolumeWidgets VolumeControl QLabel.mixer-category,
+QLabel.mixer-category {
+    background: var(--wii_dark) !important;
+    color: #ffffff !important;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--wii_border);
+}
+
+/* ミュートボタン: 通常は背景透明、ミュート時は赤背景 + 純白ミュートアイコン
+   ※OBSの applyColorToIcon() が buttonText (color) でアイコンを再着色するため、color: #ffffff !important が必須！ */
+/* ミュート / モニターボタン: OFF = 透明(濃色アイコン) / ON = 塗り(赤・水色)。枠線幅は全状態 1px 固定 */
+.btn-mute,
+QPushButton.btn-mute {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #2b2f36;
+    qproperty-icon: url(theme:Light/settings/audio.svg);
+}
+
+.btn-mute:hover,
+QPushButton.btn-mute:hover {
+    background-color: #e0f4fc;
+    border: 1px solid #22b2e9;
+}
+
+.btn-mute.checked,
+.btn-mute:checked,
+QPushButton.btn-mute.checked,
+QPushButton.btn-mute:checked {
+    color: #ffffff !important;
+    background: #d9363e !important;
+    border: 1px solid #b02a31 !important;
+    border-radius: 4px;
+    qproperty-icon: url(theme:Dark/mute.svg) !important;
+}
+
+.btn-mute.checked:hover,
+.btn-mute:checked:hover,
+QPushButton.btn-mute.checked:hover,
+QPushButton.btn-mute:checked:hover {
+    color: #ffffff !important;
+    background: #e5484f !important;
+    border: 1px solid #b02a31 !important;
+    qproperty-icon: url(theme:Dark/mute.svg) !important;
+}
+
+.btn-monitor,
+QPushButton.btn-monitor {
+    background: transparent;
+    border: 1px solid #b3b6c0;
+    border-radius: 4px;
+    color: #2b2f36;
+    qproperty-icon: url(theme:Light/headphones-off.svg);
+}
+
+.btn-monitor:hover,
+QPushButton.btn-monitor:hover {
+    background-color: #e0f4fc;
+    border: 1px solid #22b2e9;
+}
+
+.btn-monitor.checked,
+.btn-monitor:checked,
+QPushButton.btn-monitor.checked,
+QPushButton.btn-monitor:checked {
+    color: #062a3b !important;
+    background: #22b2e9 !important;
+    border: 1px solid #1a8fbd !important;
+    border-radius: 4px;
+    qproperty-icon: url(theme:Light/headphones.svg) !important;
+}
+
+.btn-monitor.checked:hover,
+.btn-monitor:checked:hover,
+QPushButton.btn-monitor.checked:hover,
+QPushButton.btn-monitor:checked:hover {
+    color: #062a3b !important;
+    background: #44bfed !important;
+    border: 1px solid #1a8fbd !important;
+    qproperty-icon: url(theme:Light/headphones.svg) !important;
+}
+
+QSlider::groove:horizontal {
+    background-color: var(--wii_mid);
+    height: 4px;
+    border-radius: 2px;
+}
+
+QSlider::sub-page:horizontal {
+    background-color: var(--wii_dark) !important;
+    border-radius: 2px;
+}
+
+QSlider::add-page:horizontal {
+    background-color: var(--wii_mid);
+    border-radius: 2px;
+}
+
+QSlider::groove:vertical {
+    background-color: var(--wii_mid);
+    width: 4px;
+    border-radius: 2px;
+}
+
+QSlider::add-page:vertical {
+    background-color: var(--wii_dark) !important;
+    border-radius: 2px;
+}
+
+QSlider::sub-page:vertical {
+    background-color: var(--wii_mid);
+    border-radius: 2px;
+}
+
+QSlider::handle:horizontal {
+    background-color: var(--wii_dark);
+    border: 1px solid var(--wii_dark_pressed);
+    width: 14px;
+    height: 18px;
+    margin: -7px 0;
+    border-radius: 3px;
+}
+
+QSlider::handle:horizontal:hover {
+    background-color: var(--wii_dark_hover);
+    border-color: var(--wii_dark);
+}
+
+QSlider::groove:vertical {
+    background-color: var(--wii_mid);
+    width: 4px;
+    border-radius: 2px;
+}
+
+QSlider::handle:vertical {
+    background-color: var(--wii_dark);
+    border: 1px solid var(--wii_dark_pressed);
+    width: 18px;
+    height: 14px;
+    margin: 0 -7px;
+    border-radius: 3px;
+}
+
+QSlider::handle:vertical:hover {
+    background-color: var(--wii_dark_hover);
+    border-color: var(--wii_dark);
+}
+
+/* 音声ボリュームメーター */
+VolumeMeter {
+    qproperty-backgroundNominalColor: #28a745;
+    qproperty-backgroundWarningColor: #e09800;
+    qproperty-backgroundErrorColor: #e01e34;
+    qproperty-foregroundNominalColor: #009e46;
+    qproperty-foregroundWarningColor: #c77e00;
+    qproperty-foregroundErrorColor: #b21b28;
+    qproperty-magnitudeColor: #1b1b1c;
+    qproperty-majorTickColor: #1b1b1c;
+    qproperty-minorTickColor: var(--wii_mid);
+}
+
+/* =============================================================================
+   9. Light テーマ標準アイコンの継承・明示指定
+   ============================================================================= */
+
+OBSBasic {
+    qproperty-imageIcon: url(theme:Light/sources/image.svg);
+    qproperty-colorIcon: url(theme:Light/sources/brush.svg);
+    qproperty-slideshowIcon: url(theme:Light/sources/slideshow.svg);
+    qproperty-audioInputIcon: url(theme:Light/sources/microphone.svg);
+    qproperty-audioOutputIcon: url(theme:Light/settings/audio.svg);
+    qproperty-desktopCapIcon: url(theme:Light/settings/video.svg);
+    qproperty-windowCapIcon: url(theme:Light/sources/window.svg);
+    qproperty-gameCapIcon: url(theme:Light/sources/gamepad.svg);
+    qproperty-cameraIcon: url(theme:Light/sources/camera.svg);
+    qproperty-textIcon: url(theme:Light/sources/text.svg);
+    qproperty-mediaIcon: url(theme:Light/sources/media.svg);
+    qproperty-browserIcon: url(theme:Light/sources/globe.svg);
+    qproperty-groupIcon: url(theme:Light/sources/group.svg);
+    qproperty-sceneIcon: url(theme:Light/sources/scene.svg);
+    qproperty-defaultIcon: url(theme:Light/sources/default.svg);
+    qproperty-audioProcessOutputIcon: url(theme:Light/sources/windowaudio.svg);
+}
+
+.icon-plus             { qproperty-icon: url(theme:Light/plus.svg); }
+.icon-minus            { qproperty-icon: url(theme:Light/minus.svg); }
+.icon-trash            { qproperty-icon: url(theme:Light/trash.svg); }
+.icon-clear            { qproperty-icon: url(theme:Light/entry-clear.svg); }
+.icon-gear             { qproperty-icon: url(theme:Light/settings/general.svg); }
+.icon-dots-vert        { qproperty-icon: url(theme:Light/dots-vert.svg); }
+.icon-refresh          { qproperty-icon: url(theme:Light/refresh.svg); }
+.icon-cogs             { qproperty-icon: url(theme:Light/cogs.svg); }
+.icon-touch            { qproperty-icon: url(theme:Light/interact.svg); }
+.icon-up               { qproperty-icon: url(theme:Light/up.svg); }
+.icon-down             { qproperty-icon: url(theme:Light/down.svg); }
+.icon-filter           { qproperty-icon: url(theme:Light/filter.svg); }
+.icon-revert           { qproperty-icon: url(theme:Light/revert.svg); }
+.icon-close            { qproperty-icon: url(theme:Light/close.svg); }
+.icon-layout-vertical  { qproperty-icon: url(theme:Light/layout-vertical.svg); }
+.icon-layout-horizontal{ qproperty-icon: url(theme:Light/layout-horizontal.svg); }
+
+QScrollBar:vertical,
+#previewYScrollBar,
+OBSBasicSettings QScrollBar:vertical,
+OBSDock QScrollBar:vertical {
+    background-color: var(--wii_body_dark);
+    width: 16px !important;
+    border: none !important;
+    margin: 16px 0px 16px 0px !important;
+}
+
+QScrollBar:horizontal,
+#previewXScrollBar,
+OBSBasicSettings QScrollBar:horizontal,
+OBSDock QScrollBar:horizontal {
+    background-color: var(--wii_body_dark);
+    height: 16px !important;
+    border: none !important;
+    margin: 0px 16px 0px 16px !important;
+}
+
+/* つまみ (ボタンと太さを完全一致) */
+QScrollBar::handle:vertical,
+#previewYScrollBar::handle,
+OBSBasicSettings QScrollBar::handle:vertical,
+OBSDock QScrollBar::handle:vertical {
+    background-color: var(--wii_mid);
+    border: 1px solid var(--wii_dark);
+    border-top: 2px solid #ffffff;
+    border-bottom: 2px solid var(--wii_dark);
+    min-height: 24px;
+    margin: 0px !important;
+    border-radius: 0px;
+}
+
+QScrollBar::handle:vertical:hover,
+OBSBasicSettings QScrollBar::handle:vertical:hover {
+    background-color: var(--wii_cyan);
+    border: 1px solid var(--wii_cyan_pressed);
+}
+
+QScrollBar::handle:vertical:pressed,
+OBSBasicSettings QScrollBar::handle:vertical:pressed {
+    background-color: var(--wii_cyan_pressed);
+    border: 1px solid #034663;
+}
+
+QScrollBar::handle:horizontal,
+#previewXScrollBar::handle,
+OBSBasicSettings QScrollBar::handle:horizontal,
+OBSDock QScrollBar::handle:horizontal {
+    background-color: var(--wii_mid);
+    border: 1px solid var(--wii_dark);
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid var(--wii_dark);
+    min-width: 24px;
+    margin: 0px !important;
+    border-radius: 0px;
+}
+
+QScrollBar::handle:horizontal:hover,
+OBSBasicSettings QScrollBar::handle:horizontal:hover {
+    background-color: var(--wii_cyan);
+    border: 1px solid var(--wii_cyan_pressed);
+}
+
+QScrollBar::handle:horizontal:pressed,
+OBSBasicSettings QScrollBar::handle:horizontal:pressed {
+    background-color: var(--wii_cyan_pressed);
+    border: 1px solid #034663;
+}
+
+QScrollBar::add-line:vertical {
+    background-color: var(--wii_mid);
+    border: 1px solid var(--wii_dark);
+    border-top: 2px solid var(--wii_dark);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    background-color: var(--wii_mid);
+    border: 1px solid var(--wii_dark);
+    border-bottom: 2px solid var(--wii_dark);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical:hover,
+QScrollBar::sub-line:vertical:hover {
+    background-color: var(--wii_cyan);
+    border: 1px solid var(--wii_cyan_pressed);
+}
+
+QScrollBar::add-line:vertical:pressed,
+QScrollBar::sub-line:vertical:pressed {
+    background-color: var(--wii_cyan_pressed);
+    border: 1px solid #034663;
+}
+
+QScrollBar::add-line:horizontal {
+    background-color: var(--wii_mid);
+    border: 1px solid var(--wii_dark);
+    border-left: 2px solid var(--wii_dark);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    background-color: var(--wii_mid);
+    border: 1px solid var(--wii_dark);
+    border-right: 2px solid var(--wii_dark);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:horizontal:hover,
+QScrollBar::sub-line:horizontal:hover {
+    background-color: var(--wii_cyan);
+    border: 1px solid var(--wii_cyan_pressed);
+}
+
+QScrollBar::add-line:horizontal:pressed,
+QScrollBar::sub-line:horizontal:pressed {
+    background-color: var(--wii_cyan_pressed);
+    border: 1px solid #034663;
+}
+
+QScrollBar::up-arrow:vertical {
+    image: url(theme:Dark/up.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::down-arrow:vertical {
+    image: url(theme:Dark/down.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::left-arrow:horizontal {
+    image: url(theme:Dark/left.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::right-arrow:horizontal {
+    image: url(theme:Dark/right.svg);
+    width: 8px;
+    height: 8px;
+}
+
+/* =============================================================================
+   ミキサー ミュート/モニター ボタン: ON/OFF 状態の明示分離（視認性強化）
+   OFF: 透明背景 + 通常アイコン / ON: 赤(ミュート)・緑(モニター)背景 + 白アイコン
+   ============================================================================= */
+QPushButton.btn-mute:!checked,.btn-mute:!checked:!hover,
+VolumeControl .btn-mute:!checked:!hover {
+    color: #1a1a1a !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    qproperty-icon: url(theme:Light/settings/audio.svg) !important;
+}
+QPushButton.btn-monitor:!checked,.btn-monitor:!checked:!hover,
+VolumeControl .btn-monitor:!checked:!hover {
+    color: #1a1a1a !important;
+    background: transparent !important;
+    border: 1px solid #7e8082 !important;
+    qproperty-icon: url(theme:Light/headphones-off.svg) !important;
+}
+QPushButton.btn-mute:checked, QPushButton.btn-mute.checked, .btn-mute:checked, .btn-mute.checked,
+VolumeControl .btn-mute:checked {
+    color: #ffffff !important;
+    background: #b3202a !important;
+    border: 1px solid #6a0e14 !important;
+    qproperty-icon: url(theme:Dark/mute.svg) !important;
+}
+QPushButton.btn-monitor:checked, QPushButton.btn-monitor.checked, .btn-monitor:checked, .btn-monitor.checked,
+VolumeControl .btn-monitor:checked {
+    color: #ffffff !important;
+    background: #1e8f42 !important;
+    border: 1px solid #0f5a26 !important;
+    qproperty-icon: url(theme:Dark/headphones.svg) !important;
+}
+
+/* =============================================================================
+   11. Wii オーバーライド (ドック・タブ・選択色・スクロールバー・スライダー)
+   ============================================================================= */
+
+/* ドックタイトルバー: 白 → シルバーのグラデ + 下辺に水色 2px (Wii メニュー下部バーの水色ライン) */
+QDockWidget {
+    color: #062a3b;
+    titlebar-close-icon: url(theme:Light/close.svg);
+    titlebar-normal-icon: url(theme:Light/popout.svg);
+}
+
+QDockWidget::title {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ffffff, stop:1 #d7d8dc);
+    color: #062a3b !important;
+    padding: 6px 10px;
+    font-weight: bold;
+    border: 1px solid #b3b6c0;
+    border-bottom: 2px solid #22b2e9;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+OBSDock > QWidget {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* 選択タブ: 水色 + 紺文字 */
+QTabBar::tab:selected {
+    background: #22b2e9 !important;
+    color: #062a3b !important;
+    border: 1px solid #1a8fbd !important;
+    border-bottom: 2px solid #136185 !important;
+    font-weight: bold;
+}
+
+/* メニュー・ドロップダウン・リストの選択: 淡水色 + 水色枠 + 紺文字（不透明な濃色塗り + 白文字は避ける） */
+QMenuBar::item:selected {
+    background-color: #e0f4fc;
+    color: #062a3b !important;
+    border-radius: 3px;
+}
+
+QMenu::item:selected,
+QMenu > QWidget:selected,
+QComboBox QAbstractItemView::item:selected,
+QComboBox QListView::item:selected,
+QMenu::item:hover,
+QComboBox QAbstractItemView::item:hover,
+QComboBox QListView::item:hover,
+QMenu::item:selected:hover,
+QComboBox QAbstractItemView::item:selected:hover,
+QComboBox QListView::item:selected:hover,
+QMenu::item:focus,
+QMenu::item:selected:focus,
+QComboBox QAbstractItemView::item:selected:focus,
+QComboBox QListView::item:selected:focus {
+    background-color: #e0f4fc !important;
+    border: 1px solid #22b2e9 !important;
+    color: #062a3b !important;
+}
+
+QListView::item:selected,
+QListWidget::item:selected,
+SceneTree::item:selected,
+SourceTree::item:selected,
+QListView::item:selected:hover,
+QListWidget::item:selected:hover,
+SceneTree::item:selected:hover,
+SourceTree::item:selected:hover {
+    background-color: #e0f4fc !important;
+    border: 1px solid #22b2e9 !important;
+    color: #062a3b !important;
+}
+
+QListView::item:hover,
+QListWidget::item:hover,
+SceneTree::item:hover,
+SourceTree::item:hover {
+    background-color: #f0f9fd !important;
+    border: 1px solid #ffffff !important;
+    color: var(--text) !important;
+}
+
+QListView::item:focus,
+QListWidget::item:focus,
+SceneTree::item:focus,
+SourceTree::item:focus,
+SceneTree::item:selected:focus,
+SourceTree::item:selected:focus {
+    border: 1px solid #22b2e9 !important;
+}
+
+OBSBasicSettings QListWidget::item:selected,
+OBSBasicSettings QListWidget::item:selected:focus,
+OBSBasicSettings QListWidget::item:selected:hover {
+    background-color: #e0f4fc !important;
+    border: 1px solid #22b2e9 !important;
+    color: #062a3b !important;
+    font-weight: bold;
+}
+
+OBSBasicSettings QListWidget::item:focus {
+    border: 1px solid #22b2e9 !important;
+}
+
+/* 設定ダイアログ OK ボタン: 水色 + 紺文字 */
+OBSBasicSettings QDialogButtonBox QPushButton:default {
+    background-color: #22b2e9 !important;
+    color: #062a3b !important;
+    border: 1px solid #1a8fbd !important;
+}
+
+OBSBasicSettings QDialogButtonBox QPushButton:default:hover {
+    background-color: #44bfed !important;
+    border-color: #22b2e9 !important;
+    color: #062a3b !important;
+}
+
+/* スライダー: シルバーの溝 + 水色の進捗 + 白いつまみ */
+QSlider::groove:horizontal,
+QSlider::groove:vertical {
+    background-color: #d7d8dc;
+}
+
+QSlider::sub-page:horizontal,
+QSlider::add-page:vertical {
+    background-color: #22b2e9 !important;
+}
+
+QSlider::handle:horizontal,
+QSlider::handle:vertical {
+    background-color: #ffffff;
+    border: 1px solid #9ca1aa;
+}
+
+QSlider::handle:horizontal:hover,
+QSlider::handle:vertical:hover {
+    background-color: #e0f4fc;
+    border: 1px solid #22b2e9;
+}
+
+/* スクロールバー: 白いトラック + シルバーのカプセル型つまみ + 黒矢印 (無効時は明確にグレーアウト) */
+QScrollBar:vertical,
+#previewYScrollBar,
+OBSBasicSettings QScrollBar:vertical,
+OBSDock QScrollBar:vertical {
+    background-color: #eef0f3;
+    width: 16px !important;
+    border: none !important;
+    margin: 16px 0px 16px 0px !important;
+}
+
+QScrollBar:horizontal,
+#previewXScrollBar,
+OBSBasicSettings QScrollBar:horizontal,
+OBSDock QScrollBar:horizontal {
+    background-color: #eef0f3;
+    height: 16px !important;
+    border: none !important;
+    margin: 0px 16px 0px 16px !important;
+}
+
+QScrollBar::handle:vertical,
+#previewYScrollBar::handle,
+OBSBasicSettings QScrollBar::handle:vertical,
+OBSDock QScrollBar::handle:vertical {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #ffffff, stop:1 #d7d8dc);
+    border: 1px solid #9ca1aa;
+    min-height: 24px;
+    margin: 0px !important;
+    border-radius: 7px;
+}
+
+QScrollBar::handle:horizontal,
+#previewXScrollBar::handle,
+OBSBasicSettings QScrollBar::handle:horizontal,
+OBSDock QScrollBar::handle:horizontal {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ffffff, stop:1 #d7d8dc);
+    border: 1px solid #9ca1aa;
+    min-width: 24px;
+    margin: 0px !important;
+    border-radius: 7px;
+}
+
+QScrollBar::handle:vertical:hover,
+QScrollBar::handle:horizontal:hover,
+OBSBasicSettings QScrollBar::handle:vertical:hover,
+OBSBasicSettings QScrollBar::handle:horizontal:hover {
+    background: #e0f4fc;
+    border: 1px solid #22b2e9;
+}
+
+QScrollBar::handle:vertical:pressed,
+QScrollBar::handle:horizontal:pressed,
+OBSBasicSettings QScrollBar::handle:vertical:pressed,
+OBSBasicSettings QScrollBar::handle:horizontal:pressed {
+    background: #22b2e9;
+    border: 1px solid #1a8fbd;
+}
+
+QScrollBar::handle:vertical:disabled,
+QScrollBar::handle:horizontal:disabled {
+    background: #e6e8eb;
+    border: 1px solid #d7d8dc;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical,
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ffffff, stop:1 #d7d8dc);
+    border: 1px solid #9ca1aa;
+    border-radius: 4px;
+    width: 16px;
+    height: 16px;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical { subcontrol-position: bottom; }
+QScrollBar::sub-line:vertical { subcontrol-position: top; }
+QScrollBar::add-line:horizontal { subcontrol-position: right; }
+QScrollBar::sub-line:horizontal { subcontrol-position: left; }
+
+QScrollBar::add-line:vertical:hover,
+QScrollBar::sub-line:vertical:hover,
+QScrollBar::add-line:horizontal:hover,
+QScrollBar::sub-line:horizontal:hover {
+    background: #e0f4fc;
+    border: 1px solid #22b2e9;
+}
+
+QScrollBar::add-line:vertical:pressed,
+QScrollBar::sub-line:vertical:pressed,
+QScrollBar::add-line:horizontal:pressed,
+QScrollBar::sub-line:horizontal:pressed {
+    background: #22b2e9;
+    border: 1px solid #1a8fbd;
+}
+
+QScrollBar::add-line:vertical:disabled,
+QScrollBar::sub-line:vertical:disabled,
+QScrollBar::add-line:horizontal:disabled,
+QScrollBar::sub-line:horizontal:disabled {
+    background: #eef0f3;
+    border: 1px solid #d7d8dc;
+}
+
+QScrollBar::up-arrow:vertical    { image: url(theme:classic/up.svg);    width: 16px; height: 16px; }
+QScrollBar::down-arrow:vertical  { image: url(theme:classic/down.svg);  width: 16px; height: 16px; }
+QScrollBar::left-arrow:horizontal  { image: url(theme:classic/left.svg);  width: 16px; height: 16px; }
+QScrollBar::right-arrow:horizontal { image: url(theme:classic/right.svg); width: 16px; height: 16px; }
+
+QScrollBar::up-arrow:vertical:disabled    { image: url(theme:classic/up_disabled.svg); }
+QScrollBar::down-arrow:vertical:disabled  { image: url(theme:classic/down_disabled.svg); }
+QScrollBar::left-arrow:horizontal:disabled  { image: url(theme:classic/left_disabled.svg); }
+QScrollBar::right-arrow:horizontal:disabled { image: url(theme:classic/right_disabled.svg); }

@@ -1,0 +1,760 @@
+/* ------------------------------------------------------------------------- *
+ * Nintendo Switch Basic White (ベーシックホワイト) Theme for OBS Studio     *
+ * ------------------------------------------------------------------------- */
+
+@OBSThemeMeta {
+    name: '[2017] Switch Light - Nintendo Switch (ベーシックホワイト)';
+    id: 'com.obsproject.Yami.SwitchLight';
+    extends: 'com.obsproject.Yami.Light';
+    author: 'kjozk & Antigravity';
+    dark: 'false';
+}
+
+@OBSThemeVars {
+    /* --- Nintendo Switch ベーシックホワイト パレット --- */
+    --switch_bg: #ececec;          /* 実機ホーム背景 */
+    --switch_surface: #ffffff;     /* カード・ドック・入力欄背景 */
+    --switch_surface_hover: #f5f5f5;
+    --switch_surface_pressed: #e5e5e5;
+    --switch_dark_input: #f0f0f0;
+
+    --switch_border: #d0d0d0;      /* 区切り線 */
+    --switch_border_light: #b0b0b0;
+    --switch_text: #2d2d2d;        /* 実機テキスト */
+    --switch_text_muted: #707070;  /* 補足テキスト */
+
+    /* 実機アイコン抽出カラー */
+    --switch_primary_blue: #2052ff; /* 実機プライマリーボタン青 (#2052ff) */
+    --switch_primary_hover: #3b68ff;
+    --switch_primary_pressed: #143ecc;
+
+    --switch_cyan: #00d2f3;        /* 水色系蛍光カラー (ハイライト枠) */
+    --switch_cyan_hover: #00e5ff;  /* 蛍光ネオン水色 */
+    --switch_cyan_pressed: #00a8c4;
+    --switch_cyan_glow: #66f0ff;
+    --switch_navy: #062a3b;
+
+    --switch_news_red: #d8005a;    /* News / Joy-Con (R) ネオンマゼンタレッド */
+    --switch_eshop_orange: #c75800;/* eShop オレンジ */
+    --switch_album_blue: #0956c7;  /* Album コバルトブルー */
+
+    /* 実機スライダー・インジケーター色 (明るさ・音量バー) */
+    --switch_slider_active: #4ab2fe;   /* 実機アクティブスカイブルー */
+    --switch_slider_inactive: #d0d0d0; /* 実機非アクティブグレー */
+
+    /* コントロールボタン色 */
+    --switch_red: #ff362e;
+    --switch_red_hover: #ff5750;
+    --switch_red_pressed: #d9261f;
+    --switch_red_dark: #991d17;
+    --switch_red_glow: #ff8b85;
+
+    --switch_blue: #00b1d9;
+    --switch_blue_hover: #20c3e6;
+    --switch_blue_pressed: #008fae;
+    --switch_blue_dark: #006075;
+    --switch_blue_glow: #70e0f8;
+
+    /* --- OBS Base 変数オーバーライド --- */
+    --bg_window: var(--switch_bg);
+    --bg_base: var(--switch_bg);
+    --bg_preview: #2b2d30;
+
+    --primary: var(--switch_cyan);
+    --primary_light: var(--switch_cyan_hover);
+    --primary_lighter: var(--switch_cyan_glow);
+    --primary_dark: var(--switch_cyan_pressed);
+
+    --text: var(--switch_text);
+    --text_light: var(--switch_text);
+    --text_muted: var(--switch_text_muted);
+    --text_disabled: #a0a0a0;
+
+    --border_color: var(--switch_border);
+    --input_bg: #ffffff;
+    --input_bg_hover: #fafafa;
+    --input_bg_focus: #ffffff;
+    --input_border: var(--switch_border);
+    --input_border_focus: var(--switch_cyan);
+
+    --button_bg: #ffffff;
+    --button_bg_hover: #f5f5f5;
+    --button_bg_down: #e8e8e8;
+    --button_bg_disabled: #eeeeee;
+    --button_border: var(--switch_border);
+    --button_border_hover: var(--switch_border_light);
+    --button_border_focus: var(--switch_cyan);
+
+    --tab_bg: #dedede;
+    --tab_bg_hover: #e8e8e8;
+    --tab_bg_down: #ffffff;
+    --tab_border: var(--switch_border);
+    --tab_border_selected: var(--switch_cyan);
+
+    --scrollbar_bg: #f0f0f0;
+    --scrollbar_handle: #b8b8b8;
+    --scrollbar_hover: var(--switch_cyan);
+    --scrollbar_down: var(--switch_cyan_pressed);
+
+    --palette_window: var(--switch_bg);
+    --palette_windowText: var(--switch_text);
+    --palette_base: var(--switch_bg);
+    --palette_text: var(--switch_text);
+    --palette_button: #ffffff;
+    --palette_buttonText: var(--switch_text);
+    --palette_highlight: var(--switch_cyan);
+    --palette_highlightedText: #ffffff;
+    --palette_link: #007a99;
+}
+
+/* =========================================================================
+   全体共通スタイル
+   ========================================================================= */
+QWidget {
+    color: var(--switch_text);
+    background-color: transparent;
+}
+
+QMainWindow, QDialog, #OBSBasic {
+    background-color: var(--switch_bg);
+    color: var(--switch_text);
+}
+
+/* ドックパネル & カード */
+QDockWidget {
+    color: var(--switch_text);
+    titlebar-close-icon: url(theme:Light/close.svg);
+    titlebar-normal-icon: url(theme:Light/undock.svg);
+}
+
+QDockWidget::title {
+    background-color: #dfdfdf;
+    color: var(--switch_text);
+    padding: var(--padding_large) var(--padding_wide);
+    border-bottom: 1px solid var(--switch_border);
+    font-weight: bold;
+}
+
+QDockWidget > QWidget {
+    background-color: var(--switch_surface);
+}
+
+QStatusBar {
+    background-color: #dfdfdf;
+    color: var(--switch_text_muted);
+    border-top: 1px solid var(--switch_border);
+}
+
+/* =========================================================================
+   タブデザイン (Switch 実機スタイル: シアンのアクセントバー)
+   ========================================================================= */
+QTabBar::tab {
+    background-color: #dedede;
+    color: var(--switch_text_muted);
+    padding: var(--tab_padding_base) var(--tab_padding_large);
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-right: 2px;
+    font-weight: normal;
+}
+
+QTabBar::tab:hover {
+    background-color: #e8e8e8;
+    color: var(--switch_text);
+}
+
+QTabBar::tab:selected {
+    background-color: #ffffff !important;
+    color: #2052ff !important;
+    border-bottom: 3px solid #2052ff !important;
+    font-weight: bold;
+}
+
+/* =========================================================================
+   ツールバーボタン (シーン・ソース一覧下のボタン)
+   ========================================================================= */
+QToolBar {
+    background-color: #e5e5e5;
+    border-top: 1px solid var(--switch_border);
+    padding: var(--padding_small);
+    spacing: var(--spacing_base);
+}
+
+QToolBar QToolButton {
+    background-color: #ffffff;
+    border: 1px solid var(--switch_border);
+    border-radius: 4px;
+    padding: var(--padding_large);
+    margin: var(--spacing_base);
+    max-width: var(--icon_small);
+    max-height: var(--icon_small);
+}
+
+QToolBar QToolButton:hover {
+    background-color: #f5f5f5;
+    border: 1px solid var(--switch_cyan);
+}
+
+QToolBar QToolButton:pressed {
+    background-color: #e0e0e0;
+    border: 1px solid var(--switch_cyan_pressed);
+}
+
+QToolBar QToolButton:disabled {
+    background-color: #eeeeee;
+    border: 1px solid #d8d8d8;
+    opacity: 0.6;
+}
+
+/* =========================================================================
+   設定ダイアログ (OBSBasicSettings)
+   ========================================================================= */
+OBSBasicSettings {
+    background-color: var(--switch_bg);
+    color: var(--switch_text);
+    qproperty-generalIcon: url(theme:Light/settings/general.svg);
+    qproperty-appearanceIcon: url(theme:Light/settings/appearance.svg);
+    qproperty-streamIcon: url(theme:Light/settings/stream.svg);
+    qproperty-outputIcon: url(theme:Light/settings/output.svg);
+    qproperty-audioIcon: url(theme:Light/settings/audio.svg);
+    qproperty-videoIcon: url(theme:Light/settings/video.svg);
+    qproperty-hotkeysIcon: url(theme:Light/settings/hotkeys.svg);
+    qproperty-accessibilityIcon: url(theme:Light/settings/accessibility.svg);
+    qproperty-advancedIcon: url(theme:Light/settings/advanced.svg);
+}
+
+OBSBasicSettings QListWidget,
+OBSBasicSettings QListView {
+    background-color: #e2e2e2;
+    border: none;
+    border-right: 1px solid var(--switch_border);
+    padding: var(--padding_base);
+    color: var(--switch_text);
+    outline: none;
+}
+
+OBSBasicSettings QListWidget::item,
+OBSBasicSettings QListView::item {
+    color: var(--switch_text) !important;
+    background-color: transparent !important;
+    padding: 6px 14px 6px 28px !important;
+    border: 2px solid transparent !important;
+    border-radius: 0px !important;
+    margin: 2px 4px;
+    font-weight: normal;
+}
+
+OBSBasicSettings QListWidget::item:hover,
+OBSBasicSettings QListView::item:hover {
+    background-color: #f0f0f0 !important;
+    color: var(--switch_text) !important;
+    padding: 6px 14px 6px 28px !important;
+    border: 2px solid transparent !important;
+    border-radius: 0px !important;
+}
+
+/* 選択アイテム (フォーカスなし): 外枠は非表示、左端に縦バーインジケーター (実機ブルー #2052ff) のみ描画 */
+OBSBasicSettings QListWidget::item:selected,
+OBSBasicSettings QListView::item:selected {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0.0 #2052ff,
+        stop:0.02 #2052ff,
+        stop:0.021 #ffffff,
+        stop:1.0 #ffffff) !important;
+    color: #2052ff !important;
+    padding: 6px 14px 6px 28px !important;
+    border: 2px solid transparent !important;
+    border-radius: 0px !important;
+    font-weight: bold;
+}
+
+/* 選択アイテムかつフォーカスあり (キャレット操作中):
+   キャレットハイライト枠線 (2px シアン) が一番外側を完全に囲み、
+   その内側に青い縦バーインジケーターが独立して配置される (実機画像「サポート」完全再現) */
+OBSBasicSettings QListWidget::item:selected:focus,
+OBSBasicSettings QListWidget::item:focus,
+OBSBasicSettings QListView::item:selected:focus,
+OBSBasicSettings QListView::item:focus {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0.0 #2052ff,
+        stop:0.02 #2052ff,
+        stop:0.021 #ffffff,
+        stop:1.0 #ffffff) !important;
+    color: #2052ff !important;
+    padding: 6px 14px 6px 28px !important;
+    border: 2px solid var(--switch_cyan) !important;
+    border-radius: 0px !important;
+    font-weight: bold;
+}
+
+/* 選択アイテムのホバー時 */
+OBSBasicSettings QListWidget::item:selected:hover,
+OBSBasicSettings QListView::item:selected:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0.0 #2052ff,
+        stop:0.02 #2052ff,
+        stop:0.021 #f5f8ff,
+        stop:1.0 #f5f8ff) !important;
+    padding: 6px 14px 6px 28px !important;
+    border: 2px solid transparent !important;
+    color: #2052ff !important;
+}
+
+OBSBasicSettings QListWidget::item:selected:focus:hover,
+OBSBasicSettings QListView::item:selected:focus:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0.0 #2052ff,
+        stop:0.02 #2052ff,
+        stop:0.021 #f5f8ff,
+        stop:1.0 #f5f8ff) !important;
+    padding: 6px 14px 6px 28px !important;
+    border: 2px solid var(--switch_cyan_hover) !important;
+    color: #2052ff !important;
+}
+
+/* 設定画面内の右側セクション (QGroupBox) */
+OBSBasicSettings QGroupBox {
+    border: 1px solid var(--switch_border);
+    border-radius: 4px;
+    margin-top: 12px;
+    padding-top: 14px;
+    font-weight: bold;
+    color: var(--switch_text);
+}
+
+OBSBasicSettings QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 0 6px;
+    color: var(--switch_text);
+    font-weight: bold;
+}
+
+/* 設定ダイアログ下部ボタングループ (OK, キャンセル, 適用) */
+OBSBasicSettings QDialogButtonBox QPushButton {
+    background-color: #ffffff !important;
+    color: var(--switch_text) !important;
+    border: 1px solid var(--switch_border) !important;
+    border-radius: 2px !important;
+    min-width: 75px;
+    padding: var(--input_padding) var(--padding_wide);
+    font-weight: bold;
+}
+
+OBSBasicSettings QDialogButtonBox QPushButton:hover {
+    background-color: #f2f2f2 !important;
+    border-color: #2052ff !important;
+    color: #2052ff !important;
+}
+
+/* OKボタン (決定): 実機ライトテーマ「できあがり」ブルー完全準拠 */
+OBSBasicSettings QDialogButtonBox QPushButton:default {
+    background-color: #2052ff !important;
+    color: #ffffff !important;
+    border: 1px solid #143ecc !important;
+    border-radius: 2px !important;
+}
+
+OBSBasicSettings QDialogButtonBox QPushButton:default:hover {
+    background-color: #1742d4 !important;
+    color: #ffffff !important;
+}
+
+OBSBasicSettings QDialogButtonBox QPushButton:disabled {
+    background-color: #eaeaea !important;
+    color: var(--switch_text_muted) !important;
+    border-color: var(--switch_border) !important;
+}
+
+QGroupBox {
+    border: 1px solid var(--switch_border);
+    border-radius: 6px;
+    margin-top: 12px;
+    padding-top: 14px;
+    font-weight: bold;
+    color: var(--switch_text);
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 0 6px;
+    color: #007a99;
+}
+
+QLabel {
+    color: var(--switch_text);
+}
+
+/* =========================================================================
+   リスト & ツリー (シーン・ソース一覧)
+   ========================================================================= */
+QListWidget, QTreeWidget, QTableView {
+    background-color: #fafafa;
+    border: 1px solid var(--switch_border);
+    border-radius: 4px;
+    color: var(--switch_text);
+    selection-background-color: #ffffff;
+    selection-color: var(--switch_text);
+}
+
+QListWidget::item, QTreeWidget::item {
+    padding: var(--padding_large);
+    color: var(--switch_text);
+    border: 1px solid transparent;
+}
+
+QListWidget::item:hover, QTreeWidget::item:hover {
+    background-color: #ffffff;
+    border: 1px solid var(--switch_border_light);
+}
+
+QListWidget::item:selected, QTreeWidget::item:selected {
+    background-color: #ffffff;
+    color: var(--switch_text);
+    border: 1px solid var(--switch_cyan);
+    font-weight: bold;
+}
+
+/* =========================================================================
+   入力フォーム (キャレット・選択ハイライトの実機ブルー/ネオン表現)
+   ========================================================================= */
+QLineEdit, QTextEdit, QPlainTextEdit, QComboBox, QSpinBox, QDoubleSpinBox {
+    background-color: #ffffff;
+    color: var(--switch_text);
+    border: 1px solid var(--switch_border);
+    border-radius: 4px;
+    padding: var(--input_padding);
+    selection-background-color: #2052ff;
+    selection-color: #ffffff;
+    qproperty-cursorColor: #2052ff;
+}
+
+QLineEdit:hover, QTextEdit:hover, QPlainTextEdit:hover, QComboBox:hover, QSpinBox:hover {
+    border: 1px solid var(--switch_border_light);
+}
+
+QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus, QComboBox:focus, QSpinBox:focus {
+    border: 1px solid var(--switch_cyan);
+    qproperty-cursorColor: #2052ff;
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 20px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #ffffff;
+    color: var(--switch_text);
+    border: 1px solid var(--switch_border);
+    selection-background-color: var(--switch_cyan);
+    selection-color: #ffffff;
+}
+
+/* =========================================================================
+   スライダー & インジケーター (Switch 実機「明るさ・音量スライダー」完全再現)
+   ========================================================================= */
+QSlider::groove:horizontal {
+    background-color: var(--switch_slider_inactive);
+    height: 4px;
+    border: none;
+    border-radius: 2px;
+}
+
+QSlider::sub-page:horizontal {
+    background-color: var(--switch_slider_active);
+    height: 4px;
+    border: none;
+    border-radius: 2px;
+}
+
+QSlider::add-page:horizontal {
+    background-color: var(--switch_slider_inactive);
+    height: 4px;
+    border: none;
+    border-radius: 2px;
+}
+
+QSlider::groove:vertical {
+    background-color: var(--switch_slider_inactive);
+    width: 4px;
+    border: none;
+    border-radius: 2px;
+}
+
+QSlider::add-page:vertical {
+    background-color: var(--switch_slider_active);
+    width: 4px;
+    border: none;
+    border-radius: 2px;
+}
+
+QSlider::sub-page:vertical {
+    background-color: var(--switch_slider_inactive);
+    width: 4px;
+    border: none;
+    border-radius: 2px;
+}
+
+/* 実機円形白ノブ (白背景視認性ボーダー付き丸型) */
+QSlider::handle:horizontal {
+    background-color: #ffffff;
+    border: 1px solid #b0b0b0;
+    width: 16px;
+    height: 16px;
+    margin: -7px 0;
+    border-radius: 8px;
+}
+
+QSlider::handle:horizontal:hover {
+    background-color: #f5f5f5;
+    border-color: var(--switch_slider_active);
+}
+
+QSlider::handle:horizontal:pressed {
+    background-color: #e5e5e5;
+    border-color: var(--switch_slider_active);
+}
+
+QSlider::handle:vertical {
+    background-color: #ffffff;
+    border: 1px solid #b0b0b0;
+    width: 16px;
+    height: 16px;
+    margin: 0 -7px;
+    border-radius: 8px;
+}
+
+QSlider::handle:vertical:hover {
+    background-color: #f5f5f5;
+    border-color: var(--switch_slider_active);
+}
+
+QSlider::handle:vertical:pressed {
+    background-color: #e5e5e5;
+    border-color: var(--switch_slider_active);
+}
+
+/* プログレスバー (進捗インジケーター) */
+QProgressBar {
+    background-color: var(--switch_slider_inactive);
+    border: none;
+    border-radius: 3px;
+    text-align: center;
+    color: var(--switch_text);
+    height: 8px;
+}
+
+QProgressBar::chunk {
+    background-color: var(--switch_slider_active);
+    border-radius: 3px;
+}
+
+
+/* =========================================================================
+   トグルボタン / 選択ボタン (実機設定画面完全同期)
+   ベタ塗りを排除し、純白背景 + 2px 実機ブルー枠 + ブルー文字で高い視認性を確保
+   ========================================================================= */
+QPushButton:checked {
+    background-color: #ffffff !important;
+    border: 2px solid #2052ff !important;
+    color: #2052ff !important;
+    font-weight: bold;
+}
+
+QPushButton:checked:hover {
+    background-color: #f5f8ff !important;
+    border: 2px solid #143ecc !important;
+    color: #143ecc !important;
+}
+
+QPushButton:checked:focus {
+    border: 2px solid #2052ff !important;
+}
+
+/* =========================================================================
+   音声ミキサー (Switch 実機カラー横展開: アルバムブルー -> eShop オレンジ -> News レッド)
+   ========================================================================= */
+VolumeMeter {
+    qproperty-backgroundNominalColor: #0956c7;
+    qproperty-backgroundWarningColor: #c75800;
+    qproperty-backgroundErrorColor: #d8005a;
+    qproperty-foregroundNominalColor: #2675ee;
+    qproperty-foregroundWarningColor: #e67300;
+    qproperty-foregroundErrorColor: #ff2a7a;
+}
+
+/* =========================================================================
+   コントロールボタン (Nintendo Switch ネオンレッド & ネオンブルー)
+   ========================================================================= */
+#streamButton,
+#recordButton,
+#virtualCamButton,
+#modeSwitch,
+#settingsButton,
+#exitButton {
+    border-radius: var(--border_radius);
+    padding: var(--padding_large) var(--padding_wide);
+    font-weight: bold;
+}
+
+/* 1. 配信開始ボタン (ネオンレッド - Joy-Con R) */
+#streamButton {
+    background-color: var(--switch_red);
+    color: #ffffff;
+    border: 2px solid var(--switch_red_dark);
+}
+#streamButton:hover {
+    background-color: var(--switch_red_hover);
+    border: 2px solid var(--switch_red_glow);
+}
+#streamButton:pressed {
+    background-color: var(--switch_red_pressed);
+    border: 2px solid var(--switch_red_dark);
+}
+#streamButton:checked {
+    background-color: var(--switch_red_pressed);
+    border: 2px solid var(--switch_blue);
+    color: #ffffff;
+}
+
+/* 2. 録画開始ボタン (ネオンブルー - Joy-Con L) */
+#recordButton {
+    background-color: var(--switch_blue);
+    color: #ffffff;
+    border: 2px solid var(--switch_blue_dark);
+}
+#recordButton:hover {
+    background-color: var(--switch_blue_hover);
+    border: 2px solid var(--switch_blue_glow);
+}
+#recordButton:pressed {
+    background-color: var(--switch_blue_pressed);
+    border: 2px solid var(--switch_blue_dark);
+}
+#recordButton:checked {
+    background-color: var(--switch_blue_pressed);
+    border: 2px solid var(--switch_red);
+    color: #ffffff;
+}
+
+/* 一時停止ボタン */
+#recordIcon, QPushButton[themeID="pauseRecordButton"] {
+    background-color: #ffffff;
+    border: 2px solid var(--switch_border);
+    border-radius: 6px;
+}
+QPushButton[themeID="pauseRecordButton"]:hover {
+    border: 2px solid var(--switch_cyan);
+}
+QPushButton[themeID="pauseRecordButton"]:checked {
+    background-color: var(--switch_eshop_orange);
+    border: 2px solid #ffffff;
+    color: #ffffff;
+}
+
+/* 3. 仮想カメラボタン */
+#virtualCamButton {
+    background-color: #ffffff;
+    color: var(--switch_text);
+    border: 2px solid var(--switch_border);
+}
+#virtualCamButton:hover {
+    background-color: #f5f5f5;
+    border: 2px solid var(--switch_cyan);
+}
+#virtualCamButton:pressed {
+    background-color: #e5e5e5;
+    border: 2px solid var(--switch_cyan_pressed);
+}
+#virtualCamButton:checked {
+    background-color: var(--switch_cyan);
+    border: 2px solid var(--switch_cyan_glow);
+    color: #ffffff;
+}
+
+/* 仮想カメラ設定ボタン */
+#virtualCamConfigButton {
+    background-color: #ffffff;
+    border: 2px solid var(--switch_border);
+    border-radius: 6px;
+}
+#virtualCamConfigButton:hover {
+    border: 2px solid var(--switch_cyan);
+}
+
+/* 4. スタジオモードボタン */
+#modeSwitch {
+    background-color: #ffffff;
+    color: var(--switch_text);
+    border: 2px solid var(--switch_border);
+}
+#modeSwitch:hover {
+    background-color: #f5f5f5;
+    border: 2px solid var(--switch_cyan);
+}
+#modeSwitch:pressed {
+    background-color: #e5e5e5;
+    border: 2px solid var(--switch_cyan_pressed);
+}
+#modeSwitch:checked {
+    background-color: var(--switch_cyan);
+    border: 2px solid var(--switch_cyan_glow);
+    color: #ffffff;
+}
+
+/* 5. 設定ボタン & 終了ボタン */
+#settingsButton, #exitButton {
+    background-color: #ffffff;
+    color: var(--switch_text);
+    border: 2px solid var(--switch_border);
+    font-weight: normal;
+}
+#settingsButton:hover, #exitButton:hover {
+    background-color: #f5f5f5;
+    border: 2px solid var(--switch_border_light);
+}
+#settingsButton:pressed, #exitButton:pressed {
+    background-color: #e5e5e5;
+    border: 2px solid var(--switch_border);
+}
+
+/* ダイアログボタンボックス */
+QDialogButtonBox QPushButton {
+    background-color: #ffffff;
+    color: var(--switch_text);
+    border: 2px solid var(--switch_border);
+    border-radius: 6px;
+    padding: var(--padding_large) var(--padding_wide);
+    min-width: 70px;
+    font-weight: bold;
+}
+QDialogButtonBox QPushButton:hover {
+    background-color: #f5f5f5;
+    border: 2px solid var(--switch_cyan);
+}
+QDialogButtonBox QPushButton:pressed {
+    background-color: #e5e5e5;
+    border: 2px solid var(--switch_cyan_pressed);
+}
+QDialogButtonBox QPushButton:default,
+QPushButton#okButton,
+QPushButton#applyButton {
+    background-color: #2052ff;
+    color: #ffffff;
+    border: 2px solid #143ecc;
+    font-weight: bold;
+}
+QDialogButtonBox QPushButton:default:hover,
+QPushButton#okButton:hover,
+QPushButton#applyButton:hover {
+    background-color: #3b68ff;
+    border: 2px solid #00e5ff;
+}
+QDialogButtonBox QPushButton:default:pressed,
+QPushButton#okButton:pressed,
+QPushButton#applyButton:pressed {
+    background-color: #143ecc;
+    border: 2px solid #0f2c8f;
+}

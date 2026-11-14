@@ -1,0 +1,1368 @@
+@OBSThemeMeta {
+    name: '[1985] NES - Nintendo Entertainment System';
+    id: 'com.obsproject.Yami.NES';
+    extends: 'com.obsproject.Yami.Light';
+    author: 'kjozk & Antigravity';
+    dark: 'false';
+}
+
+@OBSThemeVars {
+    /* =========================================================================
+       NES 実機再現カラーパレット
+       ========================================================================= */
+    --nes_body: #dcdad6;         /* 本体アイボリーホワイト成型色（ベース） */
+    --nes_body_light: #ffffff;   /* 入力欄・通常ボタン背景 */
+    --nes_body_dark: #cdcbc7;    /* リスト・サイドバー背景 */
+    --nes_mid: #8b8885;          /* スライダー溝 / 区切り線 */
+    --nes_border: #aeaca8;       /* コンポーネント境界線 */
+
+    /* --- FC 象徴的アクセントカラー (実機写真準拠) --- */
+    --nes_red: #c3222b;          /* 伝統のえんじ色 (Maroon) - ドックヘッダー / 配信ボタン / OKボタン */
+    --nes_red_hover: #d62a34;
+    --nes_red_pressed: #9e1a21;
+    --nes_red_glow: #ff5a63;
+
+    --nes_gold: #9f9a9a;         /* コントローラー真鍮・金プレート (Gold) - 録画ボタン / ハイライト */
+    --nes_gold_hover: #b6b0b0;
+    --nes_gold_pressed: #898484;
+    --nes_gold_glow: #ffeaa7;
+
+    --nes_black: #1a1a1c;        /* 十字キー・ゴムボタン (Matte Black) - コントロール */
+    --nes_black_hover: #353538;
+    --nes_black_pressed: #121214;
+    --nes_black_border: #525258;
+
+    /* --- 画面全体の背景定義 --- */
+    --bg_window: var(--nes_body);
+    --bg_base: var(--nes_body);
+    --bg_preview: #1e1e1e;      /* プレビュー周囲は引き締まったダークウォームグレー */
+
+    /* =========================================================================
+       文字色・パレット設定（絶対に文字が背景に溶け込まないための完全定義）
+       ========================================================================= */
+    --text: #1a1a1c;            /* メインテキスト: 高コントラストなウォームブラック */
+    --text_light: #ffffff;      /* 暗色ボタン・ヘッダー用ホワイト */
+    --text_muted: #565454;      /* 補足テキスト */
+    --text_inactive: #3d3c3c;
+    --text_disabled: #706e6e;   /* 無効時でも視認できるトーン */
+
+    /* Qt パレット完全上書き (非QSSウィジェットの白文字化を防止) */
+    --palette_windowText: #1a1a1c;
+    --palette_text: #1a1a1c;
+    --palette_buttonText: #1a1a1c;
+    --palette_brightText: #ffffff;
+    --palette_highlightedText: #ffffff;
+    --palette_toolTipText: #ffffff;
+    --palette_window: var(--nes_body);
+    --palette_base: #ffffff;
+    --palette_button: #ffffff;
+    --palette_mid: var(--nes_border);
+
+    --primary: var(--nes_red);
+    --primary_light: var(--nes_red_hover);
+    --primary_lighter: #ffffff;
+    --primary_dark: var(--nes_red_pressed);
+    --primary_darker: #3a0007;
+    --highlight_color: #ffffff;
+    --list_item_bg_selected: #a49d9d;
+    --list_item_bg_hover: #b9b2b2;
+    --tab_border_focus: #ffffff;
+
+    /* 基底テーマ(Yami/Light)の青色変数を完全無力化（青枠・青背景の漏れ出しを完全阻止） */
+    --blue1: #ffffff;
+    --blue2: var(--nes_red_hover);
+    --blue3: var(--nes_red);
+    --blue4: var(--nes_red_pressed);
+    --blue5: var(--nes_red_pressed);
+    --blue6: #3a0007;
+
+    --warning: var(--nes_gold);
+    --danger: var(--nes_red);
+
+    /* 入力フォーム & 汎用ボタン変数 */
+    --input_bg: #ffffff;
+    --input_bg_hover: #faf9f9;
+    --input_bg_focus: #ffffff;
+    --input_border: var(--nes_border);
+    --input_border_focus: var(--nes_gold);
+
+    --button_bg: #ffffff;
+    --button_bg_hover: #f0efef;
+    --button_bg_down: #dad9d9;
+    --button_bg_disabled: #e4e3e3;
+    --button_border: var(--nes_border);
+    --button_border_hover: var(--nes_gold);
+    --button_border_focus: var(--nes_gold);
+    --button_border_width: 1px;
+}
+
+/* =============================================================================
+   1. 基本ウィジェット & 文字コントラスト保護
+   ============================================================================= */
+
+/* 全ウィジェットの基本テキスト色および標準フォント設定（OBS Default テーマスタック準拠） */
+QWidget {
+    color: var(--text);
+    selection-background-color: #a49d9d;
+    selection-color: #151515;
+    font-family: 'Open Sans', '.AppleSystemUIFont', Helvetica, Arial, 'MS Shell Dlg', sans-serif;
+}
+
+/* ラベル、チェックボックス、ラジオボタンの視認性確保 */
+QLabel {
+    color: var(--text);
+}
+
+QLabel:disabled {
+    color: var(--text_disabled);
+}
+
+QCheckBox,
+QRadioButton {
+    color: var(--text);
+    spacing: 6px;
+}
+
+QCheckBox:disabled,
+QRadioButton:disabled {
+    color: var(--text_disabled);
+}
+
+/* =============================================================================
+   2. ドック・タイトルバー・ウィンドウ枠
+   ============================================================================= */
+
+/* ドックタイトルバー: ファミコンの象徴である深い「えんじ色（マルーン）」 */
+QDockWidget {
+    color: #ffffff;
+    titlebar-close-icon: url(theme:Dark/close.svg);
+    titlebar-normal-icon: url(theme:Dark/popout.svg);
+}
+
+QDockWidget::title {
+    background-color: var(--nes_red);
+    color: #ffffff !important;
+    padding: 6px 10px;
+    font-weight: bold;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+/* ドック内部のベースコンテナ */
+OBSDock > QWidget {
+    background: var(--nes_body);
+    border: 1px solid var(--nes_border);
+    border-top: none;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+/* ドックのタブバー（「ソース」「シーントランジション」「シーン」等）の視認性完全確保 */
+QTabBar {
+    outline: none;
+}
+
+QTabBar::tab {
+    background: #cdcbc7;
+    color: #2f2e2e !important;
+    border: 1px solid var(--nes_border);
+    padding: var(--tab_padding_base) 6px;
+    min-width: 40px;
+    font-weight: 500;
+}
+
+QTabBar::tab:hover {
+    background: #e8e8e8;
+    color: var(--nes_red) !important;
+    border-color: var(--nes_gold);
+}
+
+/* 選択タブ: えんじ色背景の上にクッキリと読める真っ白な太字 */
+QTabBar::tab:selected {
+    background: var(--nes_red) !important;
+    color: #ffffff !important;
+    border: 1px solid #9e1a21 !important;
+    border-bottom: 2px solid var(--nes_gold) !important;
+    font-weight: bold;
+}
+
+/* ステータスバー（最下部） */
+QStatusBar {
+    background-color: var(--nes_body_dark);
+    color: var(--text);
+    border-top: 1px solid var(--nes_border);
+}
+
+QStatusBar QLabel {
+    color: var(--text) !important;
+}
+
+/* メニューバー & メニュー */
+QMenuBar {
+    background-color: var(--nes_body);
+    color: var(--text);
+    border-bottom: 1px solid var(--nes_border);
+}
+
+QMenuBar::item {
+    background: transparent;
+    color: var(--text);
+    padding: 5px 9px;
+}
+
+QMenuBar::item:selected {
+    background-color: #a49d9d;
+    color: #151515 !important;
+    border-radius: 3px;
+}
+
+QMenu {
+    background-color: #ffffff;
+    color: var(--text);
+    border: 1px solid var(--nes_border);
+    padding: 4px;
+}
+
+QMenu::item {
+    padding: 6px 24px 6px 12px;
+    border-radius: 3px;
+    color: var(--text);
+}
+
+QMenu::item:selected {
+    background-color: #a49d9d;
+    color: #151515 !important;
+}
+
+QMenu::separator {
+    height: 1px;
+    background-color: var(--nes_body_dark);
+    margin: 4px 6px;
+}
+
+/* =============================================================================
+   3. 一般ボタン (QPushButton, QToolButton)
+   ============================================================================= */
+
+/* ダイアログや設定画面内の通常ボタン: アイボリー調 + ゴールドのホバー枠線 */
+QPushButton,
+QToolButton {
+    background-color: var(--button_bg);
+    color: var(--text) !important;
+    border: 1px solid var(--button_border);
+    border-radius: var(--border_radius);
+    padding: var(--input_padding) var(--padding_wide);
+}
+
+QPushButton:hover,
+QToolButton:hover {
+    background-color: var(--button_bg_hover);
+    border-color: var(--nes_gold);
+    color: var(--nes_red) !important;
+}
+
+QPushButton:pressed,
+QToolButton:pressed {
+    background-color: var(--button_bg_down);
+    border-color: var(--nes_gold_pressed);
+    color: var(--nes_red_pressed) !important;
+}
+
+/* 選択・トグルボタン（外観の密度設定ボタン「クラシック」「通常」等） */
+QPushButton:checked,
+QToolButton:checked {
+    background-color: #a49d9d !important; /* ファミコン金プレート色 */
+    border: 2px solid var(--nes_red) !important; /* えんじ色の輪郭 */
+    color: #151515 !important; /* 黒文字で視認性抜群 */
+    font-weight: bold;
+}
+
+QPushButton:checked:hover,
+QToolButton:checked:hover {
+    background-color: #b6afaf !important;
+    border-color: var(--nes_red_hover) !important;
+    color: #151515 !important;
+}
+
+QPushButton:disabled,
+QToolButton:disabled {
+    background-color: var(--button_bg_disabled);
+    color: var(--text_disabled) !important;
+    border-color: #cfcdcd;
+}
+
+QPushButton:focus,
+QToolButton:focus {
+    border-color: var(--nes_gold);
+}
+
+/* =============================================================================
+   4. 入力コントロール (テキスト, 数値, ドロップダウン)
+   ============================================================================= */
+
+QLineEdit,
+QTextEdit,
+QPlainTextEdit {
+    background-color: var(--input_bg);
+    color: var(--text) !important;
+    border: 1px solid var(--input_border);
+    border-radius: 3px;
+    padding: 4px 6px;
+    selection-background-color: #a49d9d;
+    selection-color: #151515;
+}
+
+QLineEdit:focus,
+QTextEdit:focus,
+QPlainTextEdit:focus {
+    border: 1px solid var(--nes_gold);
+}
+
+/* ドロップダウン（コンボボックス）: OBS基底テーマ（Yami）の精密なサイズ・パディング計算に準拠 */
+QComboBox,
+QDateTimeEdit {
+    background-color: var(--input_bg);
+    color: var(--text) !important;
+    border: 1px solid var(--input_border);
+    border-radius: 3px;
+}
+
+QComboBox:hover,
+QComboBox:focus,
+QDateTimeEdit:hover,
+QDateTimeEdit:selected {
+    border-color: var(--nes_gold);
+}
+
+QComboBox::drop-down,
+QDateTimeEdit::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    background-color: var(--nes_red);
+    border: none;
+    border-left: 1px solid #9e1a21;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+QComboBox::drop-down:hover,
+QDateTimeEdit::drop-down:hover {
+    background-color: var(--nes_red_hover);
+    border-left: 1px solid var(--nes_gold);
+}
+
+QComboBox::drop-down:on,
+QComboBox::drop-down:pressed,
+QDateTimeEdit::drop-down:pressed {
+    background-color: var(--nes_red_pressed);
+    border-left: 1px solid #5a0a0f;
+}
+
+QComboBox::drop-down:disabled,
+QDateTimeEdit::drop-down:disabled {
+    background-color: #7d1c22;
+    border: none;
+    border-left: 1px solid #5a0a0f;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+QComboBox::down-arrow,
+QDateTimeEdit::down-arrow,
+QComboBox::down-arrow:editable,
+QDateTimeEdit::down-arrow:editable {
+    image: url(theme:Dark/collapse.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QComboBox::down-arrow:disabled,
+QDateTimeEdit::down-arrow:disabled {
+    image: url(theme:Dark/collapse.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #ffffff;
+    border: 1px solid var(--nes_border);
+    selection-background-color: #a49d9d;
+    selection-color: #151515;
+    outline: none;
+}
+
+QComboBox QAbstractItemView::item {
+    color: var(--text);
+    padding: 4px 8px;
+    min-height: 20px;
+    border: 1px solid transparent;
+}
+
+/* ドロップダウンメニュー及びメニューの選択・ホバー・フォーカスの真鍮色ハイライト */
+QMenu::item:selected,
+QMenu > QWidget:selected,
+QComboBox QAbstractItemView::item:selected,
+QComboBox QListView::item:selected {
+    background-color: #a49d9d !important;
+    border: 1px solid #898484 !important;
+    color: #151515 !important;
+}
+
+QMenu::item:hover,
+QComboBox QAbstractItemView::item:hover,
+QComboBox QListView::item:hover {
+    background-color: #b9b2b2 !important;
+    border: 1px solid #8c8484 !important;
+    color: #151515 !important;
+}
+
+QMenu::item:selected:hover,
+QComboBox QAbstractItemView::item:selected:hover,
+QComboBox QListView::item:selected:hover {
+    background-color: #b9b2b2 !important;
+    border: 1px solid #898484 !important;
+    color: #151515 !important;
+}
+
+QMenu::item:focus,
+QMenu::item:selected:focus,
+QComboBox QAbstractItemView::item:selected:focus,
+QComboBox QListView::item:selected:focus {
+    background-color: #a49d9d !important;
+    border: 1px solid #898484 !important;
+    color: #151515 !important;
+}
+/* プレビュー下部ズーム・スケーリングバーのはみ出しを完全防止 */
+#previewScalingMode {
+    background-color: transparent !important;
+    color: var(--text) !important;
+    border: 1px solid var(--nes_border) !important;
+    border-radius: 0px !important;
+    height: 14px !important;
+    max-height: 14px !important;
+    min-height: 14px !important;
+    padding: 0px 4px !important;
+    margin: 0px !important;
+    font-size: var(--font_xsmall);
+}
+
+#previewScalingMode::drop-down {
+    background-color: var(--nes_red) !important;
+    border: none !important;
+    border-left: 1px solid #9e1a21 !important;
+    border-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    width: 14px !important;
+    height: 14px !important;
+}
+
+#previewScalingMode::drop-down:hover {
+    background-color: var(--nes_red_hover) !important;
+}
+
+#previewScalingMode::down-arrow {
+    image: url(theme:Dark/collapse.svg) !important;
+    width: 7px !important;
+    height: 7px !important;
+}
+
+#previewScalePercent {
+    color: var(--text) !important;
+    font-size: var(--font_xsmall);
+}
+
+/* スピンボックス: OBS基底テーマ（Yami）の精密なレイアウト計算に準拠（独自ボタン定義によるズレ・隙間を完全解消） */
+QSpinBox,
+QDoubleSpinBox {
+    background-color: var(--input_bg);
+    color: var(--text) !important;
+    border-color: var(--input_border);
+}
+
+QSpinBox:focus,
+QDoubleSpinBox:focus {
+    border-color: var(--nes_gold);
+}
+
+QSpinBox::up-arrow,
+QDoubleSpinBox::up-arrow {
+    image: url(theme:Light/up.svg);
+}
+
+QSpinBox::down-arrow,
+QDoubleSpinBox::down-arrow {
+    image: url(theme:Light/down.svg);
+}
+
+QSpinBox::up-arrow:disabled,
+QDoubleSpinBox::up-arrow:disabled {
+    image: url(theme:Light/up.svg);
+}
+
+QSpinBox::down-arrow:disabled,
+QDoubleSpinBox::down-arrow:disabled {
+    image: url(theme:Light/down.svg);
+}
+
+/* グループボックス: 枠線とタイトルの位置ずれ解消 & 設定画面での縦領域最適化 */
+QGroupBox {
+    background-color: transparent;
+    color: var(--nes_red);
+    border: 1px solid var(--nes_border);
+    border-radius: 4px;
+    margin-top: 6px;
+    padding-top: 10px;
+    padding-bottom: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-weight: bold;
+}
+
+QGroupBox::title {
+    color: var(--nes_red) !important;
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 10px;
+    top: 0px;
+    padding: 0 8px;
+    background-color: var(--nes_body);
+}
+
+/* 警告・エラーメッセージの視認性最大化（明るい背景での溶け込みを防止） */
+.text-warning,
+QLabel[class="text-warning"],
+QLabel#simpleOutRecWarning,
+QLabel#advOutRecWarning {
+    color: #9e4a00 !important; /* 明るい背景でくっきり読めるディープアンバーオレンジ */
+    font-weight: bold;
+}
+
+.text-danger,
+QLabel[class="text-danger"] {
+    color: #b30018 !important; /* 明るい背景でくっきり読めるクラシック深紅 */
+    font-weight: bold;
+}
+
+/* スタジオモードのプレビュー／プログラムラベルの視認性確保（白文字化を完全解消） */
+.label-preview-title {
+    color: var(--nes_red) !important;
+    font-size: var(--font_xlarge);
+    font-weight: bold;
+}
+
+/* =============================================================================
+   5. リスト・ツリー・テーブル (SceneTree, SourceTree 等) の文字切れ解消
+   ============================================================================= */
+
+/* =============================================================================
+   5. リスト・ツリー (SceneTree, SourceTree) の最適化
+   ============================================================================= */
+
+QAbstractItemView {
+    background-color: #ffffff;
+    color: var(--text);
+    border: 1px solid var(--nes_border);
+}
+
+/* 選択時: ファミコン金プレート色 + 純白のフチ（青枠・はみ出しを完全排除し、アイコン・文字を完全収容） */
+QListView::item:selected,
+QListWidget::item:selected,
+SceneTree::item:selected,
+SourceTree::item:selected {
+    background-color: #a49d9d !important;
+    border: 1px solid #ffffff !important;
+    color: #151515 !important;
+}
+
+QListView::item:hover,
+QListWidget::item:hover,
+SceneTree::item:hover,
+SourceTree::item:hover {
+    background-color: #f0efef !important;
+    border: 1px solid #ffffff !important;
+    color: #151515 !important;
+}
+
+QListView::item:selected:hover,
+QListWidget::item:selected:hover,
+SceneTree::item:selected:hover,
+SourceTree::item:selected:hover {
+    background-color: #aca5a5 !important;
+    border: 1px solid #ffffff !important;
+    color: #151515 !important;
+}
+
+QListView::item:focus,
+QListWidget::item:focus,
+SceneTree::item:focus,
+SourceTree::item:focus,
+SceneTree::item:selected:focus,
+SourceTree::item:selected:focus {
+    border: 1px solid #ffffff !important;
+}
+
+/* =============================================================================
+   6. 設定ダイアログ (OBSBasicSettings) の完全最適化
+   ============================================================================= */
+
+OBSBasicSettings {
+    background-color: var(--nes_body);
+    qproperty-generalIcon: url(theme:Light/settings/general.svg);
+    qproperty-appearanceIcon: url(theme:Light/settings/appearance.svg);
+    qproperty-streamIcon: url(theme:Light/settings/stream.svg);
+    qproperty-outputIcon: url(theme:Light/settings/output.svg);
+    qproperty-audioIcon: url(theme:Light/settings/audio.svg);
+    qproperty-videoIcon: url(theme:Light/settings/video.svg);
+    qproperty-hotkeysIcon: url(theme:Light/settings/hotkeys.svg);
+    qproperty-accessibilityIcon: url(theme:Light/settings/accessibility.svg);
+    qproperty-advancedIcon: url(theme:Light/settings/advanced.svg);
+}
+
+/* 設定ダイアログの左側サイドバー */
+OBSBasicSettings QListWidget {
+    background-color: var(--nes_body_dark);
+    border: none;
+    border-right: 1px solid var(--nes_border);
+    padding: 6px;
+    selection-background-color: #a49d9d;
+    selection-color: #151515;
+}
+
+OBSBasicSettings QListWidget::item {
+    padding: var(--padding_large) var(--padding_wide);
+    margin: 1px 0;
+    border: 1px solid transparent;
+    border-radius: var(--border_radius);
+    color: var(--text) !important;
+    font-weight: 500;
+}
+
+OBSBasicSettings QListWidget::item:hover {
+    background-color: #cdcccc;
+    border: 1px solid transparent;
+    color: var(--text) !important;
+}
+
+/* 選択時: ファミコン金プレート色 + 純白のフチ（余計な左アクセント線を排除） */
+OBSBasicSettings QListWidget::item:selected,
+OBSBasicSettings QListWidget::item:selected:focus,
+OBSBasicSettings QListWidget::item:selected:hover {
+    background-color: #a49d9d !important;
+    border: 1px solid #ffffff !important;
+    color: #151515 !important;
+    font-weight: bold;
+}
+
+OBSBasicSettings QListWidget::item:focus {
+    border: 1px solid #ffffff !important;
+}
+
+/* 設定画面下部のダイアログボタン（OK, キャンセル, 適用）の視認性を完全確保 */
+OBSBasicSettings QDialogButtonBox QPushButton {
+    background-color: #ffffff !important;
+    color: var(--text) !important;
+    border: 1px solid var(--nes_border) !important;
+    border-radius: var(--border_radius);
+    min-width: 75px;
+    padding: var(--input_padding) var(--padding_wide);
+    font-weight: bold;
+}
+
+OBSBasicSettings QDialogButtonBox QPushButton:hover {
+    background-color: #f0efef !important;
+    border-color: var(--nes_gold) !important;
+    color: var(--nes_red) !important;
+}
+
+/* OKボタン（確定）: ファミコンえんじ色背景 + 白文字で抜群の視認性と存在感 */
+OBSBasicSettings QDialogButtonBox QPushButton:default {
+    background-color: var(--nes_red) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--nes_red_pressed) !important;
+}
+
+OBSBasicSettings QDialogButtonBox QPushButton:default:hover {
+    background-color: var(--nes_red_hover) !important;
+    border-color: var(--nes_gold) !important;
+    color: #ffffff !important;
+}
+
+/* 適用ボタン等の無効時: しっかり読める濃さのグレー文字 */
+OBSBasicSettings QDialogButtonBox QPushButton:disabled {
+    background-color: #e5e3e3 !important;
+    color: #706e6e !important;
+    border-color: #cfcdcd !important;
+}
+
+/* =============================================================================
+   7. コントロールパネル & ボタン (ファミコン Iコン 実機完全再現)
+   真鍮ゴールドプレート背景 + マットブラックボタン + えんじ色フチ
+   ============================================================================= */
+
+/* コントロールパネルのコンテナ背景 (ファミコン Iコン ヘアライン真鍮プレート完全再現) */
+OBSDock#controls,
+OBSDock#controls > QWidget,
+#controlsFrame {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #a09a9a,
+        stop:0.05 #989292,
+        stop:0.50 #8b8686,
+        stop:0.95 #948e8e,
+        stop:1.0 #837d7d);
+    border: 1px solid var(--nes_red);
+}
+
+/* コントロールボタン群 (実機ボタン完全再現: えんじ色メインボタン + マットブラック機能ボタン) */
+
+/* 汎用・機能ボタン (仮想カメラ / スタジオモード / 設定 / 終了): マットブラック + えんじ枠 + 白文字 */
+#controlsFrame QPushButton,
+#virtualCamButton,
+#modeSwitch,
+#settingsButton,
+#exitButton {
+    background-color: #121214;
+    color: #ffffff !important;
+    border: 2px solid var(--nes_red);
+    border-radius: 4px;
+    padding: var(--padding_large);
+    font-weight: bold;
+}
+
+#controlsFrame QPushButton:hover,
+#virtualCamButton:hover,
+#modeSwitch:hover,
+#settingsButton:hover,
+#exitButton:hover {
+    background-color: #222226;
+    border-color: #b22234;
+    color: #ffffff !important;
+}
+
+#controlsFrame QPushButton:pressed,
+#virtualCamButton:pressed,
+#modeSwitch:pressed,
+#settingsButton:pressed,
+#exitButton:pressed {
+    background-color: #08080a;
+    border-color: #550a12;
+    color: #ffffff !important;
+}
+
+/* --- 配信開始 & 録画開始ボタン: 象徴的なFCえんじ色 (Maroon) ボタン --- */
+QPushButton#streamButton,
+QPushButton#recordButton {
+    background-color: var(--nes_red);
+    color: #ffffff !important;
+    border: 2px solid #9e1a21;
+    border-radius: 4px;
+    padding: var(--padding_large);
+    font-weight: bold;
+}
+
+QPushButton#streamButton:hover,
+QPushButton#recordButton:hover {
+    background-color: var(--nes_red_hover);
+    border-color: var(--nes_gold);
+    color: #ffffff !important;
+}
+
+QPushButton#streamButton:pressed,
+QPushButton#recordButton:pressed {
+    background-color: var(--nes_red_pressed);
+    border-color: #550a12;
+    color: #ffffff !important;
+}
+
+/* 録画一時停止ボタン: えんじ色背景 + 純白一時停止アイコン (Darkリソース) */
+QPushButton#pauseRecordButton {
+    background-color: var(--nes_red);
+    color: #ffffff !important;
+    border: 2px solid #9e1a21;
+    border-radius: 4px;
+    padding: var(--padding_large);
+    width: var(--input_height);
+    max-width: var(--input_height);
+    qproperty-icon: url(theme:Dark/media-pause.svg);
+}
+
+QPushButton#pauseRecordButton:hover {
+    background-color: var(--nes_red_hover);
+    border-color: var(--nes_gold);
+    qproperty-icon: url(theme:Dark/media-pause.svg);
+}
+
+QPushButton#pauseRecordButton:pressed {
+    background-color: var(--nes_red_pressed);
+    border-color: #550a12;
+    qproperty-icon: url(theme:Dark/media-pause.svg);
+}
+
+QPushButton#pauseRecordButton.state-active,
+QPushButton#pauseRecordButton:checked,
+QPushButton#pauseRecordButton:!hover:!pressed.state-active {
+    background-color: #550a12 !important;
+    border: 2px solid var(--nes_gold_glow) !important;
+    color: #ffffff !important;
+    qproperty-icon: url(theme:Dark/media-pause.svg);
+}
+
+/* 仮想カメラ設定（歯車）ボタン: ブラック + えんじ枠 + 白アイコンで統一 */
+QPushButton#virtualCamConfigButton {
+    background-color: #121214 !important;
+    border: 2px solid var(--nes_red) !important;
+    border-radius: 4px;
+    padding: var(--padding_large);
+    width: var(--input_height);
+    max-width: var(--input_height);
+    color: #ffffff !important;
+    qproperty-icon: url(theme:Dark/settings/general.svg);
+}
+
+QPushButton#virtualCamConfigButton:hover {
+    background-color: #222226 !important;
+    border-color: #b22234 !important;
+    qproperty-icon: url(theme:Dark/settings/general.svg);
+}
+
+/* --- アクティブ状態 (配信中 / 録画中 / 仮想カメラ / スタジオモード) --- */
+
+/* 配信中: 実機電源ランプのような真紅・濃いえんじ背景 + ゴールド発光枠 + 白文字太字 */
+QPushButton#streamButton.state-active,
+QPushButton#streamButton:checked,
+QPushButton#streamButton:!hover:!pressed.state-active,
+QPushButton#streamButton:hover.state-active,
+QPushButton#streamButton:hover:checked {
+    background-color: #550a12 !important;
+    border: 2px solid var(--nes_gold_glow) !important;
+    color: #ffffff !important;
+}
+
+/* 録画中 (録画終了ボタン): えんじ色背景 + ゴールド発光枠 + 白文字太字 */
+QPushButton#recordButton.state-active,
+QPushButton#recordButton:checked,
+QPushButton#recordButton:!hover:!pressed.state-active,
+QPushButton#recordButton:hover.state-active,
+QPushButton#recordButton:hover:checked {
+    background-color: #550a12 !important;
+    border: 2px solid var(--nes_gold_glow) !important;
+    color: #ffffff !important;
+}
+
+/* 仮想カメラ動作中 */
+QPushButton#virtualCamButton.state-active,
+QPushButton#virtualCamButton:checked,
+QPushButton#virtualCamButton:!hover:!pressed.state-active,
+QPushButton#virtualCamButton:hover.state-active,
+QPushButton#virtualCamButton:hover:checked {
+    background-color: #222226 !important;
+    border: 2px solid var(--nes_gold_glow) !important;
+    color: #ffffff !important;
+}
+
+/* スタジオモード有効時 */
+QPushButton#modeSwitch.state-active,
+QPushButton#modeSwitch:checked,
+QPushButton#modeSwitch:!hover:!pressed.state-active,
+QPushButton#modeSwitch:hover.state-active,
+QPushButton#modeSwitch:hover:checked {
+    background-color: var(--nes_red) !important;
+    border: 2px solid var(--nes_gold) !important;
+    color: #ffffff !important;
+}
+
+/* 画面左下（プレビュー下部コンテキストバー）ツールボタン: 白浮きを完全解消し背景透明化 */
+#contextContainer {
+    background-color: var(--nes_body);
+}
+
+#contextContainer QPushButton {
+    background-color: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: var(--border_radius);
+    padding: 3px 6px;
+}
+
+#contextContainer QPushButton:hover {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid var(--nes_border) !important;
+}
+
+#contextContainer QPushButton:pressed {
+    background-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+/* =============================================================================
+   8. 音声ミキサー & スライダー (ファミコン IIコン モチーフ完全再現)
+   ============================================================================= */
+
+/* ミキサーベースコンテナ */
+#mixerContainer,
+#mixerArea {
+    background-color: var(--nes_body);
+}
+
+/* チャンネルストリップ (各音声チャンネル): IIコンの金プレートを模したシャンパンゴールド */
+#vVolumeWidgets VolumeControl,
+#hVolumeWidgets VolumeControl {
+    background-color: #d4d0d0;
+    border: 1px solid #aaa6a6;
+    border-right: 2px solid var(--nes_red);
+    padding: 4px;
+}
+
+/* チャンネル名（「デスクトップ音声」「マイク」等）: 金プレート上の黒文字刻印 */
+VolumeControl .mixer-name,
+#vVolumeWidgets VolumeControl QLabel,
+#hVolumeWidgets VolumeControl QLabel {
+    color: #151515 !important;
+    font-weight: bold;
+}
+
+/* 音量数値ラベル（0.0 dB 等）: 金プレート上の明瞭な黒文字 */
+VolumeControl #volLabel,
+#vVolumeWidgets VolumeControl #volLabel,
+#hVolumeWidgets VolumeControl #volLabel {
+    color: #151515 !important;
+    font-weight: bold;
+}
+
+/* ミキサーヘッダーバー: ファミコンえんじ色 */
+#mixerContainer QWidget[header="true"] QLabel,
+#mixerContainer QLabel#header,
+#mixerContainer .header {
+    background-color: var(--nes_red);
+    color: #ffffff !important;
+    padding: 3px 8px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+/* カテゴリバッジ（IIコン右上のパンチングマイク穴グリルを模したえんじ色バッジ） */
+VolumeControl .mixer-category,
+VolumeControl QLabel.mixer-category,
+#vVolumeWidgets VolumeControl QLabel.mixer-category,
+#hVolumeWidgets VolumeControl QLabel.mixer-category,
+QLabel.mixer-category {
+    background: var(--nes_red) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--nes_gold) !important;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+/* グローバル（ピン留め）カテゴリバッジ: IIコン左上の「II」ロゴマーク風ブラック + ゴールド枠 + 白文字 */
+VolumeControl.volume-pinned .mixer-category,
+VolumeControl.volume-pinned QLabel.mixer-category,
+#vVolumeWidgets VolumeControl.volume-pinned QLabel.mixer-category,
+#hVolumeWidgets VolumeControl.volume-pinned QLabel.mixer-category {
+    background: #1a1a1c !important;
+    color: #ffffff !important;
+    border: 1px solid var(--nes_gold) !important;
+}
+
+/* 非アクティブカテゴリ */
+VolumeControl.volume-inactive .mixer-category,
+VolumeControl.volume-inactive QLabel.mixer-category {
+    background: #bab6b6 !important;
+    color: #403f3f !important;
+    border: 1px solid #9e9a9a !important;
+}
+
+/* プレビューカテゴリ */
+VolumeControl.volume-preview .mixer-category,
+VolumeControl.volume-preview QLabel.mixer-category {
+    background: var(--nes_red) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--nes_gold) !important;
+}
+
+/* --- IIコン マイク音量スライダー (VOLUME) の完全再現 --- */
+
+/* スライダースロット溝: IIコンのスイッチ開口部である「えんじ色（マルーン）」の溝 */
+QSlider::groove:vertical,
+#vVolumeWidgets VolumeControl QSlider::groove:vertical {
+    background-color: var(--nes_red) !important;
+    border: 1px solid #5a0e18;
+    width: 6px;
+    border-radius: 3px;
+}
+
+QSlider::groove:horizontal,
+#hVolumeWidgets VolumeControl QSlider::groove:horizontal {
+    background-color: var(--nes_red) !important;
+    border: 1px solid #5a0e18;
+    height: 6px;
+    border-radius: 3px;
+}
+
+/* レベル進捗側: IIコンの音量グラデーションウェッジ（黒三角）を模したブラック */
+QSlider::add-page:vertical,
+#vVolumeWidgets VolumeControl QSlider::add-page:vertical {
+    background-color: #1a1a1c !important;
+    border-radius: 2px;
+}
+
+QSlider::sub-page:vertical,
+#vVolumeWidgets VolumeControl QSlider::sub-page:vertical {
+    background-color: var(--nes_red) !important;
+    border-radius: 2px;
+}
+
+QSlider::sub-page:horizontal,
+#hVolumeWidgets VolumeControl QSlider::sub-page:horizontal {
+    background-color: #1a1a1c !important;
+    border-radius: 2px;
+}
+
+QSlider::add-page:horizontal,
+#hVolumeWidgets VolumeControl QSlider::add-page:horizontal {
+    background-color: var(--nes_red) !important;
+    border-radius: 2px;
+}
+
+/* スライダーつまみ: IIコンの「黒いマイク音量スイッチノブ」そのもの！ */
+QSlider::handle:vertical,
+#vVolumeWidgets VolumeControl QSlider::handle:vertical {
+    background-color: #1c1c1e !important;
+    border: 1px solid #4a4a50;
+    border-top: 2px solid var(--nes_red);
+    border-bottom: 2px solid var(--nes_red);
+    width: 22px;
+    height: 12px;
+    margin: 0 -8px;
+    border-radius: 2px;
+}
+
+QSlider::handle:vertical:hover,
+#vVolumeWidgets VolumeControl QSlider::handle:vertical:hover {
+    background-color: #2a2a2e !important;
+    border-color: var(--nes_gold) !important;
+}
+
+QSlider::handle:horizontal,
+#hVolumeWidgets VolumeControl QSlider::handle:horizontal {
+    background-color: #1c1c1e !important;
+    border: 1px solid #4a4a50;
+    border-left: 2px solid var(--nes_red);
+    border-right: 2px solid var(--nes_red);
+    width: 12px;
+    height: 22px;
+    margin: -8px 0;
+    border-radius: 2px;
+}
+
+QSlider::handle:horizontal:hover,
+#hVolumeWidgets VolumeControl QSlider::handle:horizontal:hover {
+    background-color: #2a2a2e !important;
+    border-color: var(--nes_gold) !important;
+}
+
+/* --- IIコン 丸ボタン & MIC. ボタン --- */
+
+/* モニタリングボタン（ヘッドフォン）: IIコンの丸ボタン風ブラックサークル */
+.btn-monitor {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    qproperty-icon: url(theme:Light/headphones-off.svg);
+}
+
+.btn-monitor:hover {
+    background-color: #a49d9d;
+    border-color: var(--nes_gold);
+}
+
+/* モニタリングON時: 黒丸ボタン + ゴールド枠 + 白ヘッドフォンアイコンで超鮮明 */
+.btn-monitor.checked,
+.btn-monitor:checked {
+    color: #ffffff !important;
+    background: #1c1c1e !important;
+    border: 2px solid var(--nes_gold) !important;
+    border-radius: 4px;
+    qproperty-icon: url(theme:Dark/headphones.svg) !important;
+}
+
+/* ミュートボタン: 通常は金プレート上の黒マイク、ミュート時はマイク穴風えんじ色 + 白マイクアイコン */
+.btn-mute {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    qproperty-icon: url(theme:Light/settings/audio.svg);
+}
+
+.btn-mute:hover {
+    background-color: #a49d9d;
+    border-color: var(--nes_gold);
+}
+
+/* ミュート時: えんじ色背景の上にクッキリと映える「白い」ミュートアイコン（Dark/mute.svg）を採用！
+   ※OBSの applyColorToIcon() が buttonText (color) でアイコンを再着色するため、color: #ffffff !important が必須！ */
+.btn-mute.checked,
+.btn-mute:checked {
+    color: #ffffff !important;
+    background: var(--nes_red) !important;
+    border: 1px solid #9e1a21 !important;
+    border-radius: 4px;
+    qproperty-icon: url(theme:Dark/mute.svg) !important;
+}
+
+.btn-mute.checked:hover,
+.btn-mute:checked:hover {
+    color: #ffffff !important;
+    background: var(--nes_red_hover) !important;
+    border-color: var(--nes_gold) !important;
+    qproperty-icon: url(theme:Dark/mute.svg) !important;
+}
+
+/* 音声ボリュームメーター: IIコンの音量インジケーター（目盛り・数字）を黒で強調 */
+VolumeMeter {
+    qproperty-backgroundNominalColor: #28a745;
+    qproperty-backgroundWarningColor: #9f9a9a;
+    qproperty-backgroundErrorColor: #c3222b;
+    qproperty-foregroundNominalColor: #1e8f42;
+    qproperty-foregroundWarningColor: #898484;
+    qproperty-foregroundErrorColor: #9e1a21;
+    qproperty-magnitudeColor: #151515;
+    qproperty-majorTickColor: #151515;
+    qproperty-minorTickColor: #8b8885;
+}
+
+/* =============================================================================
+   9. Light テーマ標準アイコンの継承・明示指定
+   ============================================================================= */
+
+OBSBasic {
+    qproperty-imageIcon: url(theme:Light/sources/image.svg);
+    qproperty-colorIcon: url(theme:Light/sources/brush.svg);
+    qproperty-slideshowIcon: url(theme:Light/sources/slideshow.svg);
+    qproperty-audioInputIcon: url(theme:Light/sources/microphone.svg);
+    qproperty-audioOutputIcon: url(theme:Light/settings/audio.svg);
+    qproperty-desktopCapIcon: url(theme:Light/settings/video.svg);
+    qproperty-windowCapIcon: url(theme:Light/sources/window.svg);
+    qproperty-gameCapIcon: url(theme:Light/sources/gamepad.svg);
+    qproperty-cameraIcon: url(theme:Light/sources/camera.svg);
+    qproperty-textIcon: url(theme:Light/sources/text.svg);
+    qproperty-mediaIcon: url(theme:Light/sources/media.svg);
+    qproperty-browserIcon: url(theme:Light/sources/globe.svg);
+    qproperty-groupIcon: url(theme:Light/sources/group.svg);
+    qproperty-sceneIcon: url(theme:Light/sources/scene.svg);
+    qproperty-defaultIcon: url(theme:Light/sources/default.svg);
+    qproperty-audioProcessOutputIcon: url(theme:Light/sources/windowaudio.svg);
+}
+
+.icon-plus             { qproperty-icon: url(theme:Light/plus.svg); }
+.icon-minus            { qproperty-icon: url(theme:Light/minus.svg); }
+.icon-trash            { qproperty-icon: url(theme:Light/trash.svg); }
+.icon-clear            { qproperty-icon: url(theme:Light/entry-clear.svg); }
+.icon-gear             { qproperty-icon: url(theme:Light/settings/general.svg); }
+.icon-dots-vert        { qproperty-icon: url(theme:Light/dots-vert.svg); }
+.icon-refresh          { qproperty-icon: url(theme:Light/refresh.svg); }
+.icon-cogs             { qproperty-icon: url(theme:Light/cogs.svg); }
+.icon-touch            { qproperty-icon: url(theme:Light/interact.svg); }
+.icon-up               { qproperty-icon: url(theme:Light/up.svg); }
+.icon-down             { qproperty-icon: url(theme:Light/down.svg); }
+.icon-filter           { qproperty-icon: url(theme:Light/filter.svg); }
+.icon-revert           { qproperty-icon: url(theme:Light/revert.svg); }
+.icon-close            { qproperty-icon: url(theme:Light/close.svg); }
+.icon-layout-vertical  { qproperty-icon: url(theme:Light/layout-vertical.svg); }
+.icon-layout-horizontal{ qproperty-icon: url(theme:Light/layout-horizontal.svg); }
+
+/* =============================================================================
+   10. スクロールバー (ファミコン本体 白ベース × EJECTレバーえんじ色)
+   ============================================================================= */
+QScrollBar:vertical,
+#previewYScrollBar,
+OBSBasicSettings QScrollBar:vertical,
+OBSDock QScrollBar:vertical {
+    background-color: var(--nes_body);
+    width: 16px !important;
+    border: none !important;
+    margin: 16px 0px 16px 0px !important;
+}
+
+QScrollBar:horizontal,
+#previewXScrollBar,
+OBSBasicSettings QScrollBar:horizontal,
+OBSDock QScrollBar:horizontal {
+    background-color: var(--nes_body);
+    height: 16px !important;
+    border: none !important;
+    margin: 0px 16px 0px 16px !important;
+}
+
+/* つまみ (ファミコン本体 EJECT レバーの象徴的えんじ色: ボタンと太さを完全一致) */
+QScrollBar::handle:vertical,
+#previewYScrollBar::handle,
+OBSBasicSettings QScrollBar::handle:vertical,
+OBSDock QScrollBar::handle:vertical {
+    background-color: var(--nes_red);
+    border: 1px solid #9e1a21;
+    border-top: 2px solid var(--nes_gold);
+    border-bottom: 2px solid var(--nes_gold);
+    min-height: 24px;
+    margin: 0px !important;
+    border-radius: 0px;
+}
+
+QScrollBar::handle:vertical:hover,
+OBSBasicSettings QScrollBar::handle:vertical:hover {
+    background-color: var(--nes_red_hover);
+    border: 1px solid var(--nes_gold);
+}
+
+QScrollBar::handle:vertical:pressed,
+OBSBasicSettings QScrollBar::handle:vertical:pressed {
+    background-color: var(--nes_red_pressed);
+    border: 1px solid #5a0a0f;
+}
+
+QScrollBar::handle:horizontal,
+#previewXScrollBar::handle,
+OBSBasicSettings QScrollBar::handle:horizontal,
+OBSDock QScrollBar::handle:horizontal {
+    background-color: var(--nes_red);
+    border: 1px solid #9e1a21;
+    border-left: 2px solid var(--nes_gold);
+    border-right: 2px solid var(--nes_gold);
+    min-width: 24px;
+    margin: 0px !important;
+    border-radius: 0px;
+}
+
+QScrollBar::handle:horizontal:hover,
+OBSBasicSettings QScrollBar::handle:horizontal:hover {
+    background-color: var(--nes_red_hover);
+    border: 1px solid var(--nes_gold);
+}
+
+QScrollBar::handle:horizontal:pressed,
+OBSBasicSettings QScrollBar::handle:horizontal:pressed {
+    background-color: var(--nes_red_pressed);
+    border: 1px solid #5a0a0f;
+}
+
+/* 矢印ボタン (実機EJECTレバー同等のえんじ色 + 白矢印) */
+QScrollBar::add-line:vertical {
+    background-color: var(--nes_red);
+    border: 1px solid #9e1a21;
+    border-top: 2px solid var(--nes_gold);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    background-color: var(--nes_red);
+    border: 1px solid #9e1a21;
+    border-bottom: 2px solid var(--nes_gold);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical:hover,
+QScrollBar::sub-line:vertical:hover {
+    background-color: var(--nes_red_hover);
+    border: 1px solid var(--nes_gold);
+}
+
+QScrollBar::add-line:vertical:pressed,
+QScrollBar::sub-line:vertical:pressed {
+    background-color: var(--nes_red_pressed);
+    border: 1px solid #5a0a0f;
+}
+
+QScrollBar::add-line:horizontal {
+    background-color: var(--nes_red);
+    border: 1px solid #9e1a21;
+    border-left: 2px solid var(--nes_gold);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    background-color: var(--nes_red);
+    border: 1px solid #9e1a21;
+    border-right: 2px solid var(--nes_gold);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:horizontal:hover,
+QScrollBar::sub-line:horizontal:hover {
+    background-color: var(--nes_red_hover);
+    border: 1px solid var(--nes_gold);
+}
+
+QScrollBar::add-line:horizontal:pressed,
+QScrollBar::sub-line:horizontal:pressed {
+    background-color: var(--nes_red_pressed);
+    border: 1px solid #5a0a0f;
+}
+
+QScrollBar::up-arrow:vertical {
+    image: url(theme:Dark/up.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::down-arrow:vertical {
+    image: url(theme:Dark/down.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::left-arrow:horizontal {
+    image: url(theme:Dark/left.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::right-arrow:horizontal {
+    image: url(theme:Dark/right.svg);
+    width: 8px;
+    height: 8px;
+}
+
+/* =============================================================================
+   ミキサー ミュート/モニター ボタン: ON/OFF 状態の明示分離（視認性強化）
+   OFF: 透明背景 + 通常アイコン / ON: 赤(ミュート)・緑(モニター)背景 + 白アイコン
+   ============================================================================= */
+QPushButton.btn-mute:!checked,.btn-mute:!checked:!hover,
+VolumeControl .btn-mute:!checked:!hover {
+    color: #1a1a1a !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    qproperty-icon: url(theme:Light/settings/audio.svg) !important;
+}
+QPushButton.btn-monitor:!checked,.btn-monitor:!checked:!hover,
+VolumeControl .btn-monitor:!checked:!hover {
+    color: #1a1a1a !important;
+    background: transparent !important;
+    border: 1px solid #706e6e !important;
+    qproperty-icon: url(theme:Light/headphones-off.svg) !important;
+}
+QPushButton.btn-mute:checked, QPushButton.btn-mute.checked, .btn-mute:checked, .btn-mute.checked,
+VolumeControl .btn-mute:checked {
+    color: #ffffff !important;
+    background: #c3222b !important;
+    border: 1px solid #5a0a10 !important;
+    qproperty-icon: url(theme:Dark/mute.svg) !important;
+}
+QPushButton.btn-monitor:checked, QPushButton.btn-monitor.checked, .btn-monitor:checked, .btn-monitor.checked,
+VolumeControl .btn-monitor:checked {
+    color: #ffffff !important;
+    background: #1e8f42 !important;
+    border: 1px solid #0f5a26 !important;
+    qproperty-icon: url(theme:Dark/headphones.svg) !important;
+}

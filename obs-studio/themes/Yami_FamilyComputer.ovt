@@ -1,5 +1,5 @@
 @OBSThemeMeta {
-    name: 'ファミリーコンピュータ';
+    name: '[1983] FC - ファミリーコンピュータ';
     id: 'com.obsproject.Yami.FamilyComputer';
     extends: 'com.obsproject.Yami.Light';
     author: 'kjozk & Antigravity';
@@ -403,8 +403,7 @@ QComboBox QAbstractItemView::item {
 QMenu::item:selected,
 QMenu > QWidget:selected,
 QComboBox QAbstractItemView::item:selected,
-QComboBox QListView::item:selected,
-idian--Row QComboBox QAbstractItemView::item:selected {
+QComboBox QListView::item:selected {
     background-color: #dfbc62 !important;
     border: 1px solid #b88f55 !important;
     color: #1a1610 !important;
@@ -412,8 +411,7 @@ idian--Row QComboBox QAbstractItemView::item:selected {
 
 QMenu::item:hover,
 QComboBox QAbstractItemView::item:hover,
-QComboBox QListView::item:hover,
-idian--Row QComboBox QAbstractItemView.hover::item {
+QComboBox QListView::item:hover {
     background-color: #ebd180 !important;
     border: 1px solid #c8a048 !important;
     color: #1a1610 !important;

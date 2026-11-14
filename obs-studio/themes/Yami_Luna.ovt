@@ -1,5 +1,5 @@
 @OBSThemeMeta {
-    name: 'Windows XP Luna';
+    name: '[2001] Windows XP Luna';
     id: 'com.obsproject.Yami.Luna';
     extends: 'com.obsproject.Yami.Light';
     author: 'kjozk & Antigravity';
@@ -560,11 +560,7 @@ QLabel.text-muted {
     color: #555555 !important;
 }
 
-/* 選択時の非表示ソーステキスト */
-QAbstractItemView::item:selected .text-muted,
-SourceTree::item:selected .text-muted {
-    color: #D0D8F0 !important;
-}
+/* 選択時の非表示ソーステキスト (子孫結合子によるパーサーバグ回避のため ::item:selected では指定しない) */
 
 /* ヘッダー */
 QHeaderView::section {

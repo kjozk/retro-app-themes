@@ -110,3 +110,12 @@ if (-not $NoWait -and $Host.Name -eq "ConsoleHost") {
     Read-Host "Enterキーを押して終了してください..."
 }
 ```
+
+
+---
+
+## 5. インストーラーの適用方法メッセージの完全性
+
+- インストール対象に含めた全テーマを、適用方法メッセージにも列挙する（追加したテーマを漏らさない）。
+- .bat ラッパーには setlocal と chcp 65001 >nul を必ず含める（PowerShell 5.1 のコンソールコードページ対策）。
+- macOS/Linux 用 .sh では 全テーマファイルを THEME_FILES に含める（配布漏れ防止）。

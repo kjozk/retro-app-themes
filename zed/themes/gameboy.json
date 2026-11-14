@@ -1,10 +1,10 @@
 {
   "$schema": "https://zed.dev/schema/themes/v0.2.0.json",
-  "name": "Gameboy",
+  "name": "GB - Game Boy (ゲームボーイ)",
   "author": "kjozk & Antigravity",
   "themes": [
     {
-      "name": "ゲームボーイ [Blurred]",
+      "name": "[1989] GB - Game Boy (ゲームボーイ) [Blurred]",
       "appearance": "light",
       "style": {
         "accents": [
@@ -310,7 +310,7 @@
       }
     },
     {
-      "name": "ゲームボーイ",
+      "name": "[1989] GB - Game Boy (ゲームボーイ)",
       "appearance": "light",
       "style": {
         "accents": [
@@ -370,7 +370,7 @@
         "editor.foreground": "#1A1D24",
         "editor.background": "#FFFFFF",
         "editor.gutter.background": "#F8F8F6",
-        "editor.subheader.background": "#00000000",
+        "editor.subheader.background": "#FAFAF8",
         "editor.active_line.background": "#8C9E5B22",
         "editor.highlighted_line.background": "#8C9E5B33",
         "editor.line_number": "#8E94A0",
@@ -383,7 +383,7 @@
         "editor.indent_guide_active": "#005EC488",
         "editor.document_highlight.read_background": "#005EC426",
         "editor.document_highlight.write_background": "#E01E3426",
-        "terminal.background": "#00000000",
+        "terminal.background": "#FAFAF8",
         "terminal.foreground": "#181A1F",
         "terminal.bright_foreground": "#2B2E34",
         "terminal.dim_foreground": "#4E535E",
@@ -616,7 +616,7 @@
       }
     },
     {
-      "name": "ゲームボーイ Dark [Blurred]",
+      "name": "[1989] GB - Game Boy (ゲームボーイ) Dark [Blurred]",
       "appearance": "dark",
       "style": {
         "accents": [
@@ -922,7 +922,7 @@
       }
     },
     {
-      "name": "ゲームボーイ Dark",
+      "name": "[1989] GB - Game Boy (ゲームボーイ) Dark",
       "appearance": "dark",
       "style": {
         "accents": [
@@ -982,7 +982,7 @@
         "editor.foreground": "#98A882",
         "editor.background": "#14200E",
         "editor.gutter.background": "#14200E",
-        "editor.subheader.background": "#00000000",
+        "editor.subheader.background": "#101318",
         "editor.active_line.background": "#1E301566",
         "editor.highlighted_line.background": "#263D1B88",
         "editor.line_number": "#4A563E",
@@ -995,7 +995,7 @@
         "editor.indent_guide_active": "#3A94FF88",
         "editor.document_highlight.read_background": "#3A94FF26",
         "editor.document_highlight.write_background": "#FF455926",
-        "terminal.background": "#00000000",
+        "terminal.background": "#101318",
         "terminal.foreground": "#D8DCE2",
         "terminal.bright_foreground": "#FFFFFF",
         "terminal.dim_foreground": "#6D7380",

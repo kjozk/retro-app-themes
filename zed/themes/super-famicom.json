@@ -1,10 +1,10 @@
 {
   "$schema": "https://zed.dev/schema/themes/v0.2.0.json",
-  "name": "Super Famicom",
+  "name": "SFC - スーパーファミコン",
   "author": "kjozk & Antigravity",
   "themes": [
     {
-      "name": "スーパーファミコン [Blurred]",
+      "name": "[1990] SFC - スーパーファミコン [Blurred]",
       "appearance": "light",
       "style": {
         "accents": [
@@ -310,7 +310,7 @@
       }
     },
     {
-      "name": "スーパーファミコン",
+      "name": "[1990] SFC - スーパーファミコン",
       "appearance": "light",
       "style": {
         "accents": [
@@ -615,7 +615,7 @@
       }
     },
     {
-      "name": "スーパーファミコン Dark [Blurred]",
+      "name": "[1990] SFC - スーパーファミコン Dark [Blurred]",
       "appearance": "dark",
       "style": {
         "accents": [
@@ -921,7 +921,7 @@
       }
     },
     {
-      "name": "スーパーファミコン Dark",
+      "name": "[1990] SFC - スーパーファミコン Dark",
       "appearance": "dark",
       "style": {
         "accents": [

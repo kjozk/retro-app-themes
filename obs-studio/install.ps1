@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
     OBS Studio のテーマディレクトリに SFC / FC テーマをインストールするスクリプト (Windows / macOS / Linux 対応)
@@ -30,6 +30,10 @@ if ($IsMacOS) {
 Write-Host "==========================================================" -ForegroundColor Cyan
 Write-Host "  OBS Studio カスタムテーマ インストーラー" -ForegroundColor Cyan
 Write-Host "  ・スーパーファミコン (Super Famicom)" -ForegroundColor Cyan
+Write-Host "  ・NES (Nintendo Entertainment System)" -ForegroundColor Cyan
+Write-Host "  ・SNES (Super Nintendo Entertainment System)" -ForegroundColor Cyan
+Write-Host "  ・Wii (Nintendo Wii)" -ForegroundColor Cyan
+Write-Host "  ・Switch (Nintendo Switch Dark & Light)" -ForegroundColor Cyan
 Write-Host "  ・ファミリーコンピュータ (Family Computer)" -ForegroundColor Cyan
 Write-Host "  ・ゲームボーイ (Gameboy)" -ForegroundColor Cyan
 Write-Host "  ・Windows XP Luna" -ForegroundColor Cyan
@@ -41,6 +45,11 @@ $srcThemeDir = Join-Path $scriptDir "themes"
 $themeFiles = @(
     "Yami_SuperFamicom.ovt",
     "Yami_FamilyComputer.ovt",
+    "Yami_NES.ovt",
+    "Yami_SNES.ovt",
+    "Yami_Wii.ovt",
+    "Yami_Switch_Dark.ovt",
+    "Yami_Switch_Light.ovt",
     "Yami_Gameboy.ovt",
     "Yami_Luna.ovt",
     "Yami_WindowsClassic.ovt",
@@ -73,9 +82,16 @@ try {
     Write-Host "【反映方法】" -ForegroundColor Cyan
     Write-Host "1. 起動中の OBS Studio を再起動します。"
     Write-Host "2. 設定 > 外観 > テーマ から以下を選択してください。"
-    Write-Host "   - Super Famicom"
-    Write-Host "   - Family Computer"
-    Write-Host "   - Gameboy"
+    Write-Host "   - [1983] FC - ファミリーコンピュータ"
+    Write-Host "   - [1985] NES - Nintendo Entertainment System"
+    Write-Host "   - [1989] GB - ゲームボーイ"
+    Write-Host "   - [1990] SFC - スーパーファミコン"
+    Write-Host "   - [1991] SNES - Super Nintendo Entertainment System"
+    Write-Host "   - [1995] Windows Classic"
+    Write-Host "   - [2001] Windows XP Luna"
+    Write-Host "   - [2006] Wii - Nintendo Wii"
+    Write-Host "   - [2017] Switch Dark - Nintendo Switch (ベーシックブラック)"
+    Write-Host "   - [2017] Switch Light - Nintendo Switch (ベーシックホワイト)"
     Write-Host ""
 } catch {
     Write-Host "エラーが発生しました: $_" -ForegroundColor Red

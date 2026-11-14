@@ -1,0 +1,1344 @@
+@OBSThemeMeta {
+    name: '[1991] SNES - Super Nintendo Entertainment System';
+    id: 'com.obsproject.Yami.SNES';
+    extends: 'com.obsproject.Yami.Light';
+    author: 'kjozk & Antigravity';
+    dark: 'false';
+}
+
+@OBSThemeVars {
+    /* =========================================================================
+       SNES 実機再現カラーパレット
+       ========================================================================= */
+    --snes_body: #d0ced1;        /* 本体ライトグレー成型色（ベース） */
+    --snes_body_light: #ffffff;  /* 入力欄・通常ボタン背景 */
+    --snes_body_dark: #c3c2c6;   /* リスト・サイドバー背景 */
+    --snes_mid: #9d9ba3;         /* カセット周辺のミディアムグレー / 枠線 */
+    --snes_dark: #4a4850;        /* POWER/RESET/十字キーのダークスレートグレー */
+    --snes_dark_hover: #5d5a66;  /* ダークホバー */
+    --snes_dark_pressed: #38363f;/* ダークプレス */
+    --snes_border: #b9b7bc;      /* コンポーネント境界線 */
+
+    /* --- ABXY コントローラー 4色ボタン (実機写真準拠) --- */
+    --snes_blue: #6b3fb5;        /* X Button (Top) - ロイヤルブルー */
+    --snes_blue_hover: #7f56c8;
+    --snes_blue_pressed: #50299a;
+    --snes_blue_glow: #a99bd8;
+
+    --snes_yellow: #f0b400;      /* B Button (Bottom) - 実機カナリア/山吹イエロー */
+    --snes_yellow_hover: #ffc41a;
+    --snes_yellow_pressed: #c79500;
+    --snes_yellow_glow: #ffe57f;
+
+    --snes_green: #009e46;       /* Y Button (Left) - 実機エメラルドグリーン */
+    --snes_green_hover: #0fb357;
+    --snes_green_pressed: #007734;
+    --snes_green_glow: #69f0ae;
+
+    --snes_red: #e01e34;         /* A Button (Right) - 実機ヴィヴィッドレッド */
+    --snes_red_hover: #f03348;
+    --snes_red_pressed: #ad1122;
+    --snes_red_glow: #ff7688;
+
+    /* --- 画面全体の背景定義 --- */
+    --bg_window: var(--snes_body);
+    --bg_base: var(--snes_body);
+    --bg_preview: #2b2b2a;      /* プレビュー周囲は引き締まったダーク */
+
+    /* =========================================================================
+       文字色・パレット設定（絶対に文字が背景に溶け込まないための完全定義）
+       ========================================================================= */
+    --text: #1c1c1b;            /* メインテキスト: 高コントラストな濃色 */
+    --text_light: #ffffff;      /* 暗色ボタン・ヘッダー用ホワイト */
+    --text_muted: #575655;      /* 補足テキスト */
+    --text_inactive: #403f3e;
+    --text_disabled: #92918f;   /* 無効時でも視認できるグレー */
+
+    /* Qt パレット完全上書き (非QSSウィジェットの白文字化を防止) */
+    --palette_windowText: #1c1c1b;
+    --palette_text: #1c1c1b;
+    --palette_buttonText: #1c1c1b;
+    --palette_brightText: #ffffff;
+    --palette_highlightedText: #ffffff;
+    --palette_toolTipText: #ffffff;
+    --palette_window: var(--snes_body);
+    --palette_base: #ffffff;
+    --palette_button: #ffffff;
+    --palette_mid: var(--snes_border);
+
+    --primary: var(--snes_dark);
+    --primary_light: var(--snes_dark_hover);
+    --primary_lighter: #ffffff;
+    --primary_dark: var(--snes_dark_pressed);
+    --primary_darker: #212120;
+    --highlight_color: #ffffff;
+    --list_item_bg_selected: var(--snes_dark);
+    --list_item_bg_hover: var(--snes_dark_hover);
+    --tab_border_focus: #ffffff;
+
+    /* 基底テーマ(Yami/Light)の青色変数を完全無力化（青枠・青背景の漏れ出しを完全阻止） */
+    --blue1: #ffffff;
+    --blue2: var(--snes_dark_hover);
+    --blue3: var(--snes_dark);
+    --blue4: var(--snes_dark_pressed);
+    --blue5: var(--snes_dark_pressed);
+    --blue6: #212120;
+
+    --warning: var(--snes_yellow);
+    --danger: var(--snes_red);
+    --success: var(--snes_green);
+
+    /* 入力フォーム & 汎用ボタン変数: プライマリーカラーはSFCグレーに統一 */
+    --input_bg: #ffffff;
+    --input_bg_hover: #faf8fc;
+    --input_bg_focus: #ffffff;
+    --input_border: var(--snes_border);
+    --input_border_focus: var(--snes_dark);
+
+    --button_bg: #ffffff;
+    --button_bg_hover: #f2f1f0;
+    --button_bg_down: #e3e2e1;
+    --button_bg_disabled: #ebeae9;
+    --button_border: var(--snes_border);
+    --button_border_hover: var(--snes_dark);
+    --button_border_focus: var(--snes_dark);
+    --button_border_width: 1px;
+}
+
+/* =============================================================================
+   1. 基本ウィジェット & 文字コントラスト保護
+   ============================================================================= */
+
+/* 全ウィジェットの基本テキスト色および標準フォント設定（OBS Default テーマスタック準拠） */
+QWidget {
+    color: var(--text);
+    selection-background-color: var(--snes_dark);
+    selection-color: #ffffff;
+    font-family: 'Open Sans', '.AppleSystemUIFont', Helvetica, Arial, 'MS Shell Dlg', sans-serif;
+}
+
+/* ラベル、チェックボックス、ラジオボタンの視認性確保 */
+QLabel {
+    color: var(--text);
+}
+
+QLabel:disabled {
+    color: var(--text_disabled);
+}
+
+QCheckBox,
+QRadioButton {
+    color: var(--text);
+    spacing: 6px;
+}
+
+QCheckBox:disabled,
+QRadioButton:disabled {
+    color: var(--text_disabled);
+}
+
+/* =============================================================================
+   2. ドック・タイトルバー・ウィンドウ枠
+   ============================================================================= */
+
+/* ドックタイトルバー: SFCのPOWER/RESETやカセットスロットを模したダークスレートグレー */
+QDockWidget {
+    color: #ffffff;
+    titlebar-close-icon: url(theme:Dark/close.svg);
+    titlebar-normal-icon: url(theme:Dark/popout.svg);
+}
+
+QDockWidget::title {
+    background-color: var(--snes_dark);
+    color: #ffffff !important;
+    padding: 6px 10px;
+    font-weight: bold;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+/* ドック内部のベースコンテナ */
+OBSDock > QWidget {
+    background: var(--snes_body);
+    border: 1px solid var(--snes_border);
+    border-top: none;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+/* ドックのタブバー（青色を廃止し、SFC実機EJECTボタン風スレートグレーに統一） */
+QTabBar {
+    outline: none;
+}
+
+QTabBar::tab {
+    background: #dfdedd;
+    color: #353432 !important;
+    border: 1px solid var(--snes_border);
+    padding: var(--tab_padding_base) 6px;
+    min-width: 40px;
+    font-weight: 500;
+}
+
+QTabBar::tab:hover {
+    background: #ecebea;
+    color: var(--snes_dark) !important;
+    border-color: var(--snes_mid);
+}
+
+/* 選択タブ: POWER/RESETスイッチのダークグレー + 白文字でドックタイトルと完全に調和 */
+QTabBar::tab:selected {
+    background: var(--snes_dark) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--snes_dark_pressed) !important;
+    border-bottom: 2px solid var(--snes_mid) !important;
+    font-weight: bold;
+}
+
+/* ステータスバー（最下部） */
+QStatusBar {
+    background-color: var(--snes_body_dark);
+    color: var(--text);
+    border-top: 1px solid var(--snes_border);
+}
+
+QStatusBar QLabel {
+    color: var(--text) !important;
+}
+
+/* メニューバー & メニュー */
+QMenuBar {
+    background-color: var(--snes_body);
+    color: var(--text);
+    border-bottom: 1px solid var(--snes_border);
+}
+
+QMenuBar::item {
+    background: transparent;
+    color: var(--text);
+    padding: 5px 9px;
+}
+
+QMenuBar::item:selected {
+    background-color: var(--snes_dark);
+    color: #ffffff !important;
+    border-radius: 3px;
+}
+
+QMenu {
+    background-color: #ffffff;
+    color: var(--text);
+    border: 1px solid var(--snes_border);
+    padding: 4px;
+}
+
+QMenu::item {
+    padding: 6px 24px 6px 12px;
+    border-radius: 3px;
+    color: var(--text);
+}
+
+QMenu::item:selected {
+    background-color: var(--snes_dark);
+    color: #ffffff !important;
+}
+
+QMenu::separator {
+    height: 1px;
+    background-color: var(--snes_body_dark);
+    margin: 4px 6px;
+}
+
+/* =============================================================================
+   3. 一般ボタン (QPushButton, QToolButton)
+   ============================================================================= */
+
+/* ダイアログや設定画面内の通常ボタン: 上品なライト成型色 + スレートグレーのホバー */
+QPushButton,
+QToolButton {
+    background-color: var(--button_bg);
+    color: var(--text) !important;
+    border: 1px solid var(--button_border);
+    border-radius: var(--border_radius);
+    padding: var(--input_padding) var(--padding_wide);
+}
+
+QPushButton:hover,
+QToolButton:hover {
+    background-color: var(--button_bg_hover);
+    border-color: var(--snes_dark);
+    color: var(--snes_dark) !important;
+}
+
+QPushButton:pressed,
+QToolButton:pressed {
+    background-color: var(--button_bg_down);
+    border-color: var(--snes_dark_pressed);
+    color: var(--snes_dark_pressed) !important;
+}
+
+/* 選択・トグルボタン（外観の密度設定ボタン「クラシック」「通常」等）:
+   青色を廃止し、POWER/RESETスイッチのダークスレートグレーに統一 */
+QPushButton:checked,
+QToolButton:checked {
+    background-color: var(--snes_dark) !important;
+    border: 1px solid var(--snes_dark_pressed) !important;
+    color: #ffffff !important;
+    font-weight: bold;
+}
+
+QPushButton:checked:hover,
+QToolButton:checked:hover {
+    background-color: var(--snes_dark_hover) !important;
+    border-color: var(--snes_dark) !important;
+    color: #ffffff !important;
+}
+
+QPushButton:disabled,
+QToolButton:disabled {
+    background-color: var(--button_bg_disabled);
+    color: var(--text_disabled) !important;
+    border-color: #d7d6d5;
+}
+
+QPushButton:focus,
+QToolButton:focus {
+    border-color: var(--snes_dark);
+}
+
+/* =============================================================================
+   4. 入力コントロール (テキスト, 数値, ドロップダウン)
+   ============================================================================= */
+
+QLineEdit,
+QTextEdit,
+QPlainTextEdit {
+    background-color: var(--input_bg);
+    color: var(--text) !important;
+    border: 1px solid var(--input_border);
+    border-radius: 3px;
+    padding: 4px 6px;
+    selection-background-color: var(--snes_dark);
+    selection-color: #ffffff;
+}
+
+QLineEdit:focus,
+QTextEdit:focus,
+QPlainTextEdit:focus {
+    border: 1px solid var(--snes_dark);
+}
+
+/* ドロップダウン（コンボボックス）: OBS基底テーマ（Yami）の精密なサイズ・パディング計算に準拠 */
+QComboBox,
+QDateTimeEdit {
+    background-color: var(--input_bg);
+    color: var(--text) !important;
+    border: 1px solid var(--input_border);
+    border-radius: 3px;
+}
+
+QComboBox:hover,
+QComboBox:focus,
+QDateTimeEdit:hover,
+QDateTimeEdit:selected {
+    border-color: var(--snes_dark);
+}
+
+QComboBox::drop-down,
+QDateTimeEdit::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    background-color: var(--snes_mid);
+    border: none;
+    border-left: 1px solid var(--snes_dark);
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+QComboBox::drop-down:hover,
+QDateTimeEdit::drop-down:hover {
+    background-color: var(--snes_blue);
+    border-left: 1px solid var(--snes_blue_pressed);
+}
+
+QComboBox::drop-down:on,
+QComboBox::drop-down:pressed,
+QDateTimeEdit::drop-down:pressed {
+    background-color: var(--snes_blue_pressed);
+    border-left: 1px solid #2d085e;
+}
+
+QComboBox::drop-down:disabled,
+QDateTimeEdit::drop-down:disabled {
+    background-color: #706e6c;
+    border: none;
+    border-left: 1px solid var(--snes_dark);
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+QComboBox::down-arrow,
+QDateTimeEdit::down-arrow,
+QComboBox::down-arrow:editable,
+QDateTimeEdit::down-arrow:editable {
+    image: url(theme:Dark/collapse.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QComboBox::down-arrow:disabled,
+QDateTimeEdit::down-arrow:disabled {
+    image: url(theme:Dark/collapse.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #ffffff;
+    border: 1px solid var(--snes_border);
+    selection-background-color: var(--snes_dark);
+    selection-color: #ffffff;
+    outline: none;
+}
+
+QComboBox QAbstractItemView::item {
+    color: var(--text);
+    padding: 4px 8px;
+    min-height: 20px;
+    border: 1px solid transparent;
+}
+
+/* ドロップダウンメニューおよびメニューの選択・ホバー・フォーカス時の青枠排除と白枠・白文字化 */
+QMenu::item:selected,
+QMenu > QWidget:selected,
+QComboBox QAbstractItemView::item:selected,
+QComboBox QListView::item:selected {
+    background-color: var(--snes_dark) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QMenu::item:hover,
+QComboBox QAbstractItemView::item:hover,
+QComboBox QListView::item:hover {
+    background-color: var(--snes_dark) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QMenu::item:selected:hover,
+QComboBox QAbstractItemView::item:selected:hover,
+QComboBox QListView::item:selected:hover {
+    background-color: var(--snes_dark_hover) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QMenu::item:focus,
+QMenu::item:selected:focus,
+QComboBox QAbstractItemView::item:selected:focus,
+QComboBox QListView::item:selected:focus {
+    background-color: var(--snes_dark) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+/* プレビュー下部ズーム・スケーリングバーのはみ出しを完全防止 */
+#previewScalingMode {
+    background-color: transparent !important;
+    color: var(--text) !important;
+    border: 1px solid var(--snes_border) !important;
+    border-radius: 0px !important;
+    height: 14px !important;
+    max-height: 14px !important;
+    min-height: 14px !important;
+    padding: 0px 4px !important;
+    margin: 0px !important;
+    font-size: var(--font_xsmall);
+}
+
+#previewScalingMode::drop-down {
+    background-color: var(--snes_mid) !important;
+    border: none !important;
+    border-left: 1px solid var(--snes_dark) !important;
+    border-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    width: 14px !important;
+    height: 14px !important;
+}
+
+#previewScalingMode::drop-down:hover {
+    background-color: var(--snes_blue) !important;
+}
+
+#previewScalingMode::down-arrow {
+    image: url(theme:Dark/collapse.svg) !important;
+    width: 7px !important;
+    height: 7px !important;
+}
+
+#previewScalePercent {
+    color: var(--text) !important;
+    font-size: var(--font_xsmall);
+}
+
+/* スピンボックス: OBS基底テーマ（Yami）の精密なレイアウト計算に準拠（独自ボタン定義によるズレ・隙間を完全解消） */
+QSpinBox,
+QDoubleSpinBox {
+    background-color: var(--input_bg);
+    color: var(--text) !important;
+    border-color: var(--input_border);
+}
+
+QSpinBox:focus,
+QDoubleSpinBox:focus {
+    border-color: var(--snes_dark);
+}
+
+QSpinBox::up-arrow,
+QDoubleSpinBox::up-arrow {
+    image: url(theme:Light/up.svg);
+}
+
+QSpinBox::down-arrow,
+QDoubleSpinBox::down-arrow {
+    image: url(theme:Light/down.svg);
+}
+
+QSpinBox::up-arrow:disabled,
+QDoubleSpinBox::up-arrow:disabled {
+    image: url(theme:Light/up.svg);
+}
+
+QSpinBox::down-arrow:disabled,
+QDoubleSpinBox::down-arrow:disabled {
+    image: url(theme:Light/down.svg);
+}
+
+/* グループボックス: 枠線とタイトルの位置ずれおよび最下部見切れを完全解消 */
+QGroupBox {
+    background-color: transparent;
+    color: var(--snes_dark);
+    border: 1px solid var(--snes_mid);
+    border-radius: 4px;
+    margin-top: 6px;
+    padding-top: 10px;
+    padding-bottom: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-weight: bold;
+}
+
+QGroupBox::title {
+    color: var(--snes_dark) !important;
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 10px;
+    top: 0px;
+    padding: 0 8px;
+    background-color: var(--snes_body);
+}
+
+/* 警告・エラーメッセージの視認性最大化（明るい背景での溶け込みを防止） */
+.text-warning,
+QLabel[class="text-warning"],
+QLabel#simpleOutRecWarning,
+QLabel#advOutRecWarning {
+    color: #9e4a00 !important; /* 明るい背景でくっきり読めるディープアンバーオレンジ */
+    font-weight: bold;
+}
+
+.text-danger,
+QLabel[class="text-danger"] {
+    color: #b30018 !important; /* 明るい背景でくっきり読めるクラシック深紅 */
+    font-weight: bold;
+}
+
+/* スタジオモードのプレビュー／プログラムラベルの視認性確保（白文字化を完全解消） */
+.label-preview-title {
+    color: var(--snes_dark) !important;
+    font-size: var(--font_xlarge);
+    font-weight: bold;
+}
+
+/* =============================================================================
+   5. リスト・ツリー・テーブル (SceneTree, SourceTree 等) の文字切れ解消
+   ============================================================================= */
+
+/* =============================================================================
+   5. リスト・ツリー (SceneTree, SourceTree) の最適化
+   ============================================================================= */
+
+QAbstractItemView {
+    background-color: #ffffff;
+    color: var(--text);
+    border: 1px solid var(--snes_border);
+}
+
+/* 選択時: POWER/RESETダークグレー + 純白のフチ（青枠・はみ出しを完全排除し、アイコン・文字を完全収容） */
+QListView::item:selected,
+QListWidget::item:selected,
+SceneTree::item:selected,
+SourceTree::item:selected {
+    background-color: var(--snes_dark) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QListView::item:hover,
+QListWidget::item:hover,
+SceneTree::item:hover,
+SourceTree::item:hover {
+    background-color: #f0edf5 !important;
+    border: 1px solid #ffffff !important;
+    color: var(--text) !important;
+}
+
+QListView::item:selected:hover,
+QListWidget::item:selected:hover,
+SceneTree::item:selected:hover,
+SourceTree::item:selected:hover {
+    background-color: var(--snes_dark_hover) !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+QListView::item:focus,
+QListWidget::item:focus,
+SceneTree::item:focus,
+SourceTree::item:focus,
+SceneTree::item:selected:focus,
+SourceTree::item:selected:focus {
+    border: 1px solid #ffffff !important;
+}
+
+/* シーンツリー（SceneTree）の行高確保 */
+SceneTree::item,
+#scenes::item {
+    min-height: 24px;
+    padding: 3px 6px;
+}
+
+/* =============================================================================
+   6. 設定ダイアログ (OBSBasicSettings) の完全最適化
+   ============================================================================= */
+
+OBSBasicSettings {
+    background-color: var(--snes_body);
+    qproperty-generalIcon: url(theme:Light/settings/general.svg);
+    qproperty-appearanceIcon: url(theme:Light/settings/appearance.svg);
+    qproperty-streamIcon: url(theme:Light/settings/stream.svg);
+    qproperty-outputIcon: url(theme:Light/settings/output.svg);
+    qproperty-audioIcon: url(theme:Light/settings/audio.svg);
+    qproperty-videoIcon: url(theme:Light/settings/video.svg);
+    qproperty-hotkeysIcon: url(theme:Light/settings/hotkeys.svg);
+    qproperty-accessibilityIcon: url(theme:Light/settings/accessibility.svg);
+    qproperty-advancedIcon: url(theme:Light/settings/advanced.svg);
+}
+
+/* 設定ダイアログの左側サイドバー */
+OBSBasicSettings QListWidget {
+    background-color: var(--snes_body_dark);
+    border: none;
+    border-right: 1px solid var(--snes_border);
+    padding: 6px;
+}
+
+OBSBasicSettings QListWidget::item {
+    padding: var(--padding_large) var(--padding_wide);
+    margin: 1px 0;
+    border: 1px solid transparent;
+    border-radius: var(--border_radius);
+    color: var(--text) !important;
+    font-weight: 500;
+}
+
+OBSBasicSettings QListWidget::item:hover {
+    background-color: #dddcdb;
+    border: 1px solid transparent;
+    color: var(--text) !important;
+}
+
+/* 選択時: POWER/RESETスイッチのダークスレートグレー + 純白のフチ（白枠線） + 純白文字 */
+OBSBasicSettings QListWidget::item:selected,
+OBSBasicSettings QListWidget::item:selected:focus,
+OBSBasicSettings QListWidget::item:selected:hover {
+    background-color: #cbcac7 !important;
+    border: 1px solid #888784 !important;
+    color: #1d1c1b !important;
+    font-weight: bold;
+}
+
+OBSBasicSettings QListWidget::item:focus {
+    border: 1px solid #ffffff !important;
+}
+
+/* 設定画面下部のボタンボックス（OK, キャンセル, 適用）の視認性を完全確保 */
+OBSBasicSettings QDialogButtonBox QPushButton {
+    background-color: #ffffff !important;
+    color: var(--text) !important;
+    border: 1px solid var(--snes_border) !important;
+    border-radius: var(--border_radius);
+    min-width: 75px;
+    padding: var(--input_padding) var(--padding_wide);
+    font-weight: bold;
+}
+
+OBSBasicSettings QDialogButtonBox QPushButton:hover {
+    background-color: #f2f1f0 !important;
+    border-color: var(--snes_dark) !important;
+    color: var(--snes_dark) !important;
+}
+
+/* OKボタン（確定）: POWER/RESETスイッチのダークスレートグレー + 白文字 */
+OBSBasicSettings QDialogButtonBox QPushButton:default {
+    background-color: var(--snes_dark) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--snes_dark_pressed) !important;
+}
+
+OBSBasicSettings QDialogButtonBox QPushButton:default:hover {
+    background-color: var(--snes_dark_hover) !important;
+    border-color: var(--snes_dark) !important;
+    color: #ffffff !important;
+}
+
+/* 適用ボタン等の無効時: しっかり読める濃さのグレー文字 */
+OBSBasicSettings QDialogButtonBox QPushButton:disabled {
+    background-color: #ebeae9 !important;
+    color: #81807f !important;
+    border-color: #d7d6d5 !important;
+}
+
+/* =============================================================================
+   7. コントロールボタン (SNES ABXY 4色 + POWER/RESET)
+   ============================================================================= */
+
+#streamButton,
+#recordButton,
+#virtualCamButton,
+#modeSwitch,
+#settingsButton,
+#exitButton {
+    border-radius: var(--border_radius);
+    padding: var(--padding_large);
+    font-weight: normal;
+}
+
+/* --- 配信ボタン (Purple #6b3fb5) --- ※枠線常時 2px 固定（レイアウトずれ完全防止） */
+QPushButton#streamButton {
+    background-color: #6b3fb5;
+    color: #ffffff !important;
+    border: 2px solid #50299a;
+}
+
+QPushButton#streamButton:hover {
+    background-color: #7f56c8;
+    border: 2px solid #6b3fb5;
+    color: #ffffff !important;
+}
+
+QPushButton#streamButton:pressed {
+    background-color: #50299a;
+    border: 2px solid #50299a;
+    color: #ffffff !important;
+}
+
+QPushButton#streamButton.state-active,
+QPushButton#streamButton:checked,
+QPushButton#streamButton:!hover:!pressed.state-active,
+QPushButton#streamButton:hover.state-active,
+QPushButton#streamButton:hover:checked {
+    background-color: #3f1f80 !important;
+    border: 2px solid #a99bd8 !important;
+    color: #ffffff !important;
+}
+
+/* --- 録画ボタン (Purple #6b3fb5) --- ※枠線常時 2px 固定 */
+QPushButton#recordButton {
+    background-color: #6b3fb5;
+    color: #ffffff !important;
+    border: 2px solid #50299a;
+}
+
+QPushButton#recordButton:hover {
+    background-color: #7f56c8;
+    border: 2px solid #6b3fb5;
+    color: #ffffff !important;
+}
+
+QPushButton#recordButton:pressed {
+    background-color: #50299a;
+    border: 2px solid #50299a;
+    color: #ffffff !important;
+}
+
+QPushButton#recordButton.state-active,
+QPushButton#recordButton:checked,
+QPushButton#recordButton:!hover:!pressed.state-active,
+QPushButton#recordButton:hover.state-active,
+QPushButton#recordButton:hover:checked {
+    background-color: #3f1f80 !important;
+    border: 2px solid #a99bd8 !important;
+    color: #ffffff !important;
+}
+
+/* --- 録画一時停止ボタン (Purple #6b3fb5) --- ※枠線常時 2px 固定 */
+QPushButton#pauseRecordButton {
+    background-color: #6b3fb5;
+    color: #ffffff !important;
+    border: 2px solid #50299a;
+}
+
+QPushButton#pauseRecordButton:hover {
+    background-color: #7f56c8;
+    border: 2px solid #6b3fb5;
+    color: #ffffff !important;
+}
+
+QPushButton#pauseRecordButton:pressed {
+    background-color: #50299a;
+    border: 2px solid #50299a;
+    color: #ffffff !important;
+}
+
+QPushButton#pauseRecordButton.state-active,
+QPushButton#pauseRecordButton:checked,
+QPushButton#pauseRecordButton:!hover:!pressed.state-active,
+QPushButton#pauseRecordButton:hover.state-active,
+QPushButton#pauseRecordButton:hover:checked {
+    background-color: #3f1f80 !important;
+    border: 2px solid #a99bd8 !important;
+    color: #ffffff !important;
+}
+
+/* --- 仮想カメラボタン (Lavender #a99bd8) --- ※枠線常時 2px 固定 */
+QPushButton#virtualCamButton {
+    background-color: #a99bd8;
+    color: #1a1a19 !important;
+    border: 2px solid #8f80c2;
+}
+
+QPushButton#virtualCamButton:hover {
+    background-color: #b9aee3;
+    border: 2px solid #a99bd8;
+    color: #1a1a19 !important;
+}
+
+QPushButton#virtualCamButton:pressed {
+    background-color: #8f80c2;
+    border: 2px solid #8f80c2;
+    color: #1a1a19 !important;
+}
+
+QPushButton#virtualCamButton.state-active,
+QPushButton#virtualCamButton:checked,
+QPushButton#virtualCamButton:!hover:!pressed.state-active,
+QPushButton#virtualCamButton:hover.state-active,
+QPushButton#virtualCamButton:hover:checked {
+    background-color: #8f80c2 !important;
+    border: 2px solid #50299a !important;
+    color: #000000 !important;
+}
+
+/* 仮想カメラ設定（歯車）ボタン: 白浮きを解消しダークグレー + 白アイコンで統一 */
+QPushButton#virtualCamConfigButton {
+    background-color: var(--snes_dark) !important;
+    border: 1px solid var(--snes_dark_pressed) !important;
+    border-radius: var(--border_radius);
+    padding: var(--padding_large);
+    width: var(--input_height);
+    max-width: var(--input_height);
+    color: #ffffff !important;
+    qproperty-icon: url(theme:Dark/settings/general.svg);
+}
+
+QPushButton#virtualCamConfigButton:hover {
+    background-color: var(--snes_dark_hover) !important;
+    border-color: var(--snes_mid) !important;
+    qproperty-icon: url(theme:Dark/settings/general.svg);
+}
+
+/* --- スタジオモード切替 (Lavender #a99bd8) --- ※枠線常時 2px 固定 */
+QPushButton#modeSwitch {
+    background-color: #a99bd8;
+    color: #1a1a19 !important;
+    border: 2px solid #8f80c2;
+}
+
+QPushButton#modeSwitch:hover {
+    background-color: #b9aee3;
+    border: 2px solid #a99bd8;
+    color: #1a1a19 !important;
+}
+
+QPushButton#modeSwitch:pressed {
+    background-color: #8f80c2;
+    border: 2px solid #8f80c2;
+    color: #1a1a19 !important;
+}
+
+QPushButton#modeSwitch.state-active,
+QPushButton#modeSwitch:checked,
+QPushButton#modeSwitch:!hover:!pressed.state-active,
+QPushButton#modeSwitch:hover.state-active,
+QPushButton#modeSwitch:hover:checked {
+    background-color: #8f80c2 !important;
+    border: 2px solid #50299a !important;
+    color: #000000 !important;
+}
+
+/* --- 設定・終了ボタン (POWER / RESET スイッチのダークスレートグレー) --- */
+QPushButton#settingsButton,
+QPushButton#exitButton {
+    background-color: var(--snes_dark);
+    color: #ffffff !important;
+    border: 1px solid var(--snes_dark_pressed);
+}
+
+QPushButton#settingsButton:hover,
+QPushButton#exitButton:hover {
+    background-color: var(--snes_dark_hover);
+    border-color: var(--snes_mid);
+    color: #ffffff !important;
+}
+
+QPushButton#settingsButton:pressed,
+QPushButton#exitButton:pressed {
+    background-color: var(--snes_dark_pressed);
+    color: #ffffff !important;
+}
+
+/* 画面左下（プレビュー下部コンテキストバー）ツールボタン: 白浮きを完全解消し背景透明化 */
+#contextContainer {
+    background-color: var(--snes_body);
+}
+
+#contextContainer QPushButton {
+    background-color: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: var(--border_radius);
+    padding: 3px 6px;
+}
+
+#contextContainer QPushButton:hover {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid var(--snes_border) !important;
+}
+
+#contextContainer QPushButton:pressed {
+    background-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+/* =============================================================================
+   8. 音声ミキサー & スライダー
+   ============================================================================= */
+
+#mixerContainer,
+#mixerArea {
+    background-color: var(--snes_body);
+}
+
+/* ミキサーヘッダー (Global, Active 等) */
+#mixerContainer QWidget[header="true"] QLabel,
+#mixerContainer QLabel#header,
+#mixerContainer .header {
+    background-color: var(--snes_dark);
+    color: #ffffff !important;
+    padding: 3px 6px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+VolumeControl .mixer-category,
+VolumeControl QLabel.mixer-category,
+#vVolumeWidgets VolumeControl QLabel.mixer-category,
+#hVolumeWidgets VolumeControl QLabel.mixer-category,
+QLabel.mixer-category {
+    background: var(--snes_dark) !important;
+    color: #ffffff !important;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--snes_border);
+}
+
+/* ミュートボタン: 通常は背景透明、ミュート時は赤背景 + 純白ミュートアイコン
+   ※OBSの applyColorToIcon() が buttonText (color) でアイコンを再着色するため、color: #ffffff !important が必須！ */
+.btn-mute {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    qproperty-icon: url(theme:Light/settings/audio.svg);
+}
+
+.btn-mute:hover {
+    background-color: #dddcdb;
+    border-color: var(--snes_border);
+}
+
+.btn-mute.checked,
+.btn-mute:checked {
+    color: #ffffff !important;
+    background: var(--snes_red) !important;
+    border: 1px solid #ad1122 !important;
+    border-radius: 4px;
+    qproperty-icon: url(theme:Dark/mute.svg) !important;
+}
+
+.btn-mute.checked:hover,
+.btn-mute:checked:hover {
+    color: #ffffff !important;
+    background: var(--snes_red_hover) !important;
+    border-color: var(--snes_red) !important;
+    qproperty-icon: url(theme:Dark/mute.svg) !important;
+}
+
+/* モニタリングボタン: 通常は透明、ON時はダークグレー + 純白ヘッドホンアイコン */
+.btn-monitor {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    qproperty-icon: url(theme:Light/headphones-off.svg);
+}
+
+.btn-monitor:hover {
+    background-color: #dddcdb;
+    border-color: var(--snes_border);
+}
+
+.btn-monitor.checked,
+.btn-monitor:checked {
+    color: #ffffff !important;
+    background: var(--snes_dark) !important;
+    border: 1px solid var(--snes_dark_pressed) !important;
+    border-radius: 4px;
+    qproperty-icon: url(theme:Dark/headphones.svg) !important;
+}
+
+.btn-monitor.checked:hover,
+.btn-monitor:checked:hover {
+    color: #ffffff !important;
+    background: var(--snes_dark_hover) !important;
+    border-color: var(--snes_mid) !important;
+    qproperty-icon: url(theme:Dark/headphones.svg) !important;
+}
+
+/* スライダー: POWERスイッチ風のダークグレーハンドル & スレートグレープログレス */
+QSlider::groove:horizontal {
+    background-color: var(--snes_mid);
+    height: 4px;
+    border-radius: 2px;
+}
+
+QSlider::sub-page:horizontal {
+    background-color: var(--snes_dark) !important;
+    border-radius: 2px;
+}
+
+QSlider::add-page:horizontal {
+    background-color: var(--snes_mid);
+    border-radius: 2px;
+}
+
+QSlider::groove:vertical {
+    background-color: var(--snes_mid);
+    width: 4px;
+    border-radius: 2px;
+}
+
+QSlider::add-page:vertical {
+    background-color: var(--snes_dark) !important;
+    border-radius: 2px;
+}
+
+QSlider::sub-page:vertical {
+    background-color: var(--snes_mid);
+    border-radius: 2px;
+}
+
+QSlider::handle:horizontal {
+    background-color: var(--snes_dark);
+    border: 1px solid var(--snes_dark_pressed);
+    width: 14px;
+    height: 18px;
+    margin: -7px 0;
+    border-radius: 3px;
+}
+
+QSlider::handle:horizontal:hover {
+    background-color: var(--snes_dark_hover);
+    border-color: var(--snes_dark);
+}
+
+QSlider::groove:vertical {
+    background-color: var(--snes_mid);
+    width: 4px;
+    border-radius: 2px;
+}
+
+QSlider::handle:vertical {
+    background-color: var(--snes_dark);
+    border: 1px solid var(--snes_dark_pressed);
+    width: 18px;
+    height: 14px;
+    margin: 0 -7px;
+    border-radius: 3px;
+}
+
+QSlider::handle:vertical:hover {
+    background-color: var(--snes_dark_hover);
+    border-color: var(--snes_dark);
+}
+
+/* 音声ボリュームメーター */
+VolumeMeter {
+    qproperty-backgroundNominalColor: #28a745;
+    qproperty-backgroundWarningColor: #e09800;
+    qproperty-backgroundErrorColor: #e01e34;
+    qproperty-foregroundNominalColor: #009e46;
+    qproperty-foregroundWarningColor: #c77e00;
+    qproperty-foregroundErrorColor: #b21b28;
+    qproperty-magnitudeColor: #1c1c1b;
+    qproperty-majorTickColor: #1c1c1b;
+    qproperty-minorTickColor: var(--snes_mid);
+}
+
+/* =============================================================================
+   9. Light テーマ標準アイコンの継承・明示指定
+   ============================================================================= */
+
+OBSBasic {
+    qproperty-imageIcon: url(theme:Light/sources/image.svg);
+    qproperty-colorIcon: url(theme:Light/sources/brush.svg);
+    qproperty-slideshowIcon: url(theme:Light/sources/slideshow.svg);
+    qproperty-audioInputIcon: url(theme:Light/sources/microphone.svg);
+    qproperty-audioOutputIcon: url(theme:Light/settings/audio.svg);
+    qproperty-desktopCapIcon: url(theme:Light/settings/video.svg);
+    qproperty-windowCapIcon: url(theme:Light/sources/window.svg);
+    qproperty-gameCapIcon: url(theme:Light/sources/gamepad.svg);
+    qproperty-cameraIcon: url(theme:Light/sources/camera.svg);
+    qproperty-textIcon: url(theme:Light/sources/text.svg);
+    qproperty-mediaIcon: url(theme:Light/sources/media.svg);
+    qproperty-browserIcon: url(theme:Light/sources/globe.svg);
+    qproperty-groupIcon: url(theme:Light/sources/group.svg);
+    qproperty-sceneIcon: url(theme:Light/sources/scene.svg);
+    qproperty-defaultIcon: url(theme:Light/sources/default.svg);
+    qproperty-audioProcessOutputIcon: url(theme:Light/sources/windowaudio.svg);
+}
+
+.icon-plus             { qproperty-icon: url(theme:Light/plus.svg); }
+.icon-minus            { qproperty-icon: url(theme:Light/minus.svg); }
+.icon-trash            { qproperty-icon: url(theme:Light/trash.svg); }
+.icon-clear            { qproperty-icon: url(theme:Light/entry-clear.svg); }
+.icon-gear             { qproperty-icon: url(theme:Light/settings/general.svg); }
+.icon-dots-vert        { qproperty-icon: url(theme:Light/dots-vert.svg); }
+.icon-refresh          { qproperty-icon: url(theme:Light/refresh.svg); }
+.icon-cogs             { qproperty-icon: url(theme:Light/cogs.svg); }
+.icon-touch            { qproperty-icon: url(theme:Light/interact.svg); }
+.icon-up               { qproperty-icon: url(theme:Light/up.svg); }
+.icon-down             { qproperty-icon: url(theme:Light/down.svg); }
+.icon-filter           { qproperty-icon: url(theme:Light/filter.svg); }
+.icon-revert           { qproperty-icon: url(theme:Light/revert.svg); }
+.icon-close            { qproperty-icon: url(theme:Light/close.svg); }
+.icon-layout-vertical  { qproperty-icon: url(theme:Light/layout-vertical.svg); }
+.icon-layout-horizontal{ qproperty-icon: url(theme:Light/layout-horizontal.svg); }
+
+/* =============================================================================
+   10. スクロールバー (ホバー時でも背景に埋もれない高コントラスト・SFCスレート仕様)
+   ============================================================================= */
+QScrollBar:vertical,
+#previewYScrollBar,
+OBSBasicSettings QScrollBar:vertical,
+OBSDock QScrollBar:vertical {
+    background-color: var(--snes_body_dark);
+    width: 16px !important;
+    border: none !important;
+    margin: 16px 0px 16px 0px !important;
+}
+
+QScrollBar:horizontal,
+#previewXScrollBar,
+OBSBasicSettings QScrollBar:horizontal,
+OBSDock QScrollBar:horizontal {
+    background-color: var(--snes_body_dark);
+    height: 16px !important;
+    border: none !important;
+    margin: 0px 16px 0px 16px !important;
+}
+
+/* つまみ (ボタンと太さを完全一致) */
+QScrollBar::handle:vertical,
+#previewYScrollBar::handle,
+OBSBasicSettings QScrollBar::handle:vertical,
+OBSDock QScrollBar::handle:vertical {
+    background-color: var(--snes_mid);
+    border: 1px solid var(--snes_dark);
+    border-top: 2px solid #ffffff;
+    border-bottom: 2px solid var(--snes_dark);
+    min-height: 24px;
+    margin: 0px !important;
+    border-radius: 0px;
+}
+
+QScrollBar::handle:vertical:hover,
+OBSBasicSettings QScrollBar::handle:vertical:hover {
+    background-color: var(--snes_blue);
+    border: 1px solid var(--snes_blue_pressed);
+}
+
+QScrollBar::handle:vertical:pressed,
+OBSBasicSettings QScrollBar::handle:vertical:pressed {
+    background-color: var(--snes_blue_pressed);
+    border: 1px solid #2d085e;
+}
+
+QScrollBar::handle:horizontal,
+#previewXScrollBar::handle,
+OBSBasicSettings QScrollBar::handle:horizontal,
+OBSDock QScrollBar::handle:horizontal {
+    background-color: var(--snes_mid);
+    border: 1px solid var(--snes_dark);
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid var(--snes_dark);
+    min-width: 24px;
+    margin: 0px !important;
+    border-radius: 0px;
+}
+
+QScrollBar::handle:horizontal:hover,
+OBSBasicSettings QScrollBar::handle:horizontal:hover {
+    background-color: var(--snes_blue);
+    border: 1px solid var(--snes_blue_pressed);
+}
+
+QScrollBar::handle:horizontal:pressed,
+OBSBasicSettings QScrollBar::handle:horizontal:pressed {
+    background-color: var(--snes_blue_pressed);
+    border: 1px solid #2d085e;
+}
+
+/* 矢印ボタン (スクロールバーつまみと同等のスレートグレー + 白矢印) */
+QScrollBar::add-line:vertical {
+    background-color: var(--snes_mid);
+    border: 1px solid var(--snes_dark);
+    border-top: 2px solid var(--snes_dark);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    background-color: var(--snes_mid);
+    border: 1px solid var(--snes_dark);
+    border-bottom: 2px solid var(--snes_dark);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical:hover,
+QScrollBar::sub-line:vertical:hover {
+    background-color: var(--snes_blue);
+    border: 1px solid var(--snes_blue_pressed);
+}
+
+QScrollBar::add-line:vertical:pressed,
+QScrollBar::sub-line:vertical:pressed {
+    background-color: var(--snes_blue_pressed);
+    border: 1px solid #2d085e;
+}
+
+QScrollBar::add-line:horizontal {
+    background-color: var(--snes_mid);
+    border: 1px solid var(--snes_dark);
+    border-left: 2px solid var(--snes_dark);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    background-color: var(--snes_mid);
+    border: 1px solid var(--snes_dark);
+    border-right: 2px solid var(--snes_dark);
+    width: 16px;
+    height: 16px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:horizontal:hover,
+QScrollBar::sub-line:horizontal:hover {
+    background-color: var(--snes_blue);
+    border: 1px solid var(--snes_blue_pressed);
+}
+
+QScrollBar::add-line:horizontal:pressed,
+QScrollBar::sub-line:horizontal:pressed {
+    background-color: var(--snes_blue_pressed);
+    border: 1px solid #2d085e;
+}
+
+QScrollBar::up-arrow:vertical {
+    image: url(theme:Dark/up.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::down-arrow:vertical {
+    image: url(theme:Dark/down.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::left-arrow:horizontal {
+    image: url(theme:Dark/left.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QScrollBar::right-arrow:horizontal {
+    image: url(theme:Dark/right.svg);
+    width: 8px;
+    height: 8px;
+}
+
+/* =============================================================================
+   ミキサー ミュート/モニター ボタン: ON/OFF 状態の明示分離（視認性強化）
+   OFF: 透明背景 + 通常アイコン / ON: 赤(ミュート)・緑(モニター)背景 + 白アイコン
+   ============================================================================= */
+QPushButton.btn-mute:!checked,.btn-mute:!checked:!hover,
+VolumeControl .btn-mute:!checked:!hover {
+    color: #1a1a1a !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    qproperty-icon: url(theme:Light/settings/audio.svg) !important;
+}
+QPushButton.btn-monitor:!checked,.btn-monitor:!checked:!hover,
+VolumeControl .btn-monitor:!checked:!hover {
+    color: #1a1a1a !important;
+    background: transparent !important;
+    border: 1px solid #81807f !important;
+    qproperty-icon: url(theme:Light/headphones-off.svg) !important;
+}
+QPushButton.btn-mute:checked, QPushButton.btn-mute.checked, .btn-mute:checked, .btn-mute.checked,
+VolumeControl .btn-mute:checked {
+    color: #ffffff !important;
+    background: #b3202a !important;
+    border: 1px solid #6a0e14 !important;
+    qproperty-icon: url(theme:Dark/mute.svg) !important;
+}
+QPushButton.btn-monitor:checked, QPushButton.btn-monitor.checked, .btn-monitor:checked, .btn-monitor.checked,
+VolumeControl .btn-monitor:checked {
+    color: #ffffff !important;
+    background: #1e8f42 !important;
+    border: 1px solid #0f5a26 !important;
+    qproperty-icon: url(theme:Dark/headphones.svg) !important;
+}

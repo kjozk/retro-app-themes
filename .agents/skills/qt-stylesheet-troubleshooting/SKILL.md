@@ -170,3 +170,89 @@ QScrollBar::add-line:vertical {
 
 外枠の角丸が $R$、枠線幅が $W$ の場合、内側のドロップダウンボタンの角丸は $(R - W)$ に設定します（例: 外枠 3px、枠線 1px のとき、ボタン角丸は 2px）。
 小型の直角コンボボックス（`border-radius: 0px`）では、ドロップダウンボタン側にも必ず `border-radius: 0px !important;` を指定し、「D字状の角丸露出」を防止します。
+
+
+---
+
+## 8. 無効な擬似状態・クラスセレクタの配置（サイレント無視トラップ）
+
+### 現象
+QSS ルールが一切適用されず、スタイルが基底テーマのまま残る。エラーも出ないため気づきにくい。
+
+### 原因
+- QAbstractItemView.hover::item のような **誤った擬似状態表記（.hover はクラス名扱いで何にもマッチしない）** はルールが適用されないだけでエラーにはならない。
+- QComboBox QAbstractItemView::item:selected のような **存在しない型セレクタ（例: idian--Row）** を先頭に置くと、そのセレクタは何にもマッチせずルールが効かない。
+- ::item の直後に子孫結合子（半角スペース）+ 子要素を続ける構文（SourceTree::item:selected QLabel）はパーサーエラーを引き起こし、**未選択行まで白文字化**される（→ 本ガイド「3. QSS パーサー仕様違反」参照）。
+
+### 対策
+- 擬似状態は必ず ::item:hover / ::item:selected / ::item:disabled の順序で記述する。
+- 型セレクタは Qt の実在クラス名のみを使用し、スペルミス・造語を混入させない。
+- セレクタ追加後は SourceTree::item:selected QLabel のような子孫結合子が混入していないか grep で確認する。
+
+---
+
+## 9. 擬似状態・アクティブ時のボーダー幅変化によるリフロー（レイアウト揺れ）トラップ
+
+### 現象
+配信開始ボタンや録画開始ボタンを押した瞬間（アクティブ化時）、またはボタンにホバーした瞬間に、ボタンの高さ・幅が微妙に膨らみ、隣接するボタンやコントロール全体のレイアウトがガタッと動いてしまう。
+
+### 原因
+通常時のボタンスタイルが `border: 1px solid ...` であるのに対し、アクティブ時（`:checked`, `.state-active`）に視認性を高めようとして `border: 2px solid ... !important;` を指定すると、ボーダー幅の差分（1px × 2 = 2px）だけボックスサイズが拡大し、Qt のレイアウトエンジンが再計算（リフロー）を引き起こします。
+
+### 対策
+**通常時・ホバー時・押下時・アクティブ時の全ステートで `border-width` を完全一致（固定）** させます。発光や強調を行いたい場合は、幅ではなく枠線の色（明度・彩度）のみを切り替えます：
+
+```css
+/* 悪い例: アクティブ時だけ線が太くなり、押した瞬間にガタつく */
+QPushButton#recordButton {
+    border: 1px solid #50299a;
+}
+QPushButton#recordButton.state-active {
+    border: 2px solid #a99bd8 !important; /* 1px 膨らむ！ */
+}
+
+/* 良い例: 常時 2px 固定でレイアウトが一切動かない */
+QPushButton#recordButton {
+    border: 2px solid #50299a;
+}
+QPushButton#recordButton:hover {
+    border: 2px solid #6b3fb5;
+}
+QPushButton#recordButton:pressed {
+    border: 2px solid #50299a;
+}
+QPushButton#recordButton.state-active {
+    border: 2px solid #a99bd8 !important; /* 幅不変、色のみ発光 */
+}
+```
+
+---
+
+## 10. サブコントロール擬似状態におけるボックスモデル破壊トラップ（チェックボックス等の文字切れ・二重枠・寸法激変）
+
+### 現象
+チェックボックス（`QCheckBox::indicator`）をチェック（`:checked`）した瞬間に、後続テキストの左端が欠けて文字切れを起こす。また、ON 時と OFF 時でチェックボックスの外径寸法が大きく変わり、周囲のレイアウトがブレる。
+
+### 原因
+1. Qt の QSS 実装では、サブコントロールの擬似状態（`:checked` 等）に `border` や `background-color` を指定すると、基底セレクタで指定されていた `margin-right` や `padding` などの未再定義ボックスプロパティが 0 にリセットされる仕様が存在する。
+2. OBS 公式テーマのように `image: url(...)` の SVG 内部にあらかじめ正方形の外枠が含まれている場合、CSS 側で `background-color` や `border` を足すと、SVG 内部枠（約12px）の上に CSS コンテナ外枠（約18px）が二重に被さり、OFF 時（SVG 単体）と ON 時（CSS 枠＋SVG）で寸法が激変する。
+
+### 対策
+- **ベース SVG 同士の切り替えに委ねる（推奨）**:
+  同一ビューポート・外枠座標を持つベクター SVG（`checkbox_unchecked.svg` と `checkbox_checked.svg`）を採用しているサブコントロールに対して、片側の擬似状態だけに CSS ボックスモデル（背景・ボーダー）をオーバーレイしない。
+- **CSS スタイリングを行う場合**:
+  通常時と全疑似状態（`:checked`, `:hover`, `:disabled`）で同一の `border`, `border-radius`, `margin-right` を完全に同期定義し、寸法の対称性を維持する。
+
+---
+
+## 11. QSS ルールセット内における CSS `calc()` 関数の非対応（サイレント無効化トラップ）
+
+### 現象
+`padding-left: calc(var(--padding_wide) + 8px);` のように `calc()` を指定してもパディングが一切反映されず、アイコンや文字が左端に詰まってインジケーターバー等と重なる。
+
+### 原因
+Qt Style Sheets は CSS2.1 ベースであり、CSS3 の `calc()` 関数をサポートしていない（OBS 独自プリプロセッサが処理する `:root` の変数定義部以外では、QSS パーサーによってプロパティごとサイレントに無視・無効化される）。
+
+### 対策
+QSS のスタイルルール内では `calc()` 関数を使用せず、固定ピクセル値（例: `padding: 6px 14px 6px 28px !important;`）または OBS 公式が提供する計算済み変数単体（`var(--padding_large)` 等）を使用する。
+

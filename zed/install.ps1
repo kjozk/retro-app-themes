@@ -1,4 +1,4 @@
-﻿﻿#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
     Zed エディタのテーマディレクトリに SFC / FC テーマをインストールするスクリプト (Windows / macOS / Linux 対応)
@@ -41,6 +41,10 @@ if ($IsMacOS) {
 Write-Host "==========================================================" -ForegroundColor Cyan
 Write-Host "  Zed カスタムテーマ インストーラー" -ForegroundColor Cyan
 Write-Host "  ・スーパーファミコン (Super Famicom)" -ForegroundColor Cyan
+Write-Host "  ・NES (Nintendo Entertainment System)" -ForegroundColor Cyan
+Write-Host "  ・SNES (Super Nintendo Entertainment System)" -ForegroundColor Cyan
+Write-Host "  ・Wii (Nintendo Wii)" -ForegroundColor Cyan
+Write-Host "  ・Switch (Nintendo Switch)" -ForegroundColor Cyan
 Write-Host "  ・ファミリーコンピュータ (Family Computer)" -ForegroundColor Cyan
 Write-Host "  ・ゲームボーイ (Gameboy)" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
@@ -51,6 +55,10 @@ $srcThemeDir = Join-Path $scriptDir "themes"
 $themeFiles = @(
     "super-famicom.json",
     "family-computer.json",
+    "nes.json",
+    "snes.json",
+    "wii.json",
+    "switch.json",
     "gameboy.json"
 )
 
@@ -78,9 +86,13 @@ try {
     Write-Host "【反映方法】" -ForegroundColor Cyan
     Write-Host "1. Zed エディタを開きます（起動中の場合は自動でリロードされます）。"
     Write-Host "2. コマンドパレット (Ctrl+K Ctrl+T または theme: select) から以下を選択してください。"
-    Write-Host "   - Super Famicom"
-    Write-Host "   - Family Computer"
-    Write-Host "   - Gameboy"
+    Write-Host "   - [1983] FC - Family Computer"
+    Write-Host "   - [1985] NES - Nintendo Entertainment System"
+    Write-Host "   - [1989] GB - Game Boy"
+    Write-Host "   - [1990] SFC - Super Famicom"
+    Write-Host "   - [1991] SNES - Super Nintendo Entertainment System"
+    Write-Host "   - [2006] Wii - Nintendo Wii"
+    Write-Host "   - [2017] Switch - Nintendo Switch"
     Write-Host ""
 } catch {
     Write-Host "エラーが発生しました: $_" -ForegroundColor Red

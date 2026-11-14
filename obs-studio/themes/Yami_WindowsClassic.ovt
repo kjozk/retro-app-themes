@@ -1,5 +1,5 @@
 @OBSThemeMeta {
-    name: 'Windows Classic';
+    name: '[1995] Windows Classic';
     id: 'com.obsproject.Yami.WindowsClassic';
     extends: 'com.obsproject.Yami.Light';
     author: 'kjozk & Antigravity';
@@ -534,11 +534,7 @@ QLabel.text-muted {
     color: #707070 !important;
 }
 
-/* 選択時の非表示ソーステキスト */
-QAbstractItemView::item:selected .text-muted,
-SourceTree::item:selected .text-muted {
-    color: #D0D8F0 !important;
-}
+/* 選択時の非表示ソーステキスト (子孫結合子によるパーサーバグ回避のため ::item:selected では指定しない) */
 
 /* ヘッダー (クラシック 3D カラムヘッダー) */
 QHeaderView::section {

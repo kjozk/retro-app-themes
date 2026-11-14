@@ -1,10 +1,10 @@
 {
   "$schema": "https://zed.dev/schema/themes/v0.2.0.json",
-  "name": "Family Computer",
+  "name": "FC - ファミリーコンピュータ",
   "author": "kjozk & Antigravity",
   "themes": [
     {
-      "name": "ファミリーコンピュータ [Blurred]",
+      "name": "[1983] FC - ファミリーコンピュータ [Blurred]",
       "appearance": "light",
       "style": {
         "accents": [
@@ -311,7 +311,7 @@
       }
     },
     {
-      "name": "ファミリーコンピュータ",
+      "name": "[1983] FC - ファミリーコンピュータ",
       "appearance": "light",
       "style": {
         "accents": [
@@ -617,7 +617,7 @@
       }
     },
     {
-      "name": "ファミリーコンピュータ Dark [Blurred]",
+      "name": "[1983] FC - ファミリーコンピュータ Dark [Blurred]",
       "appearance": "dark",
       "style": {
         "accents": [
@@ -638,7 +638,7 @@
         "element.background": "#2A292E",
         "element.hover": "#3A3840",
         "element.active": "#1E1D22",
-        "element.selected": "#CEA56B",
+        "element.selected": "#CEA56B40",
         "element.disabled": "#2A292E80",
         "drop_target.background": "#D1364B44",
         "ghost_element.background": "#00000000",
@@ -923,7 +923,7 @@
       }
     },
     {
-      "name": "ファミリーコンピュータ Dark",
+      "name": "[1983] FC - ファミリーコンピュータ Dark",
       "appearance": "dark",
       "style": {
         "accents": [
@@ -944,7 +944,7 @@
         "element.background": "#2A292E",
         "element.hover": "#3A3840",
         "element.active": "#1E1D22",
-        "element.selected": "#CEA56B",
+        "element.selected": "#CEA56B40",
         "element.disabled": "#2A292E80",
         "drop_target.background": "#D1364B44",
         "ghost_element.background": "#00000000",
